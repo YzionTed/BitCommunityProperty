@@ -100,11 +100,19 @@ public class BluetoothDoorFragment extends BaseFragment {
         unbinder.unbind();
     }
 
+    private boolean isNeedClickAble = true;
+
     @OnClick({R.id.iv_open, R.id.tv_change})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_open:
-                loadingView.start();
+                if (!isNeedClickAble) {
+                    return;
+                }
+                if (loadingView != null) {
+                    loadingView.start();
+                }
+                isNeedClickAble = false;
                 if (doorMILiBean == null || doorMILiBean.isFirst()) {
                     MyApplication.getInstance().getBlueToothApp().scanBluetoothDevice(2000);
                     new Handler().postDelayed(new Runnable() {
@@ -150,11 +158,13 @@ public class BluetoothDoorFragment extends BaseFragment {
         if (MyApplication.getInstance().getBlueToothApp().isLocationEnalbe()) {
             ToastUtil.showShort("请打开您的定位权限！");
             loadingView.stop();
+            isNeedClickAble = true;
             return;
         }
         if (searchBlueDeviceBeanList.size() < 1) {
             ToastUtil.showShort("没有找到蓝牙设备");
             loadingView.stop();
+            isNeedClickAble = true;
             return;
         }
 
@@ -192,14 +202,17 @@ public class BluetoothDoorFragment extends BaseFragment {
                             Log.e(Tag, "搜索到的蓝牙您没有权限");
                             ToastUtil.showShort("搜索到的蓝牙您没有权限！");
                             loadingView.stop();
+                            isNeedClickAble = true;
                         } else {
                             loadingView.stop();
+                            isNeedClickAble = true;
                             ToastUtil.showShort("没有搜索到门的设备");
                             Log.e(Tag, "没有搜索到门的设备！");
                         }
                     }
                 } else {
                     loadingView.stop();
+                    isNeedClickAble = true;
 //                    if (logindata.getErrorCode().equals("9050001")) {
 //                        ToastUtil.showShort(logindata.getErrorMsg());
 //                    }
@@ -211,12 +224,17 @@ public class BluetoothDoorFragment extends BaseFragment {
             @Override
             public void onError(Throwable e) {
                 loadingView.stop();
+                isNeedClickAble = true;
                 LogManager.printErrorLog("backinfo", "失败返回的数据：" + e.getMessage());
             }
 
             @Override
             public void onComplete() {
+                if (loadingView != null) {
+                    return;
+                }
                 loadingView.stop();
+                isNeedClickAble = true;
             }
         });
 
@@ -234,18 +252,26 @@ public class BluetoothDoorFragment extends BaseFragment {
 
             @Override
             public void onFailure(final String arg0) {
-                loadingView.stop();
-                Log.e(Tag, "" + MiLiState.getCodeDesc(arg0));
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), "开门失败" + arg0 + MiLiState.getCodeDesc(arg0), Toast.LENGTH_LONG).show();
-                    }
-                });
+                if (loadingView != null) {
+                    loadingView.stop();
+                    isNeedClickAble = true;
+                    Log.e(Tag, "" + MiLiState.getCodeDesc(arg0));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getActivity(), "开门失败" + arg0 + MiLiState.getCodeDesc(arg0), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+
             }
 
             @Override
             public void onSuccess(Object arg0) {
+                if (loadingView != null) {
+                    return;
+                }
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -255,7 +281,10 @@ public class BluetoothDoorFragment extends BaseFragment {
                             public void run() {
                                 if (customDialog != null && customDialog.isShowing()) {
                                     customDialog.dismiss();
-                                    loadingView.stop();
+                                    if (loadingView != null) {
+                                        loadingView.stop();
+                                        isNeedClickAble = true;
+                                    }
                                 }
                             }
                         }, 3000);

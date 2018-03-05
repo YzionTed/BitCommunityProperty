@@ -122,7 +122,7 @@ public class ElevatorControlActivity extends BaseActivity {
                     }, 2000);
                 } else {
 
-                    JiBoUtils.getInstance(ElevatorControlActivity.this).openDevice(doorJinBoBean, openLift(), new JiBoUtils.OnOpenLiftCallBackListenter() {
+                    JiBoUtils.getInstance(ElevatorControlActivity.this).openDevice(doorJinBoBean, openLift(doorJinBoBean), new JiBoUtils.OnOpenLiftCallBackListenter() {
                         @Override
                         public void OpenLiftCallBackListenter(int backState, String msg) {
                             tv_name.setText(doorJinBoBean.getElevatorNum() + doorJinBoBean.getName() + msg);
@@ -142,9 +142,23 @@ public class ElevatorControlActivity extends BaseActivity {
 
 
     // 6、组织开梯数据
-    public List<Register> openLift() {
+    public List<Register> openLift(ElevatorListBean doorJinBoBean) {
         Register reg = new Register();
-        reg.PhoneMac = JiBoUtils.getBtAddressViaReflection();
+        if (doorJinBoBean.getKeyNo().length() == 12) {
+            String keyNo = doorJinBoBean.getKeyNo();
+            StringBuffer stringBuffer = new StringBuffer();
+            for (int i = 0; i < keyNo.length() / 2; i++) {
+                String a = keyNo.substring(2 * i, 2 * i + 2);
+                stringBuffer.append(a + ":");
+            }
+            String stringBuffer1 = stringBuffer.toString().substring(0, stringBuffer.length() - 1);
+            Log.e(" reg.PhoneMac", " reg.PhoneMac==" + stringBuffer1);
+            // reg.PhoneMac = "12:34:56:12:34:57";
+            reg.PhoneMac = stringBuffer1;
+        } else {
+            reg.PhoneMac = doorJinBoBean.getKeyNo();
+        }
+
         reg.type = Conf.STATE_DATA_LADDER;
         List<Register> arry = new ArrayList<Register>();
         arry.add(reg);
@@ -188,7 +202,7 @@ public class ElevatorControlActivity extends BaseActivity {
                 if (listBaseEntity.isSuccess()) {
                     final ElevatorListBean doorJinBoBean = BluetoothUtils.getMaxElevatorRsic(searchBlueDeviceBeanList, listBaseEntity.getData());
                     if (doorJinBoBean != null) {
-                        JiBoUtils.getInstance(ElevatorControlActivity.this).openDevice(doorJinBoBean, openLift(), new JiBoUtils.OnOpenLiftCallBackListenter() {
+                        JiBoUtils.getInstance(ElevatorControlActivity.this).openDevice(doorJinBoBean, openLift(doorJinBoBean), new JiBoUtils.OnOpenLiftCallBackListenter() {
                             @Override
                             public void OpenLiftCallBackListenter(int backState, String msg) {
                                 tv_name.setText(doorJinBoBean.getElevatorNum() + doorJinBoBean.getName() + msg);
