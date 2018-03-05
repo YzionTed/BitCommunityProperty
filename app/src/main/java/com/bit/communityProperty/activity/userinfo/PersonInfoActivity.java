@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bit.communityProperty.R;
@@ -25,6 +26,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import me.leefeng.promptlibrary.PromptDialog;
@@ -35,13 +37,17 @@ import me.leefeng.promptlibrary.PromptDialog;
 public class PersonInfoActivity extends BaseActivity {
 
 
+    PromptDialog userinfo;
+    @BindView(R.id.action_bar_title)
+    TextView actionBarTitle;
+    @BindView(R.id.btn_back)
+    ImageView btnBack;
     @BindView(R.id.btn_right_action_bar)
     TextView btnRightActionBar;
     @BindView(R.id.iv_right_action_bar)
     ImageView ivRightActionBar;
     @BindView(R.id.pb_loaing_action_bar)
     ProgressBar pbLoaingActionBar;
-
     @BindView(R.id.iv_head)
     CircleImageView ivHead;
     @BindView(R.id.layout_head)
@@ -66,11 +72,6 @@ public class PersonInfoActivity extends BaseActivity {
     TextView tvJob;
     @BindView(R.id.iv_add)
     ImageView ivAdd;
-    private ImageView ivHealth;
-    private TextView tvTitle;
-    private ImageView btnBack;
-    private LinearLayout llName;
-    PromptDialog userinfo;
 
     @Override
     public int getLayoutId() {
@@ -79,39 +80,13 @@ public class PersonInfoActivity extends BaseActivity {
 
     @Override
     public void initViewData() {
-        userinfo= new PromptDialog(PersonInfoActivity.this);
+        userinfo = new PromptDialog(PersonInfoActivity.this);
         initView();
-        initListener();
         getcurrUser();
     }
 
     private void initView() {
-        tvTitle = findViewById(R.id.action_bar_title);
-        btnBack = findViewById(R.id.btn_back);
-        tvTitle.setText("用户信息");
-        llName = findViewById(R.id.layout_name);
-        ivHealth = findViewById(R.id.iv_add);
-    }
-
-    private void initListener() {
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-//        ivHealth.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                PicSelectUtils.startPhoto(PersonInfoActivity.this, 1, PictureConfig.SINGLE);
-//            }
-//        });
-//        llName.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(PersonInfoActivity.this, ChangeNameActivity.class));
-//            }
-//        });
+        actionBarTitle.setText("用户信息");
     }
 
     @Override
@@ -133,7 +108,7 @@ public class PersonInfoActivity extends BaseActivity {
     }
 
     private void getcurrUser() {
-        userinfo.showLoading("获取数据中",false);
+        userinfo.showLoading("获取数据中", false);
         RetrofitManage.getInstance().subscribe(Api.getInstance().GetCurrUser(), new Observer<BaseEntity<UserData>>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -142,9 +117,18 @@ public class PersonInfoActivity extends BaseActivity {
 
             @Override
             public void onNext(BaseEntity<UserData> userDataBaseEntity) {
-                if(userDataBaseEntity.isSuccess()==true){
-                    tvEnName.setText(userDataBaseEntity.getData().getName());
-                    tvPhone.setText(userDataBaseEntity.getData().getPhone());
+                if (userDataBaseEntity.isSuccess() == true) {
+                    UserData userData = userDataBaseEntity.getData();
+                    if (userData != null) {
+                        tvEnName.setText(userData.getName());
+                        tvPhone.setText(userData.getPhone());
+                        tvCountry.setText(userData.getAge());
+                        if (userData.getSex() == 1) {
+                            tvChName.setText("男");
+                        } else if (userData.getSex() == 2) {
+                            tvChName.setText("女");
+                        }
+                    }
                 }
                 LogManager.printErrorLog("backinfo", "用户信息返回数据：" + GsonUtils.getInstance().toJson(userDataBaseEntity));
             }
@@ -163,10 +147,8 @@ public class PersonInfoActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
-
+    @OnClick(R.id.btn_back)
+    public void onViewClicked() {
+        finish();
     }
 }

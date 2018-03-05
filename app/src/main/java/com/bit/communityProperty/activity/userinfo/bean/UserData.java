@@ -9,26 +9,60 @@ import java.util.List;
 
 public class UserData implements Serializable {
     /**
-     * email : 511782881@qq.com
-     * iDCard : 452730199110130512
-     * id : 5a73c8b29ce9fbd050a76980
-     * name : 苏祖恩
-     * nickName : suzuen
-     * permissions : []
-     * phone : 15918729265
-     * roles : []
-     * token : null
+     * age : 23
+     * attach : fefe
+     * bdaddr : efef
+     * email : fefefe
+     * headImg : adfd
+     * id : 5a9aae8824b4e6bf7afc2cf0
+     * identityCard : fdfefadf
+     * name : efdfe
+     * nickName : efdfa
+     * permissions : ["a","b"]
+     * phone : 13726216149
+     * roles : ["a","b"]
+     * sex : 1
+     * token : ffefef
      */
 
+    private String age;
+    private String attach;
+    private String bdaddr;
     private String email;
-    private String identityCard;
+    private String headImg;
     private String id;
+    private String identityCard;
     private String name;
     private String nickName;
     private String phone;
-    private Object token;
+    private int sex;
+    private String token;
     private List<String> permissions;
     private List<String> roles;
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getAttach() {
+        return attach;
+    }
+
+    public void setAttach(String attach) {
+        this.attach = attach;
+    }
+
+    public String getBdaddr() {
+        return bdaddr;
+    }
+
+    public void setBdaddr(String bdaddr) {
+        this.bdaddr = bdaddr;
+    }
 
     public String getEmail() {
         return email;
@@ -38,7 +72,13 @@ public class UserData implements Serializable {
         this.email = email;
     }
 
+    public String getHeadImg() {
+        return headImg;
+    }
 
+    public void setHeadImg(String headImg) {
+        this.headImg = headImg;
+    }
 
     public String getId() {
         return id;
@@ -46,6 +86,14 @@ public class UserData implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getIdentityCard() {
+        return identityCard;
+    }
+
+    public void setIdentityCard(String identityCard) {
+        this.identityCard = identityCard;
     }
 
     public String getName() {
@@ -72,12 +120,36 @@ public class UserData implements Serializable {
         this.phone = phone;
     }
 
-    public Object getToken() {
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
+    }
+
+    public String getToken() {
         return token;
     }
 
-    public void setToken(Object token) {
+    public void setToken(String token) {
         this.token = token;
+    }
+
+    public List<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 
 

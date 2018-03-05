@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_dp_48" />
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none">
@@ -14,12 +22,6 @@
             android:divider="@drawable/base_divider"
             android:orientation="vertical"
             android:showDividers="middle">
-
-            <include
-                android:id="@+id/toolbar"
-                layout="@layout/action_bar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/common_dp_48" />
 
             <LinearLayout
                 android:id="@+id/layout_head"
@@ -129,7 +131,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -137,7 +138,8 @@
                 android:minHeight="50dp"
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:paddingRight="16dp"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="0dp"
@@ -231,3 +233,4 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+</LinearLayout>

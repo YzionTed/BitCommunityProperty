@@ -49,8 +49,8 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public enum RetrofitManage {
     INSTANCE;
 
-    public static String BASE_URL = "http://39.106.249.8:9000"; // 自动获取API环境
-//    public static String BASE_URL = "http://192.168.10.117:9000"; // 自动获取API环境
+//    public static String BASE_URL = "http://39.106.249.8:9000"; // 测试环境API环境
+    public static String BASE_URL = "https://smcm.bitiot.com.cn"; // 生产环境API环境
     private static Retrofit mRetrofit;
     private static HttpService mHttpService;
 
