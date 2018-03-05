@@ -25,6 +25,7 @@ import com.bit.communityProperty.fragment.main.bean.WeatherInfoBean;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.receiver.RxBus;
+import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.TimeUtils;
 import com.bit.communityProperty.utils.UploadInfo;
@@ -69,7 +70,6 @@ public class MainNewsFragment extends BaseFragment {
     private LinearLayout llEmpty;
 
     private List<MainNewsBean.RecordsBean> noticeList;
-    private OSS oss;
     private UploadInfo uploadInfo;
     @Override
     protected int getLayoutId() {
@@ -175,7 +175,7 @@ public class MainNewsFragment extends BaseFragment {
     }
 
     private void initListView() {
-        newsAdapter = new MainNewsAdapter(mActivity,oss);
+        newsAdapter = new MainNewsAdapter(mActivity);
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(newsAdapter);
         CommonHeader commonHeader = new CommonHeader(mActivity, R.layout.include_main_news_head);
         mLRecyclerViewAdapter.addHeaderView(commonHeader);
@@ -240,9 +240,10 @@ public class MainNewsFragment extends BaseFragment {
                 if (uploadInfoBaseEntity.isSuccess()){
                     uploadInfo = uploadInfoBaseEntity.getData();
                     if (uploadInfo!=null){
-                        OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(uploadInfo
-                                .getAccessKeyId(), uploadInfo.getAccessKeySecret(), uploadInfo.getSecurityToken());
-                        oss = new OSSClient(mContext, uploadInfo.getEndPoint(), credentialProvider);
+//                        OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(uploadInfo
+//                                .getAccessKeyId(), uploadInfo.getAccessKeySecret(), uploadInfo.getSecurityToken());
+//                        oss = new OSSClient(mContext, uploadInfo.getEndPoint(), credentialProvider);
+                        OssManager.getInstance().init(mContext, uploadInfo);
                     }
                 }
                 initListView();

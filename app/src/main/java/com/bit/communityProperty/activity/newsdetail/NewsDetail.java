@@ -19,6 +19,7 @@ import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.GlideUtils;
 import com.bit.communityProperty.utils.LogManager;
+import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.TimeUtils;
 import com.bit.communityProperty.utils.UploadInfo;
 
@@ -54,7 +55,6 @@ public class NewsDetail extends BaseActivity {
     TextView tvDanwei;
 
     private String id;
-    private OSS oss;
     private UploadInfo uploadInfo;
 
     @Override
@@ -81,9 +81,7 @@ public class NewsDetail extends BaseActivity {
                 if (uploadInfoBaseEntity.isSuccess()){
                     uploadInfo = uploadInfoBaseEntity.getData();
                     if (uploadInfo!=null){
-                        OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(uploadInfo
-                                .getAccessKeyId(), uploadInfo.getAccessKeySecret(), uploadInfo.getSecurityToken());
-                        oss = new OSSClient(mContext, uploadInfo.getEndPoint(), credentialProvider);
+                        OssManager.getInstance().init(mContext, uploadInfo);
                     }
                 }
                 getDetail();
@@ -116,13 +114,9 @@ public class NewsDetail extends BaseActivity {
                         tvDate.setText(TimeUtils.stampToDate(bean.getPublishAt()));
                         tvDanwei.setText(bean.getEditorName());
                         tvContent.setText(bean.getBody());
-                        try {
-                            String url = oss.presignConstrainedObjectURL("bit-app", bean.getThumbnailUrl(),30 * 60);
-                            LogManager.i(url);
-                            GlideUtils.loadImage(mContext,url,ivImg);
-                        } catch (ClientException e) {
-                            e.printStackTrace();
-                        }
+                        String url = OssManager.getInstance().getUrl(bean.getThumbnailUrl());
+                        LogManager.i(url);
+                        GlideUtils.loadImage(mContext,url,ivImg);
                     }
                 }
             }

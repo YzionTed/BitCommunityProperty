@@ -14,6 +14,7 @@ import com.bit.communityProperty.R;
 import com.bit.communityProperty.adapter.ListBaseAdapter;
 import com.bit.communityProperty.fragment.main.bean.MainNewsBean;
 import com.bit.communityProperty.utils.GlideUtils;
+import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.TimeUtils;
 
 /**
@@ -23,10 +24,8 @@ import com.bit.communityProperty.utils.TimeUtils;
 public class MainNewsAdapter extends ListBaseAdapter<MainNewsBean.RecordsBean> {
 
     private Context mContext;
-    private OSS oss;
-    public MainNewsAdapter(Context context, OSS oss) {
+    public MainNewsAdapter(Context context) {
         this.mContext = context;
-        this.oss = oss;
     }
 
     @Override
@@ -45,16 +44,8 @@ public class MainNewsAdapter extends ListBaseAdapter<MainNewsBean.RecordsBean> {
         viewHolder.tvTitle.setText(mDataList.get(position).getTitle());
         viewHolder.tvDate.setText(TimeUtils.stampToDateWithHm(mDataList.get(position).getPublishAt()));
         viewHolder.tvContent.setText(mDataList.get(position).getBody());
-        try {
-            if (oss!=null){
-                String url = oss.presignConstrainedObjectURL("bit-app", mDataList.get(position).getThumbnail(),30 * 60);
-                GlideUtils.loadImage(mContext,url,viewHolder.ivImg);
-            }
-        } catch (ClientException e) {
-            e.printStackTrace();
-        }
-//        GlideUtils.loadImageView(mContext,mDataList.get(position).getThumbnail(),viewHolder.ivImg);
-
+        String url = OssManager.getInstance().getUrl(mDataList.get(position).getThumbnail());
+        GlideUtils.loadImage(mContext,url,viewHolder.ivImg);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
