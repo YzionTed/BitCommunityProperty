@@ -119,7 +119,7 @@ public class AuditingBean implements Serializable{
         private String roomId;
         private String roomLocation;
         private String roomName;
-        private Object sex;
+        private int sex;
         private String telPhone;
         private long updateAt;
         private Object updateBy;
@@ -342,11 +342,11 @@ public class AuditingBean implements Serializable{
             this.roomName = roomName;
         }
 
-        public Object getSex() {
+        public int getSex() {
             return sex;
         }
 
-        public void setSex(Object sex) {
+        public void setSex(int sex) {
             this.sex = sex;
         }
 

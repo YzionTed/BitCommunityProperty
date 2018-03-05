@@ -286,6 +286,12 @@ public class MainWorkFragment extends BaseFragment {
         }).start();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getOwnerApplyNum("5a82adf3b06c97e0cd6c0f3d");
+    }
+
     /**
      * 获取业主申请数量
      *

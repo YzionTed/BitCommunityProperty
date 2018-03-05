@@ -90,9 +90,13 @@ public class HouseholdInfoActivity extends BaseActivity {
     private void initData() {
         if (mRecordsBean != null) {
             tvName.setText(mRecordsBean.getName());
-//            tvGender.getText(mRecordsBean.getSex().toString());
+            if (mRecordsBean.getSex()==1){
+                tvGender.setText("男");
+            }else if (mRecordsBean.getSex()==2){
+                tvGender.setText("女");
+            }
             tvDate.setText(mRecordsBean.getBirthday());
-            tvPhone.setText(mRecordsBean.getPhone());
+            tvPhone.setText(mRecordsBean.getContractPhone());
             tvCardId.setText(mRecordsBean.getIdentityCard());
             tvHouseNum.setText(mRecordsBean.getRoomName());
             tvAgreementId.setText(mRecordsBean.getContract());
