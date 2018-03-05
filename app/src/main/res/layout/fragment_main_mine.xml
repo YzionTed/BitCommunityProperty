@@ -250,6 +250,7 @@
         android:visibility="gone"
         android:layout_marginTop="@dimen/common_dp_10"
         android:gravity="left|center_vertical"
-        android:textColor="@color/grary1" />
+        android:textSize="@dimen/common_sp_14"
+        android:textColor="@color/bs_grary2" />
 
 </LinearLayout>

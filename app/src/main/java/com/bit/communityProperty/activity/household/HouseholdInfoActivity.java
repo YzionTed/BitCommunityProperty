@@ -137,7 +137,7 @@ public class HouseholdInfoActivity extends BaseActivity {
             public void onNext(BaseEntity<String> BaseEntity) {
                 LogManager.printErrorLog("backinfo", GsonUtils.getInstance().toJson(BaseEntity));
                 if (BaseEntity.isSuccess()) {
-                    Toast.makeText(mContext, "成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "审核成功", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(mContext, BaseEntity.getErrorMsg(), Toast.LENGTH_SHORT).show();
                 }

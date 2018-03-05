@@ -54,7 +54,7 @@ public class AuditingAdapter extends ListBaseAdapter<AuditingBean.RecordsBean> {
             viewHolder.tvStatus.setText("违规");
         }
         viewHolder.tvName.setText(bean.getName());
-        viewHolder.tvPhone.setText(bean.getPhone());
+        viewHolder.tvPhone.setText(bean.getContractPhone());
         viewHolder.tvAddress.setText(bean.getCurrentAddress());
         viewHolder.tvTime.setText(TimeUtils.stampToDateWithHm(bean.getCreateAt()));
     }

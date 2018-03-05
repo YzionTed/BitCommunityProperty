@@ -101,7 +101,7 @@ public class AuditingBean implements Serializable{
         private boolean closed;
         private String communityId;
         private String contract;
-        private Object contractPhone;
+        private String contractPhone;
         private long createAt;
         private String createId;
         private String currentAddress;
@@ -198,11 +198,11 @@ public class AuditingBean implements Serializable{
             this.contract = contract;
         }
 
-        public Object getContractPhone() {
+        public String getContractPhone() {
             return contractPhone;
         }
 
-        public void setContractPhone(Object contractPhone) {
+        public void setContractPhone(String contractPhone) {
             this.contractPhone = contractPhone;
         }
 

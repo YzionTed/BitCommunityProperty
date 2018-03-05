@@ -72,26 +72,39 @@ public class MainWorkFragment extends BaseFragment {
     @BindView(R.id.tv_owner_apply_num)
     TextView tv0wnerApplyNum;//业主申请数量显示
     private CommonAdapter mAdapter;
+
+    /**
+     * 管理人员
+     * "小区门禁", "智能梯控", "工作排班","设备管理", "住户管理", "安防警报"
+     */
     private String[] managerTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator, AppConfig.Work_Schedule,
             AppConfig.Device_Management, AppConfig.Household_Management, AppConfig.Security_Alarm};
-    //    private String[] managerTitles = new String[]{"小区门禁", "智能梯控", "工作排班", "设备管理", "住户管理", "故障管理", "物业费管理"
-//            , "安防警报", "视频监控", "数据统计", "在线咨询"};
-    private String[] securityTitles = new String[]{"小区门禁", "智能梯控", "工作排班", "视频监控", "安防警报", "扫码放行", "巡逻打卡", "故障申报"};
-
-    private String[] cleanerTitles = new String[]{"小区门禁", "智能梯控", "工作排班", "保洁打卡"};
-
-    private String[] repairmanTitles = new String[]{"小区门禁", "智能梯控", "工作排班", "维修工单"};
-
     private int[] managerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb,
             R.mipmap.ic_work_sbgl, R.mipmap.ic_work_zhgl, R.mipmap.ic_work_afjb};
-    //    private int[] managerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_sbgl,
-//            R.mipmap.ic_work_zhgl, R.mipmap.ic_work_gzgl, R.mipmap.ic_work_wyfgl, R.mipmap.ic_work_afjb,
-//            R.mipmap.ic_work_spjk, R.mipmap.ic_work_sjtj, R.mipmap.ic_work_zxzx};
+
+    /**
+     * 保安门卫
+     * "小区门禁", "智能梯控", "工作排班", "视频监控", "安防警报", "扫码放行", "巡逻打卡", "故障申报"
+     */
+    private String[] securityTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator, AppConfig.Work_Schedule
+            , AppConfig.Video_Surveillance, AppConfig.Security_Alarm, AppConfig.Scanning_Release, AppConfig.Patrol_Punch, AppConfig.Fault_Reporting};
     private int[] securityImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_spjk,
             R.mipmap.ic_work_afjb, R.mipmap.ic_work_smfx, R.mipmap.ic_work_xldk, R.mipmap.ic_work_gzsb};
 
+    /**
+     * 保洁人员
+     * "小区门禁", "智能梯控", "工作排班", "保洁打卡"
+     */
+    private String[] cleanerTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator,
+            AppConfig.Work_Schedule, AppConfig.Punch_Cleaning};
     private int[] cleanerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_bjdk};
 
+    /**
+     * 维修人员
+     * "小区门禁", "智能梯控", "工作排班", "维修工单"
+     */
+    private String[] repairmanTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator,
+            AppConfig.Work_Schedule,AppConfig.Repair_Orders};
     private int[] repairmanImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_wxgd};
 
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_f1"
@@ -40,7 +41,7 @@
                     android:layout_height="50dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerHorizontal="true"
-                    android:src="@mipmap/ic_launcher_round" />
+                    android:src="@mipmap/ic_default_head_man" />
             </RelativeLayout>
 
             <include layout="@layout/line_gray"></include>
@@ -72,7 +73,7 @@
                     android:ellipsize="end"
                     android:gravity="right"
                     android:maxLines="1"
-                    android:text="刘三字"
+                    tools:text="刘三字"
                     android:textColor="@color/tv_black_33"
                     android:textSize="16sp" />
             </RelativeLayout>
@@ -106,7 +107,7 @@
                     android:ellipsize="end"
                     android:gravity="right"
                     android:maxLines="1"
-                    android:text="男"
+                    tools:text="男"
                     android:textColor="@color/tv_black_33"
                     android:textSize="16sp" />
             </RelativeLayout>
@@ -140,7 +141,7 @@
                     android:ellipsize="end"
                     android:gravity="right"
                     android:maxLines="1"
-                    android:text="1999-09-28"
+                    tools:text="1999-09-28"
                     android:textColor="@color/tv_black_33"
                     android:textSize="16sp" />
             </RelativeLayout>
@@ -174,7 +175,7 @@
                     android:ellipsize="end"
                     android:gravity="right"
                     android:maxLines="1"
-                    android:text="12343234543"
+                    tools:text="12343234543"
                     android:textColor="@color/tv_black_33"
                     android:textSize="16sp" />
             </RelativeLayout>
@@ -208,7 +209,7 @@
                     android:ellipsize="end"
                     android:gravity="right"
                     android:maxLines="1"
-                    android:text="1234567654567890"
+                    tools:text="1234567654567890"
                     android:textColor="@color/tv_black_33"
                     android:textSize="16sp" />
             </RelativeLayout>
@@ -242,7 +243,7 @@
                     android:ellipsize="end"
                     android:gravity="right"
                     android:maxLines="1"
-                    android:text="A1栋1单元100室"
+                    tools:text="A1栋1单元100室"
                     android:textColor="@color/tv_black_33"
                     android:textSize="16sp" />
             </RelativeLayout>
@@ -276,7 +277,7 @@
                     android:ellipsize="end"
                     android:gravity="right"
                     android:maxLines="1"
-                    android:text="1234567875"
+                    tools:text="1234567875"
                     android:textColor="@color/tv_black_33"
                     android:textSize="16sp" />
             </RelativeLayout>
@@ -290,7 +291,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="32dp"
-                android:background="@color/bg_gray_c7cfe2"
+                android:background="@drawable/shape_rad22_gray"
                 android:gravity="center"
                 android:padding="15dp"
                 android:text="已驳回"
@@ -305,7 +306,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="32dp"
-                android:background="@color/bg_yellow_b148"
+                android:background="@drawable/shape_rad22_yellow"
                 android:text="审核通过"
                 android:textColor="@color/white"
                 android:textSize="16dp" />
@@ -318,7 +319,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
-                android:background="@color/white"
+                android:background="@drawable/shape_rad22_white"
                 android:text="驳回申请"
                 android:textColor="@color/tv_black_33"
                 android:textSize="16dp" />
