@@ -23,6 +23,9 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
+
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -50,7 +53,7 @@ public enum RetrofitManage {
     INSTANCE;
 
 //    public static String BASE_URL = "http://39.106.249.8:9000"; // 测试环境API环境
-    public static String BASE_URL = "https://smcm.bitiot.com.cn"; // 生产环境API环境 api.smcm.bitiot.com.cn
+    public static String BASE_URL = "https://api.smcm.bitiot.com.cn"; // 生产环境API环境 api.smcm.bitiot.com.cn
     private static Retrofit mRetrofit;
     private static HttpService mHttpService;
 
@@ -157,6 +160,12 @@ public enum RetrofitManage {
             //错误重连
             builder.retryOnConnectionFailure(true);
 
+            builder.hostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
             OkHttpClient okHttpClient = builder.build();
 
             mRetrofit = new Retrofit.Builder()
