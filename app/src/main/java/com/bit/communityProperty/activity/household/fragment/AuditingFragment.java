@@ -17,6 +17,7 @@ import com.bit.communityProperty.activity.releasePass.bean.ReleasePassDetailsBea
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
+import com.bit.communityProperty.receiver.RxBus;
 import com.bit.communityProperty.utils.GsonUtils;
 import com.bit.communityProperty.utils.LogManager;
 import com.github.jdsjlzx.interfaces.OnItemClickListener;
@@ -33,6 +34,7 @@ import java.util.Map;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * 待审核（正在审核）的fragment，
@@ -116,7 +118,7 @@ public class AuditingFragment extends Fragment {
                 mLRecyclerViewAdapter.notifyDataSetChanged();
                 mRecordsBeanBeanList.clear();
                 //网络请求获取列表数据
-                getAuditingList("5a82adf3b06c97e0cd6c0f3d",1,0,pageIndex,REQUEST_COUNT);
+                getAuditingList("5a82adf3b06c97e0cd6c0f3d", 1, 0, pageIndex, REQUEST_COUNT);
             }
         });
 
@@ -131,7 +133,7 @@ public class AuditingFragment extends Fragment {
                 if (mCurrentCounter < TOTAL_COUNTER) {
                     pageIndex++;
                     //网络请求获取列表数据
-                    getAuditingList("5a82adf3b06c97e0cd6c0f3d",1,0,pageIndex,REQUEST_COUNT);
+                    getAuditingList("5a82adf3b06c97e0cd6c0f3d", 1, 0, pageIndex, REQUEST_COUNT);
                 } else {
                     mRecyclerView.setNoMore(true);
                 }
@@ -159,25 +161,45 @@ public class AuditingFragment extends Fragment {
             }
         });
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
+        RxBus.get().toObservable().subscribe(new Consumer<Object>() {
+
+            @Override
+            public void accept(Object o) throws Exception {
+                if (o instanceof String) {
+                    if (o != null && o.equals("update_house")) {
+                        mCurrentCounter = 0;
+                        pageIndex = 1;
+                        mLRecyclerViewAdapter.removeFooterView();
+                        adapter.clear();
+                        mLRecyclerViewAdapter.notifyDataSetChanged();
+                        mRecordsBeanBeanList.clear();
+                        //网络请求获取列表数据
+                        getAuditingList("5a82adf3b06c97e0cd6c0f3d", 1, 0, pageIndex, REQUEST_COUNT);
+                    }
+                }
+            }
+        });
         return rootView;
     }
 
     /**
      * 按社区获取用户列表
-     * @param communityId 社区ID
+     *
+     * @param communityId  社区ID
      * @param relationship 1：业主；2：家属；3：租客
-     * @param auditStatus 0：未审核；1：审核通过；-1：驳回；-2：违规; 2: 已注销; 3: 已解绑
-     * @param page 当前第几页
-     * @param size 一页的数据数量
+     * @param auditStatus  0：未审核；1：审核通过；-1：驳回；-2：违规; 2: 已注销; 3: 已解绑
+     * @param page         当前第几页
+     * @param size         一页的数据数量
      */
-    private void getAuditingList(String communityId,int relationship,int auditStatus,int page,int size){
+    private void getAuditingList(String communityId, int relationship, int auditStatus, int page, int size) {
         String url = "v1/user/" + communityId + "/getByCommunityId";
-        Map<String ,Object> map = new HashMap<>();
-        map.put("relationship",relationship);
-        map.put("auditStatus",auditStatus);
-        map.put("page",page);
-        map.put("size",size);
-        RetrofitManage.getInstance().subscribe(Api.getInstance().getAuditingList(url,map), new Observer<BaseEntity<AuditingBean>>() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("relationship", relationship);
+        map.put("auditStatus", auditStatus);
+        map.put("page", page);
+        map.put("size", size);
+        RetrofitManage.getInstance().subscribe(Api.getInstance().getAuditingList(url, map), new Observer<BaseEntity<AuditingBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -186,7 +208,7 @@ public class AuditingFragment extends Fragment {
             @Override
             public void onNext(BaseEntity<AuditingBean> BaseEntity) {
                 LogManager.printErrorLog("backinfo", GsonUtils.getInstance().toJson(BaseEntity));
-                if (BaseEntity.isSuccess()&&BaseEntity.getData()!=null) {
+                if (BaseEntity.isSuccess() && BaseEntity.getData() != null) {
                     TOTAL_COUNTER = BaseEntity.getData().getTotal();//服务器上的总数据条数
                     mRecordsBeanBeanList = BaseEntity.getData().getRecords();
                     mRecyclerView.refreshComplete(REQUEST_COUNT);

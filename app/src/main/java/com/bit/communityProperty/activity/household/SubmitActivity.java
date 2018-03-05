@@ -12,6 +12,7 @@ import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.base.BaseSubmitActivity;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
+import com.bit.communityProperty.receiver.RxBus;
 import com.bit.communityProperty.utils.GsonUtils;
 import com.bit.communityProperty.utils.LogManager;
 import com.bit.communityProperty.view.TitleBarView;
@@ -87,6 +88,7 @@ public class SubmitActivity extends BaseSubmitActivity{
                 LogManager.printErrorLog("backinfo", GsonUtils.getInstance().toJson(BaseEntity));
                 if (BaseEntity.isSuccess()) {
                     finish();
+                    RxBus.get().post("finish_house");
                     Toast.makeText(mContext, "成功", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(mContext, BaseEntity.getErrorMsg(), Toast.LENGTH_SHORT).show();

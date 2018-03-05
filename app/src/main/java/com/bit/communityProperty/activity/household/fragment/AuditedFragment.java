@@ -18,6 +18,7 @@ import com.bit.communityProperty.activity.household.bean.AuditingBean;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
+import com.bit.communityProperty.receiver.RxBus;
 import com.bit.communityProperty.utils.GsonUtils;
 import com.bit.communityProperty.utils.LogManager;
 
@@ -30,6 +31,7 @@ import java.util.TimerTask;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * 已审核的fragment
@@ -44,7 +46,7 @@ public class AuditedFragment extends Fragment {
     private AuditedExpandableListAdapter adapter;//可展开listview的adapter
     public List<AuditedBean> groupList = new ArrayList();
     public List<List<AuditedUserBean.RecordsBean>> childList = new ArrayList();
-    private ArrayList<Boolean> isGetOverData= new ArrayList<>();//是否获取过展开的数据
+    private ArrayList<Boolean> isGetOverData = new ArrayList<>();//是否获取过展开的数据
 
     //    public String[] groupStrings= {"Group1", "Group2", "Group3", "Group4", "Group5", "Group6", "Group7",
 //            "Group8","Group9", "Group10", "Group11", "Group12"};
@@ -103,7 +105,7 @@ public class AuditedFragment extends Fragment {
                 } else {//点击展开
                     //判断是否访问过网络数据
                     if (!isGetOverData.get(groupPosition)) {//没有展开过，网络访问数据
-                        isGetOverData.set(groupPosition,true);
+                        isGetOverData.set(groupPosition, true);
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -128,13 +130,25 @@ public class AuditedFragment extends Fragment {
 //                            handler.sendMessage(msg);
 //                        }
 //                    }, 200);
-                    }else {
-                        mExpandableListView.expandGroup(groupPosition,true);
+                    } else {
+                        mExpandableListView.expandGroup(groupPosition, true);
                     }
                 }
                 return true;
             }
         });
+
+//        RxBus.get().toObservable().subscribe(new Consumer<Object>() {
+//
+//            @Override
+//            public void accept(Object o) throws Exception {
+//                if (o instanceof String) {
+//                    if (o != null && o.equals("update_house")) {
+//
+//                    }
+//                }
+//            }
+//        });
         return rootView;
     }
 
@@ -143,13 +157,13 @@ public class AuditedFragment extends Fragment {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1://网络访问展开的子数据
-                    if (msg.getData()!=null)
-                    getUsersByBuildingId(msg.getData().getInt("SELECT_GROUP_POISITION"),
-                            msg.getData().getString("BUILDING_ID"),
-                            1,
-                            1,
-                            1,
-                            500);
+                    if (msg.getData() != null)
+                        getUsersByBuildingId(msg.getData().getInt("SELECT_GROUP_POISITION"),
+                                msg.getData().getString("BUILDING_ID"),
+                                1,
+                                1,
+                                1,
+                                500);
                     break;
                 default:
                     break;
@@ -175,7 +189,7 @@ public class AuditedFragment extends Fragment {
                 LogManager.printErrorLog("backinfo", GsonUtils.getInstance().toJson(BaseEntity));
                 if (BaseEntity.isSuccess() && BaseEntity.getData() != null) {
                     groupList = BaseEntity.getData();
-                    for (int i=0;i<groupList.size();i++){
+                    for (int i = 0; i < groupList.size(); i++) {
                         isGetOverData.add(false);
                     }
                     adapter = new AuditedExpandableListAdapter(mContext, BaseEntity.getData(), childList);
@@ -199,20 +213,20 @@ public class AuditedFragment extends Fragment {
      * 按楼宇ID获取用户关系列表
      *
      * @param selectGroupPoisition 选择展开列表的Poisition
-     * @param buildingId 楼宇ID
-     * @param relationship （1：业主；2：家属；3：租客）
-     * @param auditStatus （0：未审核；1：审核通过；-1：驳回；-2：违规; 2: 已注销; 3: 已解绑;）
-     * @param page 当前页数
-     * @param size 一页多少条数据
+     * @param buildingId           楼宇ID
+     * @param relationship         （1：业主；2：家属；3：租客）
+     * @param auditStatus          （0：未审核；1：审核通过；-1：驳回；-2：违规; 2: 已注销; 3: 已解绑;）
+     * @param page                 当前页数
+     * @param size                 一页多少条数据
      */
     private void getUsersByBuildingId(final int selectGroupPoisition, String buildingId, int relationship, int auditStatus, int page, int size) {
         String url = "v1/user/" + buildingId + "/by-building-id";
-        Map<String,Object> map = new HashMap<>();
-        map.put("relationship",relationship);
-        map.put("auditStatus",auditStatus);
-        map.put("page",page);
-        map.put("size",size);
-        RetrofitManage.getInstance().subscribe(Api.getInstance().getUsersByBuildingId(url,map), new Observer<BaseEntity<AuditedUserBean>>() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("relationship", relationship);
+        map.put("auditStatus", auditStatus);
+        map.put("page", page);
+        map.put("size", size);
+        RetrofitManage.getInstance().subscribe(Api.getInstance().getUsersByBuildingId(url, map), new Observer<BaseEntity<AuditedUserBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -222,10 +236,10 @@ public class AuditedFragment extends Fragment {
             public void onNext(BaseEntity<AuditedUserBean> BaseEntity) {
                 LogManager.printErrorLog("backinfo", GsonUtils.getInstance().toJson(BaseEntity));
                 if (BaseEntity.isSuccess() && BaseEntity.getData() != null) {
-                    List<AuditedUserBean.RecordsBean> beans= BaseEntity.getData().getRecords();
-                    adapter.addChildData(selectGroupPoisition,BaseEntity.getData().getRecords());
+                    List<AuditedUserBean.RecordsBean> beans = BaseEntity.getData().getRecords();
+                    adapter.addChildData(selectGroupPoisition, BaseEntity.getData().getRecords());
                     adapter.notifyDataSetChanged();
-                    mExpandableListView.expandGroup(selectGroupPoisition,true);
+                    mExpandableListView.expandGroup(selectGroupPoisition, true);
                 }
             }
 

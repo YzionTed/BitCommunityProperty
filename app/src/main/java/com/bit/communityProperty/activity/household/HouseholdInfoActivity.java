@@ -15,6 +15,7 @@ import com.bit.communityProperty.base.BaseActivity;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
+import com.bit.communityProperty.receiver.RxBus;
 import com.bit.communityProperty.utils.GsonUtils;
 import com.bit.communityProperty.utils.LogManager;
 import com.bit.communityProperty.view.TitleBarView;
@@ -24,6 +25,7 @@ import java.util.Map;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * 住户详情、业主信息
@@ -115,6 +117,18 @@ public class HouseholdInfoActivity extends BaseActivity {
             }
         }
 
+        RxBus.get().toObservable().subscribe(new Consumer<Object>() {
+
+            @Override
+            public void accept(Object o) throws Exception {
+                if (o instanceof String){
+                    if (o != null && o.equals("finish_house")) {
+                        finish();
+                        RxBus.get().post("update_house");
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -142,6 +156,8 @@ public class HouseholdInfoActivity extends BaseActivity {
                 LogManager.printErrorLog("backinfo", GsonUtils.getInstance().toJson(BaseEntity));
                 if (BaseEntity.isSuccess()) {
                     Toast.makeText(mContext, "审核成功", Toast.LENGTH_SHORT).show();
+                    RxBus.get().post("update_house");
+                    finish();
                 } else {
                     Toast.makeText(mContext, BaseEntity.getErrorMsg(), Toast.LENGTH_SHORT).show();
                 }
