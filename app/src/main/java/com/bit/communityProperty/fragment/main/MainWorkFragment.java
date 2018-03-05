@@ -136,7 +136,9 @@ public class MainWorkFragment extends BaseFragment {
             public void accept(Object o) throws Exception {
                 if (o instanceof String) {
                     if (o != null && o.equals("location")) {
-                        tvLocal.setText((String) SPUtil.get(mContext, AppConfig.CITY, "包头市"));
+                        if ((String) SPUtil.get(mContext, AppConfig.CITY, "包头市")!=null){
+                            tvLocal.setText((String) SPUtil.get(mContext, AppConfig.CITY, "包头市"));
+                        }
                     }
                 }
             }

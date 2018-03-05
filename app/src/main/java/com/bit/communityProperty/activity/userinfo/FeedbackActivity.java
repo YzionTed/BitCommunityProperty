@@ -130,6 +130,10 @@ public class FeedbackActivity extends BaseActivity {
                     ToastUtil.showShort("请输入意见反馈");
                     return;
                 }
+                if (etInput.getText().toString().length()<5){
+                    ToastUtil.showShort("请输入至少5个字符");
+                    return;
+                }
                 AddFeedback();
                 break;
         }

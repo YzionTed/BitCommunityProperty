@@ -63,7 +63,7 @@ public class WaitSolveListFragment extends BaseFragment implements SafeWarningAd
 
     @Override
     protected void initViewAndData() {
-        multipleStatusView.showLoading();
+//        multipleStatusView.showLoading();
         initDate();
         getList();
     }
@@ -120,7 +120,7 @@ public class WaitSolveListFragment extends BaseFragment implements SafeWarningAd
             @Override
             public void accept(Object s) throws Exception {
                 if (s instanceof String) {
-                    if (s.equals("update")) {
+                    if (s.equals("update") || s.equals("finish")) {
                         isRefresh = true;
                         getList();
                     }
@@ -150,17 +150,17 @@ public class WaitSolveListFragment extends BaseFragment implements SafeWarningAd
                 rlv.refreshComplete(AppConfig.pageSize);
                 alarmListBean = alarmListBeanBaseEntity.getData();
                 if (alarmListBean != null) {
-                    if (isRefresh){
-                        if (alarmListBean.getRecords().size()==0){
-                            multipleStatusView.showEmpty();
-                        }else{
-                            multipleStatusView.showContent();
+                    if (isRefresh) {
+//                        if (alarmListBean.getRecords().size() == 0) {
+////                            multipleStatusView.showEmpty();
+//                        } else {
+////                            multipleStatusView.showContent();
                             adapter.setDataList(alarmListBean.getRecords());
-                        }
+//                        }
                     } else
                         adapter.addAll(alarmListBean.getRecords());
-                }else{
-                    multipleStatusView.showEmpty();
+                } else {
+//                    multipleStatusView.showEmpty();
                 }
             }
 

@@ -475,9 +475,11 @@ public class MainActivity extends BaseActivity {
                 if (amapLocation != null) {
                     if (amapLocation.getErrorCode() == 0) {
                         //解析定位结果
-                        LogManager.i(amapLocation.getCity());
-                        SPUtil.put(mContext, AppConfig.CITY, amapLocation.getCity());
-                        RxBus.get().post("location");
+                        if (amapLocation.getCity()!=null){
+                            LogManager.i(amapLocation.getCity());
+                            SPUtil.put(mContext, AppConfig.CITY, amapLocation.getCity());
+                            RxBus.get().post("location");
+                        }
                     }
                 }
             }
