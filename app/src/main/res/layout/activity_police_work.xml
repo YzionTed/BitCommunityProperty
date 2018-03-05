@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bit.communityProperty.activity.workplan.PoliceWorkActivity">
+
+    <include layout="@layout/action_bar"></include>
+    <TextView
+        android:padding="12dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:drawableRight="@mipmap/icon_next"
+        android:layout_height="wrap_content"
+        android:text="九月份保安巡逻排班表"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/ll_table"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></LinearLayout>
+</LinearLayout>

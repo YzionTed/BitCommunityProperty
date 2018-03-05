@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_bg_video"
+    android:orientation="vertical"
+    tools:context="com.bit.communityProperty.activity.access.VideoOpenActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/common_dp_100"
+        android:text="小区大门门禁机"
+        android:textColor="@color/tv_black_33"
+        android:textSize="@dimen/common_sp_18" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/common_dp_16"
+        android:text="发起视频通话申请!"
+        android:textColor="@color/tv_gray_66"
+        android:textSize="15sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"></View>
+
+    <LinearLayout
+        android:layout_marginBottom="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_rad22_red"
+            android:minHeight="@dimen/common_dp_44"
+            android:text="挂断"
+            android:textColor="@color/white"
+            android:textSize="@dimen/common_sp_16" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_rad22_blue"
+            android:minHeight="@dimen/common_dp_44"
+            android:text="接听"
+            android:textColor="@color/white"
+            android:textSize="@dimen/common_sp_16" />
+    </LinearLayout>
+</LinearLayout>

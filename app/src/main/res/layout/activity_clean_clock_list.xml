@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/appbg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bit.communityProperty.activity.cleanclock.CleanClockListActivity">
+
+    <include layout="@layout/action_bar"></include>
+
+    <com.github.jdsjlzx.recyclerview.LRecyclerView
+        android:clipToPadding="false"
+        android:paddingTop="10dp"
+        android:id="@+id/lv_clean"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"></com.github.jdsjlzx.recyclerview.LRecyclerView>
+</LinearLayout>

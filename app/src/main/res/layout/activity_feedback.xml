@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/appbg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bit.communityProperty.activity.userinfo.FeedbackActivity">
+
+    <include layout="@layout/action_bar"></include>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+        <EditText
+            android:id="@+id/et_input"
+            android:maxLength="200"
+            android:gravity="left|top"
+            android:hint="请简要提出您对本APP的意见反馈"
+            android:background="@null"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="150dp"/>
+        <TextView
+            android:id="@+id/tv_length"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0/200"
+            android:layout_gravity="right"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_allround_blue"
+        android:text="提交"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+</LinearLayout>

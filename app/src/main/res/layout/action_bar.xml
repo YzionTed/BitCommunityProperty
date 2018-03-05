@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/action_bar"
+    android:layout_height="@dimen/common_dp_48"
+    android:background="@color/title_bg">
+
+    <TextView
+        android:id="@+id/action_bar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="KangTu"
+        android:textColor="@color/white"
+        android:textSize="@dimen/common_sp_18" />
+
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="@dimen/common_dp_48"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:padding="@dimen/common_dp_12"
+        android:src="@mipmap/icon_return"
+        android:visibility="visible" />
+
+    <TextView
+        android:layout_marginRight="@dimen/common_dp_16"
+        android:id="@+id/btn_right_action_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:text="..."
+        android:textColor="@color/white"
+        android:textSize="@dimen/common_sp_16"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/iv_right_action_bar"
+        android:layout_width="@dimen/common_dp_48"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/common_dp_16"
+        android:padding="@dimen/common_dp_12"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/pb_loaing_action_bar"
+        android:layout_width="@dimen/common_dp_30"
+        android:layout_height="@dimen/common_dp_30"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginRight="@dimen/common_dp_10"
+        android:indeterminateDrawable="@drawable/cycle_loading_anim"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:visibility="gone" />
+</RelativeLayout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.bit.communityProperty.activity.company.CompanyInfo">
+    <include layout="@layout/action_bar"></include>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/titlemessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <TextView
+                android:textSize="@dimen/common_sp_18"
+                android:layout_width="wrap_content"
+                android:textColor="@color/bs_grary4"
+                android:layout_marginTop="@dimen/common_dp_15"
+                android:layout_marginLeft="@dimen/common_dp_10"
+                android:text="包头市府兴物业有限责任公司"
+                android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/common_dp_10"
+                    android:layout_marginLeft="@dimen/common_dp_10"
+                    android:text="内蒙古自治区包头市九原区方邻美筑陶然居1-605"/>
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_below="@id/titlemessage"
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/icon_about_us"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:layout_below="@id/logo"
+                android:layout_width="wrap_content"
+                android:layout_margin="@dimen/common_dp_10"
+                android:text="包头市府兴物业有限责任公司是创建智慧社区积极倡导企业。并且在不断积累物业管理经验，不断严格依照ISO质量认证体系标准规范自己的服务，智慧社区就是以互联网为依托，运用物联网技术将社区的物联系系统和服务整合在一起，使社区管理者、用户和各种智慧系统形成各种形式的信息交互，以达到更加方便快捷的管理，给用户带来更加舒适的“数字化”生活体验。"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </ScrollView>
+
+</LinearLayout>

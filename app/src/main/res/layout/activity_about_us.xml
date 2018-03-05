@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/appbg"
+    tools:context="com.bit.communityProperty.activity.userinfo.AboutUsActivity">
+
+    <include layout="@layout/action_bar"></include>
+    <ImageView
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:src="@mipmap/icon_logo"/>
+    <TextView
+        android:textSize="16sp"
+        android:lineSpacingExtra="5dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="掌居宝物业版APP是一款基于物联网、云计算、互联网等技术打造的社区服务软件，具有智能门禁、故障报修、班表管理等功能，可实现小区的全面管理及运营，为物业和业主开启智慧新生活。"/>
+</LinearLayout>

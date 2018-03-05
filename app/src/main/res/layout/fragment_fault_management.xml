@@ -1,0 +1,14 @@
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.github.jdsjlzx.recyclerview.LRecyclerView
+        android:id="@+id/lv_fault_management"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:listSelector="@android:color/transparent" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.bit.communityProperty.activity.newsdetail.NewsDetail">
+
+    <include layout="@layout/action_bar"></include>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/common_dp_8"
+                android:paddingLeft="@dimen/common_dp_15"
+                android:paddingTop="@dimen/common_dp_15"
+                android:textColor="@color/tv_black_33"
+                android:textSize="@dimen/common_sp_18"
+                tools:text="停水通知" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/common_dp_15"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="2018/01/31" />
+
+                <TextView
+                    android:id="@+id/tv_danwei"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/common_dp_10"
+                    tools:text="和谐警管理" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_img"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:lineSpacingExtra="5dp"
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/common_dp_10"
+                tools:text="和谐警管理打卡机圣诞卡附件啊健身卡独家试爱了巨大垃圾打卡机大家垃圾就爱了就垃圾啊贷记卡将来肯定就发就爱看就得啦时间垃圾啊时间啊肯定垃圾打垃圾接垃圾大家啊健康的减肥加拉咖啡机就" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
