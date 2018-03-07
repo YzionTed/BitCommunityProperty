@@ -1,6 +1,5 @@
 package com.bit.communityProperty.activity.houseinfo;
 
-import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
