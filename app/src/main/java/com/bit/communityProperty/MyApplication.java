@@ -10,6 +10,7 @@ import com.bit.communityProperty.bean.ApkInfo;
 import com.bit.communityProperty.utils.GlideUtils;
 import com.ddclient.push.DongPushMsgManager;
 import com.inuker.bluetooth.library.BluetoothClientManger;
+import com.netease.nim.uikit.api.NimUIKit;
 import com.smarthome.yunintercom.sdk.IntercomSDK;
 
 import java.util.Stack;
@@ -42,7 +43,7 @@ public class MyApplication extends Application {
 //        JPushInterface.init(this);
 
         blueToothApp = new BluetoothApplication(this);
-
+        NimUIKit.init(mInstance);
 //        int result = IntercomSDK.initIntercomSDK(this);//米粒
 //        Log.e("===","IntercomSDK  result=="+result);
         //初始化推送设置
