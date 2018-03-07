@@ -220,6 +220,7 @@ public class MainMineFragment extends BaseFragment {
             public void onNext(BaseEntity<String> s) {
                 if (s.isSuccess() == true) {
                     outLogin.showSuccess("退出登录成功");
+                    SPUtil.put(mContext, AppConfig.IS_LOGIN, false);
                     MessageEvent event = new MessageEvent();
                     event.setLoginSuccess(false);
                     EventBus.getDefault().post(event);

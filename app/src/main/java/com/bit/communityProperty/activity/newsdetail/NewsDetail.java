@@ -66,36 +66,7 @@ public class NewsDetail extends BaseActivity {
     public void initViewData() {
         actionBarTitle.setText("小区新闻");
         id = getIntent().getStringExtra("id");
-        initOssToken();
-    }
-
-    private void initOssToken() {
-        RetrofitManage.getInstance().subscribe(Api.getInstance().ossToken(), new Observer<BaseEntity<UploadInfo>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(BaseEntity<UploadInfo> uploadInfoBaseEntity) {
-                if (uploadInfoBaseEntity.isSuccess()){
-                    uploadInfo = uploadInfoBaseEntity.getData();
-                    if (uploadInfo!=null){
-                        OssManager.getInstance().init(mContext, uploadInfo);
-                    }
-                }
-                getDetail();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        });
+        getDetail();
     }
 
     private void getDetail() {

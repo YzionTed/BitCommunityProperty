@@ -155,8 +155,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-//===============================金箔开始============================================
+    //===============================金箔开始============================================
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.CAMEAR" />
@@ -188,7 +187,6 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     //===============================金箔结束============================================
-
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
@@ -198,7 +196,6 @@
         android:name=".MyApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-
         android:icon="@mipmap/icon_logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon_logo"
@@ -799,9 +796,9 @@
         -->
 
         <receiver
-            android:name="com.bit.communityProperty.receiver.JPushReceiver"
-            android:exported="false"
-            android:enabled="true">
+            android:name=".receiver.JPushReceiver"
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
 
                 <!-- Required 用户注册SDK的intent -->
@@ -850,8 +847,9 @@
         <activity android:name=".activity.videomonitor.HistoryMonitorActivity" />
         <activity android:name=".Bluetooth.BlueDemoActivity" />
         <activity android:name=".activity.access.DoorVideoViewActivity" />
-        <activity android:name=".activity.access.VideoActiveOpenActivity"></activity>
-        <activity android:name=".activity.access.VideoUnActiveOpenActivity"></activity>
+        <activity android:name=".activity.access.VideoActiveOpenActivity" />
+        <activity android:name=".activity.access.VideoUnActiveOpenActivity" />
+        <activity android:name=".activity.securityclock.SecurityClockListActivity"></activity>
     </application>
 
 </manifest>

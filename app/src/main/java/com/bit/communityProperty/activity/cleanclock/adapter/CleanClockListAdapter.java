@@ -12,6 +12,9 @@ import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.cleanclock.bean.CleanClockListBean;
 import com.bit.communityProperty.adapter.ListBaseAdapter;
 import com.bit.communityProperty.utils.GlideUtils;
+import com.bit.communityProperty.utils.LogManager;
+import com.bit.communityProperty.utils.OssManager;
+import com.bit.communityProperty.utils.TimeUtils;
 
 /**
  * Created by DELL60 on 2018/2/9.
@@ -31,8 +34,10 @@ public class CleanClockListAdapter extends ListBaseAdapter<CleanClockListBean.Re
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ViewHolder viewHolder = (ViewHolder) holder;
-        viewHolder.tvTitle.setText(mDataList.get(position).getCreateAt());
-        GlideUtils.loadImageView(context,mDataList.get(position).getUrl(),viewHolder.ivImg);
+        viewHolder.tvTitle.setText(TimeUtils.stampToDateWithHms(mDataList.get(position).getCreateAt()));
+        String url = OssManager.getInstance().getUrl(mDataList.get(position).getUrl());
+        LogManager.i(url);
+        GlideUtils.loadImage(context,url,viewHolder.ivImg);
     }
 
     @Override

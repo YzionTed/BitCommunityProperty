@@ -1,5 +1,6 @@
 package com.bit.communityProperty.activity.houseinfo;
 
+import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -18,6 +19,7 @@ import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.UploadInfo;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -49,8 +51,11 @@ public class HouseInfoActivity extends BaseActivity {
     TextView tvZhufanshu;
     @BindView(R.id.tv_zhuhushu)
     TextView tvZhuhushu;
+    @BindView(R.id.iv_house)
+    ImageView ivHouse;
 
     private UploadInfo uploadInfo;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_house_info;
@@ -63,36 +68,7 @@ public class HouseInfoActivity extends BaseActivity {
 
     private void initView() {
         actionBarTitle.setText("小区信息");
-        initOssToken();
-    }
-
-    private void initOssToken() {
-        RetrofitManage.getInstance().subscribe(Api.getInstance().ossToken(), new Observer<BaseEntity<UploadInfo>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(BaseEntity<UploadInfo> uploadInfoBaseEntity) {
-                if (uploadInfoBaseEntity.isSuccess()){
-                    uploadInfo = uploadInfoBaseEntity.getData();
-                    if (uploadInfo!=null){
-                        OssManager.getInstance().init(mContext, uploadInfo);
-                    }
-                }
-                GetResidential_quarters_Detail();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        });
+        GetResidential_quarters_Detail();
     }
 
     private void GetResidential_quarters_Detail() {
@@ -105,15 +81,16 @@ public class HouseInfoActivity extends BaseActivity {
             @Override
             public void onNext(BaseEntity<HouseInfoBean> stringBaseEntity) {
                 LogManager.printErrorLog("backinfo", GsonUtils.getInstance().toJson(stringBaseEntity));
-                if (stringBaseEntity.isSuccess()){
+                if (stringBaseEntity.isSuccess()) {
                     HouseInfoBean infoBean = stringBaseEntity.getData();
-                    if (infoBean!=null){
+                    if (infoBean != null) {
                         tvName.setText(infoBean.getName());
                         tvAddress.setText(infoBean.getAddress());
                         tvMianji.setText(infoBean.getArea() + "");
                         tvZhufanshu.setText(infoBean.getCheckInRoomCnt() + "");
                         tvZhuhushu.setText(infoBean.getHouseholdCnt() + "");
                         String url = OssManager.getInstance().getUrl(infoBean.getImgUrl());
+                        LogManager.i(url);
                         GlideUtils.loadImage(mContext, url, ivHead);
                     }
                 }
@@ -136,4 +113,5 @@ public class HouseInfoActivity extends BaseActivity {
     public void onViewClicked() {
         finish();
     }
+
 }

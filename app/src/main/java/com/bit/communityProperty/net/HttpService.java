@@ -182,7 +182,7 @@ public interface HttpService {
      * @return
      */
     @POST("/v1/task/record/add")
-    Observable<BaseEntity<String>> addClock(@Body Map<String, Object> map);
+    Observable<BaseEntity<Object>> addClock(@Body Map<String, Object> map);
 
     /**
      * 获取oss的token
@@ -311,8 +311,8 @@ public interface HttpService {
      *
      * @return
      */
-    @GET("/v1/property/notice/{communityId}/page")
-    Observable<BaseEntity<MainNewsBean>> getNoticeList(@Path("communityId") String communityId);
+    @POST("/v1/property/notice/page")
+    Observable<BaseEntity<MainNewsBean>> getNoticeList(@Body Map<String, Object> map);
 
     /**
      * 获取小区公告详情

@@ -9,16 +9,23 @@ import android.view.KeyEvent;
 import com.bit.communityProperty.MyApplication;
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.base.BaseActivity;
+import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.data.PreferenceConst;
+import com.bit.communityProperty.net.Api;
+import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.AppUtil;
+import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.PreferenceUtils;
 import com.bit.communityProperty.utils.SPUtil;
+import com.bit.communityProperty.utils.UploadInfo;
 
 import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by kezhangzhao on 2018/1/10.
@@ -41,10 +48,20 @@ public class LauncherActivity extends BaseActivity {
     public void initViewData() {
         registerJPush();
         initScreenParam();
+        SPUtil.put(this, AppConfig.ROLE_TYPE, AppConfig.ROLE_CLEANER);
+//        UploadInfo uploadInfo = (UploadInfo) SPUtil.getObject(this, AppConfig.UPLOAD_INFO);
+//        if (uploadInfo != null) {
+//            OssManager.getInstance().init(this, uploadInfo);
+//        } else if ((boolean) SPUtil.get(mContext, AppConfig.IS_LOGIN, false)) {
+//            initOssToken();
+//        }
+        if ((boolean) SPUtil.get(mContext, AppConfig.IS_LOGIN, false)) {
+            initOssToken();
+        }
         initData();
     }
 
-    private void initData(){
+    private void initData() {
         versionCode = String.valueOf(AppUtil.getVersionCode(MyApplication.getInstance().getContext()));
         versionName = AppUtil.getVersionName(MyApplication.getInstance().getContext());
 
@@ -53,18 +70,18 @@ public class LauncherActivity extends BaseActivity {
             @Override
             public void run() {
                 Intent intent = null;
-                if (!TextUtils.isEmpty((String) SPUtil.get(mContext,AppConfig.id,""))&&!TextUtils.isEmpty((String)SPUtil.get(mContext,AppConfig.token,""))){
-                    intent = new Intent(mContext,MainActivity.class);
-                }else{
+                if ((boolean) SPUtil.get(mContext, AppConfig.IS_LOGIN, false)) {
+                    intent = new Intent(mContext, MainActivity.class);
+                } else {
                     intent = new Intent(mContext, LogonActivity.class);
                 }
-                if(getIntent().getBundleExtra(AppConfig.EXTRA_BUNDLE) != null){
+                if (getIntent().getBundleExtra(AppConfig.EXTRA_BUNDLE) != null) {
                     intent.putExtra(AppConfig.EXTRA_BUNDLE, getIntent().getBundleExtra(AppConfig.EXTRA_BUNDLE));
                 }
                 startActivity(intent);
                 finish();
             }
-        },3000);
+        }, 3000);
     }
 
     /**
@@ -141,6 +158,35 @@ public class LauncherActivity extends BaseActivity {
         int height = dm.heightPixels;
         MyApplication.getInstance().setdWidth(width);
         MyApplication.getInstance().setdHeight(height);
+    }
+
+    private void initOssToken() {
+        RetrofitManage.getInstance().subscribe(Api.getInstance().ossToken(), new Observer<BaseEntity<UploadInfo>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseEntity<UploadInfo> uploadInfoBaseEntity) {
+                if (uploadInfoBaseEntity.isSuccess()) {
+                    UploadInfo uploadInfo = uploadInfoBaseEntity.getData();
+                    SPUtil.saveObject(mContext, AppConfig.UPLOAD_INFO, uploadInfo);
+                    if (uploadInfo != null) {
+                        OssManager.getInstance().init(mContext, uploadInfo);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
     }
 
     //启动中不给退出-.-

@@ -20,7 +20,9 @@ public class AppConfig {
     public static final int pageSize = 10;
     public static final String CITY = "CITY";
     public static final String EXTRA_BUNDLE = "EXTRA_BUNDLE";
-    public static final String ROLE_TYPE = "ROLE_TYPE";
+    public static final String ROLE_TYPE = "ROLE_TYPE";  //用户角色
+    public static final String IS_LOGIN = "IS_LOGIN";  //是否登录
+
     public static final String ROLE_MANAGER = "管理人员";
     public static final String ROLE_SECURITY = "保安门卫";
     public static final String ROLE_CLEANER = "保洁人员";
@@ -43,5 +45,7 @@ public class AppConfig {
     public static final String Repair_Orders = "维修工单";
     public static final String Fault_Reporting = "故障申报";
 
+
+    public static final String UPLOAD_INFO = "UPLOAD_INFO";  //OSSTOKEN
 
 }

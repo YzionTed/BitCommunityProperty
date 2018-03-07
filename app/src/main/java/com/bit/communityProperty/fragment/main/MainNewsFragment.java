@@ -70,7 +70,6 @@ public class MainNewsFragment extends BaseFragment {
     private LinearLayout llEmpty;
 
     private List<MainNewsBean.RecordsBean> noticeList;
-    private UploadInfo uploadInfo;
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_main_news;
@@ -78,11 +77,10 @@ public class MainNewsFragment extends BaseFragment {
 
     @Override
     protected void initViewAndData() {
-        initOssToken();
-//        initListView();
+        initListView();
 ////        setCountDown(24 * 60 * 1000);
-//        getWeatherInfo();
-//        getNoticeList();
+        getWeatherInfo();
+        getNoticeList();
         RxBus.get().toObservable().subscribe(new Consumer<Object>() {
 
             @Override
@@ -128,7 +126,9 @@ public class MainNewsFragment extends BaseFragment {
     }
 
     private void getNoticeList(){
-        RetrofitManage.getInstance().subscribe(Api.getInstance().getNoticeList("5a82adf3b06c97e0cd6c0f3d"), new Observer<BaseEntity<MainNewsBean>>() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        RetrofitManage.getInstance().subscribe(Api.getInstance().getNoticeList(map), new Observer<BaseEntity<MainNewsBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -226,39 +226,5 @@ public class MainNewsFragment extends BaseFragment {
         if (timer!=null){
             timer.cancel();
         }
-    }
-
-    private void initOssToken() {
-        RetrofitManage.getInstance().subscribe(Api.getInstance().ossToken(), new Observer<BaseEntity<UploadInfo>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(BaseEntity<UploadInfo> uploadInfoBaseEntity) {
-                if (uploadInfoBaseEntity.isSuccess()){
-                    uploadInfo = uploadInfoBaseEntity.getData();
-                    if (uploadInfo!=null){
-//                        OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(uploadInfo
-//                                .getAccessKeyId(), uploadInfo.getAccessKeySecret(), uploadInfo.getSecurityToken());
-//                        oss = new OSSClient(mContext, uploadInfo.getEndPoint(), credentialProvider);
-                        OssManager.getInstance().init(mContext, uploadInfo);
-                    }
-                }
-                initListView();
-                getWeatherInfo();
-                getNoticeList();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        });
     }
 }

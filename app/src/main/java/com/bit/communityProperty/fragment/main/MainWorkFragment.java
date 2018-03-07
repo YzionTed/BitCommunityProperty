@@ -78,9 +78,10 @@ public class MainWorkFragment extends BaseFragment {
      * "小区门禁", "智能梯控", "工作排班","设备管理", "住户管理", "安防警报"
      */
     private String[] managerTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator, AppConfig.Work_Schedule,
-            AppConfig.Device_Management, AppConfig.Household_Management, AppConfig.Security_Alarm};
+            AppConfig.Device_Management, AppConfig.Household_Management, AppConfig.Security_Alarm,
+            AppConfig.Fault_Management};
     private int[] managerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb,
-            R.mipmap.ic_work_sbgl, R.mipmap.ic_work_zhgl, R.mipmap.ic_work_afjb};
+            R.mipmap.ic_work_sbgl, R.mipmap.ic_work_zhgl, R.mipmap.ic_work_afjb,R.mipmap.ic_work_gzgl};
 
     /**
      * 保安门卫

@@ -165,8 +165,18 @@ dependencies {
     compile 'com.amap.api:location:3.8.0'
     //支持多种状态切换的ActivityView https://github.com/qyxxjd/MultipleStatusView
     compile 'com.classic.common:multiple-status-view:1.4'
-
 }
 repositories {
     flatDir { dirs 'aars' }
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '26.0.2'
+            }
+        }
+    }
 }

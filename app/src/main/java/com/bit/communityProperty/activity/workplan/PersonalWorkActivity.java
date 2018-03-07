@@ -89,6 +89,13 @@ public class PersonalWorkActivity extends BaseActivity {
                 }
             }
         };
+        multipleStatusView.setOnRetryClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                multipleStatusView.showLoading();
+                getList();
+            }
+        });
         lvWork.setAdapter(commonAdapter);
         getList();
     }

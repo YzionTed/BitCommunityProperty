@@ -21,9 +21,11 @@ import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.net.ThrowableUtils;
 import com.bit.communityProperty.utils.GsonUtils;
 import com.bit.communityProperty.utils.LogManager;
+import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.PermissionUtils;
 import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.ToastUtil;
+import com.bit.communityProperty.utils.UploadInfo;
 import com.bit.communityProperty.view.TitleBarView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -62,6 +64,7 @@ public class LogonActivity extends BaseActivity {
         MessageEvent event=new MessageEvent();
         event.setLoginSuccess(false);
         EventBus.getDefault().post(event);
+        SPUtil.put(mContext, AppConfig.IS_LOGIN, false);
         initView();
         initData();
     }
@@ -134,7 +137,9 @@ public class LogonActivity extends BaseActivity {
                 LogManager.printErrorLog("backinfo", "成功返回的数据：" + GsonUtils.getInstance().toJson(logindata));
                 if (logindata.isSuccess() == true) {
                     sinInLogin.showSuccess("登录成功");
+                    initOssToken();
                     setSPValuse(logindata.getData());
+                    SPUtil.put(mContext, AppConfig.IS_LOGIN, true);
                     MessageEvent messageEvent = new MessageEvent();
                     messageEvent.setLoginSuccess(true);
                     EventBus.getDefault().post(messageEvent);
@@ -211,5 +216,35 @@ public class LogonActivity extends BaseActivity {
                 }
                 break;
         }
+    }
+
+
+    private void initOssToken() {
+        RetrofitManage.getInstance().subscribe(Api.getInstance().ossToken(), new Observer<BaseEntity<UploadInfo>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseEntity<UploadInfo> uploadInfoBaseEntity) {
+                if (uploadInfoBaseEntity.isSuccess()){
+                    UploadInfo uploadInfo = uploadInfoBaseEntity.getData();
+                    SPUtil.saveObject(mContext,AppConfig.UPLOAD_INFO,uploadInfo);
+                    if (uploadInfo!=null){
+                        OssManager.getInstance().init(mContext, uploadInfo);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
     }
 }

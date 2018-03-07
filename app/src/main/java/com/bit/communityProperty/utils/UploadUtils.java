@@ -95,7 +95,7 @@ public class UploadUtils {
     public static String uploadFileToAliYun(final UploadInfo data, String filePath, OSSCompletedCallback callback) {
         try {
             String endpoint = data.getEndPoint();
-            data.setName("ap2"+SPUtil.get(MyApplication.getInstance(), AppConfig.id,"")+"_"+TimeUtils.getCurrentTime()+".jpg");
+            data.setName("ap1"+SPUtil.get(MyApplication.getInstance(), AppConfig.id,"")+"_"+data.getBucket()+"_"+TimeUtils.getCurrentTime()+".jpg");
             OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(data
                     .getAccessKeyId(), data.getAccessKeySecret(), data.getSecurityToken());
             final OSS oss = new OSSClient(MyApplication.getInstance(), endpoint, credentialProvider);

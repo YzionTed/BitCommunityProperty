@@ -1,6 +1,7 @@
 package com.bit.communityProperty.activity.cleanclock;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,10 +23,11 @@ import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.net.ThrowableUtils;
+import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.SPUtil;
-import com.bit.communityProperty.utils.TimeUtils;
+import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.utils.UploadInfo;
-import com.bit.communityProperty.utils.UploadUtils;
+import com.classic.common.MultipleStatusView;
 import com.github.jdsjlzx.ItemDecoration.DividerDecoration;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
 import com.github.jdsjlzx.interfaces.OnNetWorkErrorListener;
@@ -42,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -63,6 +66,8 @@ public class CleanClockListActivity extends BaseActivity {
     RelativeLayout actionBar;
     @BindView(R.id.lv_clean)
     LRecyclerView lvClean;
+    @BindView(R.id.multiple_status_view)
+    MultipleStatusView multipleStatusView;
 
     private CleanClockListAdapter adapter;
     private LRecyclerViewAdapter mLRecyclerViewAdapter;
@@ -86,8 +91,16 @@ public class CleanClockListActivity extends BaseActivity {
         btnRightActionBar.setText("打卡");
         btnRightActionBar.setVisibility(View.VISIBLE);
         uploadDialog = new PromptDialog(this);
+        multipleStatusView.showLoading();
         initDate();
-        initOssToken();
+        multipleStatusView.setOnRetryClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                multipleStatusView.showLoading();
+                isRefresh = true;
+                getList();
+            }
+        });
     }
 
     private void initDate() {
@@ -108,7 +121,6 @@ public class CleanClockListActivity extends BaseActivity {
             }
         });
 
-        lvClean.setLoadMoreEnabled(false);
 
         lvClean.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -128,14 +140,13 @@ public class CleanClockListActivity extends BaseActivity {
                 getList();
             }
         });
-
         getList();
     }
 
     private void getList() {
         listMap.clear();
-        listMap.put("userId", SPUtil.get(this, AppConfig.id, ""));
-        listMap.put("username", SPUtil.get(this, AppConfig.name, ""));
+//        listMap.put("userId", SPUtil.get(this, AppConfig.id, ""));
+//        listMap.put("username", SPUtil.get(this, AppConfig.name, ""));
         listMap.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
         listMap.put("taskType", 2);
         if (isRefresh)
@@ -152,48 +163,37 @@ public class CleanClockListActivity extends BaseActivity {
 
             @Override
             public void onNext(BaseEntity<CleanClockListBean> cleanClockListBeanBaseEntity) {
-                lvClean.refreshComplete(AppConfig.pageSize);
-                cleanClockListBean = cleanClockListBeanBaseEntity.getData();
-                if (cleanClockListBean != null) {
-                    if (isRefresh)
-                        adapter.setDataList(cleanClockListBean.getRecords());
-                    else
-                        adapter.addAll(cleanClockListBean.getRecords());
+                if (cleanClockListBeanBaseEntity.isSuccess()) {
+                    lvClean.refreshComplete(AppConfig.pageSize);
+                    cleanClockListBean = cleanClockListBeanBaseEntity.getData();
+                    if (cleanClockListBean != null && cleanClockListBean.getRecords() != null) {
+                        if (isRefresh) {
+                            if (cleanClockListBean.getRecords().size() > 0) {
+                                multipleStatusView.showContent();
+                                adapter.setDataList(cleanClockListBean.getRecords());
+                            } else {
+                                multipleStatusView.showEmpty();
+                            }
+                        } else {
+                            adapter.addAll(cleanClockListBean.getRecords());
+                        }
+                    } else {
+                        multipleStatusView.showEmpty();
+                    }
+                } else {
+                    multipleStatusView.showError();
                 }
-
             }
 
             @Override
             public void onError(Throwable e) {
+                multipleStatusView.showError();
                 lvClean.refreshComplete(AppConfig.pageSize);
             }
 
             @Override
             public void onComplete() {
                 lvClean.refreshComplete(AppConfig.pageSize);
-            }
-        });
-    }
-
-    private void initOssToken() {
-        RetrofitManage.getInstance().subscribe(Api.getInstance().ossToken(), new Observer<BaseEntity<UploadInfo>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(BaseEntity<UploadInfo> uploadInfoBaseEntity) {
-                uploadInfo = uploadInfoBaseEntity.getData();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
             }
         });
     }
@@ -226,9 +226,9 @@ public class CleanClockListActivity extends BaseActivity {
                     // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
                     // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
                     if (uploadInfo != null) {
-//                        imgUrl = UploadUtils.uploadFileToAliYun(uploadInfo, selectList.get(0).getPath());
                         uploadDialog.showLoading("上传图片中...");
-                        imgUrl = UploadUtils.uploadFileToAliYun(uploadInfo, selectList.get(0).getPath(), new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+                        uploadInfo.setBucket("bit-test");
+                        imgUrl = OssManager.getInstance().uploadFileToAliYun(uploadInfo, selectList.get(0).getPath(), new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
                             @Override
                             public void onSuccess(PutObjectRequest ossRequest, PutObjectResult ossResult) {
 //                                uploadDialog.showSuccess("上传成功");
@@ -238,7 +238,8 @@ public class CleanClockListActivity extends BaseActivity {
 
                             @Override
                             public void onFailure(PutObjectRequest ossRequest, ClientException e, ServiceException e1) {
-                                uploadDialog.showError("上传失败");
+                                uploadDialog.dismiss();
+                                ToastUtil.showShort("上传失败");
                             }
                         });
                     }
@@ -249,25 +250,27 @@ public class CleanClockListActivity extends BaseActivity {
 
     private void addClock() {
         map.clear();
-        map.put("userId", SPUtil.get(this, AppConfig.id, ""));
-        map.put("username", SPUtil.get(this, AppConfig.name, ""));
+//        map.put("userId", SPUtil.get(this, AppConfig.id, ""));
+//        map.put("username", SPUtil.get(this, AppConfig.name, ""));
         map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
         map.put("taskType", 2);
-        map.put("url", imgUrl + "");
-        map.put("creatorId", SPUtil.get(this, AppConfig.id, ""));
-        map.put("createAt", TimeUtils.getCurrentTimeWithT());
-        map.put("dataStatus", "1");
-        RetrofitManage.getInstance().subscribe(Api.getInstance().addClock(map), new Observer<BaseEntity<String>>() {
+        map.put("url", uploadInfo.getName());
+//        map.put("creatorId", SPUtil.get(this, AppConfig.id, ""));
+//        map.put("createAt", TimeUtils.getCurrentTimeWithT());
+//        map.put("dataStatus", "1");
+        RetrofitManage.getInstance().subscribe(Api.getInstance().addClock(map), new Observer<BaseEntity<Object>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(BaseEntity<String> stringBaseEntity) {
-                if (stringBaseEntity.isSuccess()){
+            public void onNext(BaseEntity<Object> stringBaseEntity) {
+                if (stringBaseEntity.isSuccess()) {
                     uploadDialog.showSuccess("上传成功");
-                }else{
+                    isRefresh = true;
+                    getList();
+                } else {
                     uploadDialog.showError(stringBaseEntity.getErrorMsg());
                 }
             }

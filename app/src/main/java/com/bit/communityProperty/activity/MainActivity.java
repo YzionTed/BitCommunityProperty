@@ -46,6 +46,7 @@ import com.bit.communityProperty.utils.AppUtil;
 import com.bit.communityProperty.utils.DialogUtil;
 import com.bit.communityProperty.utils.DownloadUtils;
 import com.bit.communityProperty.utils.LogManager;
+import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.PermissionUtils;
 import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.ToastUtil;
@@ -95,8 +96,8 @@ public class MainActivity extends BaseActivity {
     public void initViewData() {
         initTabData();
         initTabHost();
+//        initOssToken();
         MyApplication.getInstance().getBlueToothApp().openBluetooth();
-        initOssToken();
 
         //从通知点击启动
         Bundle bundle = getIntent().getBundleExtra(AppConfig.EXTRA_BUNDLE);
@@ -124,6 +125,34 @@ public class MainActivity extends BaseActivity {
         getVersion();
     }
 
+    private void initOssToken() {
+        RetrofitManage.getInstance().subscribe(Api.getInstance().ossToken(), new Observer<BaseEntity<UploadInfo>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseEntity<UploadInfo> uploadInfoBaseEntity) {
+                if (uploadInfoBaseEntity.isSuccess()){
+                    UploadInfo uploadInfo = uploadInfoBaseEntity.getData();
+                    if (uploadInfo!=null){
+                        OssManager.getInstance().init(mContext, uploadInfo);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
+    }
+
     //检测版本更新
     private void getVersion() {
         RetrofitManage.getInstance().subscribe(Api.getInstance().getVersion("5a961fc80cf2c1914073ded2", AppUtil.getVersionName(this)), new Observer<BaseEntity<AppVersionInfo>>() {
@@ -136,12 +165,8 @@ public class MainActivity extends BaseActivity {
             public void onNext(BaseEntity<AppVersionInfo> appVersionInfoBaseEntity) {
                 if (appVersionInfoBaseEntity.isSuccess()) {
                     versionInfo = appVersionInfoBaseEntity.getData();
-                    if (versionInfo != null && oss != null) {
-                        try {
-                            downloadUrl = oss.presignConstrainedObjectURL("bit-app", versionInfo.getUrl(), 30 * 60);
-                        } catch (ClientException e) {
-                            e.printStackTrace();
-                        }
+                    if (versionInfo != null) {
+                        downloadUrl = OssManager.getInstance().getUrl(versionInfo.getUrl());
                         if (versionInfo.isForceUpgrade()) {
                             DialogUtil.showConfirmDialog(mContext, "版本更新", "发现新版本" + versionInfo.getSequence() + ",请下载更新.", false, new View.OnClickListener() {
                                 @Override
@@ -179,39 +204,6 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onComplete() {
 
-            }
-        });
-    }
-
-    private OSS oss;
-    private UploadInfo uploadInfo;
-
-    private void initOssToken() {
-        RetrofitManage.getInstance().subscribe(Api.getInstance().ossToken(), new Observer<BaseEntity<UploadInfo>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(BaseEntity<UploadInfo> uploadInfoBaseEntity) {
-                if (uploadInfoBaseEntity.isSuccess()) {
-                    uploadInfo = uploadInfoBaseEntity.getData();
-                    if (uploadInfo != null) {
-                        OSSCredentialProvider credentialProvider = new OSSStsTokenCredentialProvider(uploadInfo
-                                .getAccessKeyId(), uploadInfo.getAccessKeySecret(), uploadInfo.getSecurityToken());
-                        oss = new OSSClient(mContext, uploadInfo.getEndPoint(), credentialProvider);
-                    }
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
             }
         });
     }
@@ -290,20 +282,6 @@ public class MainActivity extends BaseActivity {
         super.onStop();
         if (null != toast)
             toast.cancel();
-    }
-
-    private void buildMenuDate() {
-        Object[][] data = {{R.mipmap.scan_code, "放行条形码"}, {R.mipmap.door_all2, "小区门禁"}, {R.mipmap.elevator_control, "小区梯禁"},
-                {R.mipmap.building_information, "楼盘信息"}, {R.mipmap.data_all, "数据统计"}, {R.mipmap.scheduling, "工作排班"},
-                {R.mipmap.elevator_intelligent, "智能电梯"}, {R.mipmap.video_surveillance, "视频监控"}, {R.mipmap.stop_car_magage, "停车管理"},
-                {R.mipmap.patrol, "保安打卡"}, {R.mipmap.security_alarm, "安防警报"}, {R.mipmap.fault_repair, "故障维修"},
-                {R.mipmap.fault_manager, "故障申报"}, {R.mipmap.online_consult, "在线咨询"}};
-//                {R.mipmap.meter_read, "抄表"}, {R.mipmap.online_consult, "在线咨询"}};
-        for (int i = 0; i < data.length; i++) {
-            HomeMenuBean bean = new HomeMenuBean();
-            bean.setmImageID((Integer) data[i][0]);
-            bean.setmText((String) data[i][1]);
-        }
     }
 
     @Override

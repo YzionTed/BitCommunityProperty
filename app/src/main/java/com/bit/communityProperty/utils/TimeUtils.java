@@ -64,6 +64,19 @@ public class TimeUtils {
     }
 
     /**
+     * 是否过期
+     * @param endTime
+     * @return
+     */
+    public static boolean isExpiration(String endTime){
+        if (getCurrentTimeWithT().compareTo(endTime)>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
      * 获取当前日期
      *
      * @return
@@ -103,6 +116,21 @@ public class TimeUtils {
         }
         String res;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+        long lt = new Long(s);
+        Date date = new Date(lt);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+
+    /*
+     * 将时间戳转换为时间
+     */
+    public static String stampToDateWithHms(String s){
+        if (s==null){
+            return "0";
+        }
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         long lt = new Long(s);
         Date date = new Date(lt);
         res = simpleDateFormat.format(date);
