@@ -55,7 +55,7 @@ dependencies {
 
     // 全文检索服务需要
 
-    compile 'com.netease.nimlib:lucene:4.9.0'
+//    compile 'com.netease.nimlib:lucene:4.9.0'
 
     api 'com.android.support:appcompat-v7:26.+'
     api 'com.android.support:support-v4:26.+'
