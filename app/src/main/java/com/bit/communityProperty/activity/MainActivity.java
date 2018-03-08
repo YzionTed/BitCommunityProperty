@@ -16,11 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.TabHost;
 import android.widget.Toast;
 
-import com.alibaba.sdk.android.oss.ClientException;
-import com.alibaba.sdk.android.oss.OSS;
-import com.alibaba.sdk.android.oss.OSSClient;
-import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
-import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -34,27 +29,38 @@ import com.bit.communityProperty.activity.safetywarning.SafeWarningListActivity;
 import com.bit.communityProperty.base.BaseActivity;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.bean.AppVersionInfo;
-import com.bit.communityProperty.bean.HomeMenuBean;
+import com.bit.communityProperty.bean.IMToken;
 import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.fragment.main.MainMineFragment;
 import com.bit.communityProperty.fragment.main.MainNewsFragment;
 import com.bit.communityProperty.fragment.main.MainWorkFragment;
 import com.bit.communityProperty.net.Api;
+import com.bit.communityProperty.net.ApiRequester;
+import com.bit.communityProperty.net.ResponseCallBack;
 import com.bit.communityProperty.net.RetrofitManage;
+import com.bit.communityProperty.net.ServiceException;
 import com.bit.communityProperty.receiver.JPushBean;
 import com.bit.communityProperty.receiver.RxBus;
 import com.bit.communityProperty.utils.AppUtil;
+import com.bit.communityProperty.utils.CheckSumBuilder;
 import com.bit.communityProperty.utils.DialogUtil;
 import com.bit.communityProperty.utils.DownloadUtils;
 import com.bit.communityProperty.utils.LogManager;
+import com.bit.communityProperty.utils.LogUtil;
 import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.PermissionUtils;
 import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.utils.UploadInfo;
 import com.bit.communityProperty.view.TabItem;
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.LoginInfo;
+
+import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -68,6 +74,7 @@ public class MainActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_STORAGE = 5;
     private static final int REQUEST_CODE_LOCATION = 6;
+    private static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.main_tab_contents)
     FrameLayout mainTabContents;
     @BindView(R.id.tab_bar_content)
@@ -127,6 +134,80 @@ public class MainActivity extends BaseActivity {
             initLoc();
         }
         getVersion();
+
+        createAccountId();//测试云信
+    }
+
+    private void createAccountId() {
+        RequestParams requestParams = new RequestParams();
+        requestParams.addHeader("AppKey", "c7d64ed61462dfac25c0089ab171eaa4");
+        requestParams.addHeader("Nonce", "123456");
+        String curTime = String.valueOf((new Date()).getTime() / 1000L);
+        requestParams.addHeader("CurTime", curTime);
+        requestParams.addHeader("CheckSum", CheckSumBuilder.getCheckSum("744182fbc16c", "123456", curTime));
+        requestParams.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        requestParams.addBodyParameter("accid", (String) SPUtil.get(mContext, AppConfig.phone, ""));
+//        requestParams.addBodyParameter("accid", "15900020005");
+
+//        String url = "https://api.netease.im/nimserver/user/create.action";//{"desc":"already register","code":414}
+        String url = "https://api.netease.im/nimserver/user/refreshToken.action";
+//        ApiRequester.sendRequest(url0, requestParams, mResponseCallBack);
+        ApiRequester.sendRequest(url, requestParams, mResponseCallBack);
+    }
+
+
+    //{"code":200,"info":{"token":"338fdb41436631cd5ced4d73950154d1","accid":"15900010001"}}
+    ResponseCallBack mResponseCallBack = new ResponseCallBack<IMToken>(false) {
+
+        @Override
+        public void onSuccess(IMToken data) {
+            Toast.makeText(mContext, "onSuccess", Toast.LENGTH_SHORT).show();
+            NimUIKit.login(new LoginInfo(data.getInfo().getAccid(), data.getInfo().getToken()), new RequestCallback<LoginInfo>() {
+                @Override
+                public void onSuccess(LoginInfo param) {
+                    Toast.makeText(mContext, "login im onSuccess", Toast.LENGTH_SHORT).show();
+                    LogUtil.d(TAG, "login im onSuccess");
+                }
+
+                @Override
+                public void onFailed(int code) {
+                    LogUtil.d(TAG, "onFailed:" + code);
+                }
+
+                @Override
+                public void onException(Throwable exception) {
+                    LogUtil.d(TAG, "onException:" + exception.getMessage());
+                }
+            });
+
+//            NIMClient.getService(AuthService.class).login(new LoginInfo(data.getInfo().getAccid(), data.getInfo().getToken()))
+//                    .setCallback(new RequestCallback<LoginInfo>() {
+//                        @Override
+//                        public void onSuccess(LoginInfo o) {
+//                            showToast("login onSuccess");
+//                        }
+//
+//                        @Override
+//                        public void onFailed(int i) {
+//                            showToast("login onFailed");
+//                        }
+//
+//                        @Override
+//                        public void onException(Throwable throwable) {
+//                            showToast(throwable.getMessage());
+//                        }
+//                    });
+        }
+
+        @Override
+        public void onFailure(ServiceException e) {
+            LogUtil.d(TAG, e.getMsg());
+        }
+    };
+
+    private void showToast(String message) {
+        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
     }
 
     private void initOssToken() {
@@ -138,9 +219,9 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onNext(BaseEntity<UploadInfo> uploadInfoBaseEntity) {
-                if (uploadInfoBaseEntity.isSuccess()){
+                if (uploadInfoBaseEntity.isSuccess()) {
                     UploadInfo uploadInfo = uploadInfoBaseEntity.getData();
-                    if (uploadInfo!=null){
+                    if (uploadInfo != null) {
                         OssManager.getInstance().init(mContext, uploadInfo);
                     }
                 }
@@ -159,57 +240,60 @@ public class MainActivity extends BaseActivity {
 
     //检测版本更新
     private void getVersion() {
-        RetrofitManage.getInstance().subscribe(Api.getInstance().getVersion("5a961fc80cf2c1914073ded2", AppUtil.getVersionName(this)), new Observer<BaseEntity<AppVersionInfo>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+        RetrofitManage.getInstance().subscribe(Api.getInstance().getVersion("5a961fc80cf2c1914073ded2", AppUtil.getVersionName(this)), new
+                Observer<BaseEntity<AppVersionInfo>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            }
+                    }
 
-            @Override
-            public void onNext(BaseEntity<AppVersionInfo> appVersionInfoBaseEntity) {
-                if (appVersionInfoBaseEntity.isSuccess()) {
-                    versionInfo = appVersionInfoBaseEntity.getData();
-                    if (versionInfo != null) {
-                        downloadUrl = OssManager.getInstance().getUrl(versionInfo.getUrl());
-                        if (versionInfo.isForceUpgrade()) {
-                            DialogUtil.showConfirmDialog(mContext, "版本更新", "发现新版本" + versionInfo.getSequence() + ",请下载更新.", false, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (Build.VERSION.SDK_INT >= 23) {
-                                        requestPermission();
-                                    } else {
-                                        downloadApk();
-                                    }
-                                    DialogUtil.dissmiss();
+                    @Override
+                    public void onNext(BaseEntity<AppVersionInfo> appVersionInfoBaseEntity) {
+                        if (appVersionInfoBaseEntity.isSuccess()) {
+                            versionInfo = appVersionInfoBaseEntity.getData();
+                            if (versionInfo != null) {
+                                downloadUrl = OssManager.getInstance().getUrl(versionInfo.getUrl());
+                                if (versionInfo.isForceUpgrade()) {
+                                    DialogUtil.showConfirmDialog(mContext, "版本更新", "发现新版本" + versionInfo.getSequence() + ",请下载更新.", false, new View
+                                            .OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            if (Build.VERSION.SDK_INT >= 23) {
+                                                requestPermission();
+                                            } else {
+                                                downloadApk();
+                                            }
+                                            DialogUtil.dissmiss();
+                                        }
+                                    });
+                                } else {
+                                    DialogUtil.showConfirmDialog(mContext, "版本更新", "发现新版本" + versionInfo.getSequence() + ",是否更新？", true, new View
+                                            .OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            if (Build.VERSION.SDK_INT >= 23) {
+                                                requestPermission();
+                                            } else {
+                                                downloadApk();
+                                            }
+                                            DialogUtil.dissmiss();
+                                        }
+                                    });
                                 }
-                            });
-                        } else {
-                            DialogUtil.showConfirmDialog(mContext, "版本更新", "发现新版本" + versionInfo.getSequence() + ",是否更新？", true, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (Build.VERSION.SDK_INT >= 23) {
-                                        requestPermission();
-                                    } else {
-                                        downloadApk();
-                                    }
-                                    DialogUtil.dissmiss();
-                                }
-                            });
+                            }
                         }
                     }
-                }
-            }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
-            }
+                    }
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-            }
-        });
+                    }
+                });
     }
 
 
@@ -314,7 +398,8 @@ public class MainActivity extends BaseActivity {
             return;
         }
         DownloadUtils downloadUtils = new DownloadUtils(mContext);
-        //http://183.240.119.164/imtt.dd.qq.com/16891/0AA5EAE67C378051755E7646A493F822.apk?mkey=5a9606732937e28d&f=b24&c=0&fsname=com.snda.wifilocating_4.2.58_3188.apk&csr=1bbd&p=.apk
+        //http://183.240.119.164/imtt.dd.qq.com/16891/0AA5EAE67C378051755E7646A493F822.apk?mkey=5a9606732937e28d&f=b24&c=0&fsname=com.snda
+        // .wifilocating_4.2.58_3188.apk&csr=1bbd&p=.apk
         downloadUtils.download(downloadUrl,
                 AppUtil.getAppName(mContext) + versionInfo.getSequence() + ".apk");
     }
@@ -447,7 +532,8 @@ public class MainActivity extends BaseActivity {
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //获取一次定位结果：该方法默认为false。
         mLocationOption.setOnceLocation(true);
-        //获取最近3s内精度最高的一次定位结果设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)接口也会被设置为true，反之不会，默认为false。
+        //获取最近3s内精度最高的一次定位结果设置setOnceLocationLatest(boolean b)接口为true，启动定位时SDK会返回最近3s内精度最高的一次定位结果。如果设置其为true，setOnceLocation(boolean b)
+        // 接口也会被设置为true，反之不会，默认为false。
         mLocationOption.setOnceLocationLatest(true);
         mLocationClient.setLocationOption(mLocationOption);
         //异步获取定位结果
@@ -457,7 +543,7 @@ public class MainActivity extends BaseActivity {
                 if (amapLocation != null) {
                     if (amapLocation.getErrorCode() == 0) {
                         //解析定位结果
-                        if (amapLocation.getCity()!=null){
+                        if (amapLocation.getCity() != null) {
                             LogManager.i(amapLocation.getCity());
                             SPUtil.put(mContext, AppConfig.CITY, amapLocation.getCity());
                             RxBus.get().post("location");

@@ -3,7 +3,6 @@ package com.bit.communityProperty;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import com.bit.communityProperty.Bluetooth.BluetoothApplication;
 import com.bit.communityProperty.bean.ApkInfo;
@@ -12,11 +11,12 @@ import com.ddclient.push.DongPushMsgManager;
 import com.inuker.bluetooth.library.BluetoothClientManger;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.util.NIMUtil;
 import com.smarthome.yunintercom.sdk.IntercomSDK;
 
-import java.util.Stack;
+import org.xutils.x;
 
-import cn.jpush.android.api.JPushInterface;
+import java.util.Stack;
 
 /**
  * Created by kezhangzhao on 2018/1/8.
@@ -52,7 +52,14 @@ public class MyApplication extends Application {
 
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
         NIMClient.init(this, null, null);
-        NimUIKit.init(mInstance);
+
+        // ... your codes
+        if (NIMUtil.isMainProcess(this)) {
+            NimUIKit.init(this);
+        }
+
+
+        x.Ext.init(this);
     }
 
 
