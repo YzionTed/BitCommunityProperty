@@ -28,6 +28,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.bit.communityProperty.Bluetooth.yunduijiang.YunDuiJIangUtils;
 import com.bit.communityProperty.MyApplication;
 import com.bit.communityProperty.R;
+import com.bit.communityProperty.activity.household.HouseholdManagementActivity;
 import com.bit.communityProperty.activity.newsdetail.NewsDetail;
 import com.bit.communityProperty.activity.safetywarning.SafeWarningListActivity;
 import com.bit.communityProperty.base.BaseActivity;
@@ -105,11 +106,14 @@ public class MainActivity extends BaseActivity {
             JPushBean jPushBean = (JPushBean) bundle.getSerializable("jpushbean");
             if (jPushBean != null) {
                 switch (jPushBean.getAction()) {
-                    case "100301":
+                    case "100301"://一键报警
                         startActivity(new Intent(this, SafeWarningListActivity.class).putExtra("jpushbean", jPushBean));
                         break;
-                    case "100101":
+                    case "100101"://社区公告
                         startActivity(new Intent(this, NewsDetail.class).putExtra("id", jPushBean.getData().getNotice_id()));
+                        break;
+                    case "100401"://房屋认证
+                        startActivity(new Intent(this, HouseholdManagementActivity.class).putExtra("id", jPushBean.getData().getCommunityId()));
                         break;
                 }
             }

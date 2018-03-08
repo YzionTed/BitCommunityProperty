@@ -48,6 +48,8 @@ public class AuditedFragment extends Fragment {
     public List<List<AuditedUserBean.RecordsBean>> childList = new ArrayList();
     private ArrayList<Boolean> isGetOverData = new ArrayList<>();//是否获取过展开的数据
 
+    private String communityId = "5a82adf3b06c97e0cd6c0f3d";
+
     //    public String[] groupStrings= {"Group1", "Group2", "Group3", "Group4", "Group5", "Group6", "Group7",
 //            "Group8","Group9", "Group10", "Group11", "Group12"};
 //    public String[][] childStrings={ {"Child1", "Child2", "Child3", "Child4"}, {"Child1", "Child2", "Child3", "Child4"},
@@ -73,12 +75,13 @@ public class AuditedFragment extends Fragment {
     }
 
 
-    public static AuditedFragment newInstance(int sectionNumber, Context context) {
+    public static AuditedFragment newInstance(int sectionNumber, Context context,String communityId) {
         AuditedFragment fragment = new AuditedFragment();
 //        fragment.setContext(context);
         fragment.initView(context);
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putString("id",communityId);
         fragment.setArguments(args);
         //add
         //add
@@ -91,7 +94,8 @@ public class AuditedFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_audited, container, false);
         mExpandableListView = rootView.findViewById(R.id.expandableListView);
 //        mExpandableListView.setGroupIndicator(null);
-        getHouseholdNum("5a82adf3b06c97e0cd6c0f3d");
+        communityId = getArguments().getString("id", "communityId");
+        getHouseholdNum(communityId);
 //        adapter = new AuditedExpandableListAdapter(mContext,groupList,childList);
 //        mExpandableListView.setAdapter(adapter);
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));

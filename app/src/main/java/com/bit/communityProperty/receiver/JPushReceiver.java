@@ -12,6 +12,7 @@ import android.view.View;
 import com.bit.communityProperty.MyApplication;
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.elevatorcontrol.ChangeElevatorActivity;
+import com.bit.communityProperty.activity.household.HouseholdManagementActivity;
 import com.bit.communityProperty.activity.newsdetail.NewsDetail;
 import com.bit.communityProperty.activity.safetywarning.SafeWarningListActivity;
 import com.bit.communityProperty.config.AppConfig;
@@ -125,7 +126,7 @@ public class JPushReceiver extends BroadcastReceiver {
                 LogManager.i(extras + "点击");
                 JPushBean jPushBean = GsonUtils.getInstance().fromJson(extras, JPushBean.class);
                 switch (jPushBean.getAction()){
-                    case "100301":
+                    case "100301": //一键报警
                         if (MyApplication.getActivitySize() != 0){
                             Intent i = new Intent(context, SafeWarningListActivity.class);
 //                            i.putExtra("jpushbean", jPushBean);  //从通知栏点击不弹窗提示
@@ -143,10 +144,28 @@ public class JPushReceiver extends BroadcastReceiver {
                             context.startActivity(launchIntent);
                         }
                         break;
-                    case "100101":
+                    case "100101": //社区公告
                         if (MyApplication.getActivitySize() != 0){
                             Intent i = new Intent(context, NewsDetail.class);
                             i.putExtra("id",jPushBean.getData().getNotice_id());
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            context.startActivity(i);
+                        }else{
+                            Intent launchIntent = context.getPackageManager().
+                                    getLaunchIntentForPackage("com.bit.communityProperty");
+                            launchIntent.setFlags(
+                                    Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                            Bundle args = new Bundle();
+                            args.putSerializable("jpushbean", jPushBean);
+                            launchIntent.putExtra(AppConfig.EXTRA_BUNDLE, args);
+                            context.startActivity(launchIntent);
+                        }
+                        break;
+                    case "100401": //房屋认证
+                        if (MyApplication.getActivitySize() != 0){
+                            Intent i = new Intent(context, HouseholdManagementActivity.class);
+                            i.putExtra("id",jPushBean.getData().getCommunityId());
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             context.startActivity(i);

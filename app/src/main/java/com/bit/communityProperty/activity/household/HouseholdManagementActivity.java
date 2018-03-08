@@ -25,6 +25,7 @@ public class HouseholdManagementActivity extends BaseActivity{
     private TabLayout tabLayout;//顶部菜单
     private ViewPager mViewPager;
 
+    private String communityId;
     @Override
     public int getLayoutId() {
         return R.layout.activity_houseld_management;
@@ -56,6 +57,7 @@ public class HouseholdManagementActivity extends BaseActivity{
      * 初始化数据
      */
     private void initData(){
+        communityId = getIntent().getStringExtra("id");
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -76,9 +78,9 @@ public class HouseholdManagementActivity extends BaseActivity{
         public Fragment getItem(int position) {
 //            return PlaceholderFragment.newInstance(position + 1,mContext);
             if (position==0) {
-                return AuditingFragment.newInstance(position + 1, mContext);
+                return AuditingFragment.newInstance(position + 1, mContext,communityId);
             }else {
-                return AuditedFragment.newInstance(position + 1, mContext);
+                return AuditedFragment.newInstance(position + 1, mContext,communityId);
             }
         }
 

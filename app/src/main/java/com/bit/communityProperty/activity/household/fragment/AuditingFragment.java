@@ -50,6 +50,7 @@ public class AuditingFragment extends Fragment {
     private LRecyclerView mRecyclerView;
     private AuditingAdapter adapter;//待审核的adapter
     private LRecyclerViewAdapter mLRecyclerViewAdapter;//上下拉的recyclerView的adapter
+    private String communityId = "5a82adf3b06c97e0cd6c0f3d";
     /**
      * 服务器端一共多少条数据
      */
@@ -82,12 +83,13 @@ public class AuditingFragment extends Fragment {
     }
 
 
-    public static AuditingFragment newInstance(int sectionNumber, Context context) {
+    public static AuditingFragment newInstance(int sectionNumber, Context context,String communityId) {
         AuditingFragment fragment = new AuditingFragment();
 //        fragment.setContext(context);
         fragment.initView(context);
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putString("id", communityId);
         fragment.setArguments(args);
         //add
         //add
@@ -118,7 +120,7 @@ public class AuditingFragment extends Fragment {
                 mLRecyclerViewAdapter.notifyDataSetChanged();
                 mRecordsBeanBeanList.clear();
                 //网络请求获取列表数据
-                getAuditingList("5a82adf3b06c97e0cd6c0f3d", 1, 0, pageIndex, REQUEST_COUNT);
+                getAuditingList(communityId, 1, 0, pageIndex, REQUEST_COUNT);
             }
         });
 
@@ -133,7 +135,7 @@ public class AuditingFragment extends Fragment {
                 if (mCurrentCounter < TOTAL_COUNTER) {
                     pageIndex++;
                     //网络请求获取列表数据
-                    getAuditingList("5a82adf3b06c97e0cd6c0f3d", 1, 0, pageIndex, REQUEST_COUNT);
+                    getAuditingList(communityId, 1, 0, pageIndex, REQUEST_COUNT);
                 } else {
                     mRecyclerView.setNoMore(true);
                 }
@@ -162,6 +164,8 @@ public class AuditingFragment extends Fragment {
         });
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
+        communityId = getArguments().getString("id", "5a82adf3b06c97e0cd6c0f3d");
+
         RxBus.get().toObservable().subscribe(new Consumer<Object>() {
 
             @Override
@@ -175,7 +179,7 @@ public class AuditingFragment extends Fragment {
                         mLRecyclerViewAdapter.notifyDataSetChanged();
                         mRecordsBeanBeanList.clear();
                         //网络请求获取列表数据
-                        getAuditingList("5a82adf3b06c97e0cd6c0f3d", 1, 0, pageIndex, REQUEST_COUNT);
+                        getAuditingList(communityId, 1, 0, pageIndex, REQUEST_COUNT);
                     }
                 }
             }
