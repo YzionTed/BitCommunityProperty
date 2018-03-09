@@ -39,6 +39,7 @@ import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.utils.ViewHolder;
 import com.bit.communityProperty.widget.NoScrollGridView;
+import com.netease.nim.uikit.api.NimUIKit;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -83,7 +84,7 @@ public class MainWorkFragment extends BaseFragment {
             AppConfig.Device_Management, AppConfig.Household_Management, AppConfig.Security_Alarm,
             AppConfig.Fault_Management};
     private int[] managerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb,
-            R.mipmap.ic_work_sbgl, R.mipmap.ic_work_zhgl, R.mipmap.ic_work_afjb,R.mipmap.ic_work_gzgl};
+            R.mipmap.ic_work_sbgl, R.mipmap.ic_work_zhgl, R.mipmap.ic_work_afjb, R.mipmap.ic_work_gzgl};
 
     /**
      * 保安门卫
@@ -99,15 +100,16 @@ public class MainWorkFragment extends BaseFragment {
      * "小区门禁", "智能梯控", "工作排班", "保洁打卡"
      */
     private String[] cleanerTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator,
-            AppConfig.Work_Schedule, AppConfig.Punch_Cleaning};
-    private int[] cleanerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_bjdk};
+            AppConfig.Work_Schedule, AppConfig.Punch_Cleaning, AppConfig.Online_Consultation};
+    private int[] cleanerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_bjdk, R.mipmap
+            .ic_work_zxzx};
 
     /**
      * 维修人员
      * "小区门禁", "智能梯控", "工作排班", "维修工单"
      */
     private String[] repairmanTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator,
-            AppConfig.Work_Schedule,AppConfig.Repair_Orders};
+            AppConfig.Work_Schedule, AppConfig.Repair_Orders};
     private int[] repairmanImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_wxgd};
 
     private String ROLE_TYPE = AppConfig.ROLE_MANAGER;
@@ -153,7 +155,7 @@ public class MainWorkFragment extends BaseFragment {
             public void accept(Object o) throws Exception {
                 if (o instanceof String) {
                     if (o != null && o.equals("location")) {
-                        if ((String) SPUtil.get(mContext, AppConfig.CITY, "包头市")!=null){
+                        if ((String) SPUtil.get(mContext, AppConfig.CITY, "包头市") != null) {
                             tvLocal.setText((String) SPUtil.get(mContext, AppConfig.CITY, "包头市"));
                         }
                     }
@@ -222,6 +224,10 @@ public class MainWorkFragment extends BaseFragment {
 //                                startActivity(new Intent(mContext, HouseholdManagementActivity.class));//暂时在这调试住户管理
                                 break;
                             case AppConfig.Online_Consultation://在线咨询
+                                if (NimUIKit.getAccount() != null) {
+//                                NimUIKit.startP2PSession(getContext(), (String) SPUtil.get(mContext, AppConfig.phone, ""));
+                                    NimUIKit.startP2PSession(getContext(), "15900020005");
+                                }
                                 break;
                             case AppConfig.Patrol_Punch://巡逻打卡
                                 break;
