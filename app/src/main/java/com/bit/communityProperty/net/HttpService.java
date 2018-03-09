@@ -2,6 +2,8 @@ package com.bit.communityProperty.net;
 
 import com.bit.communityProperty.activity.cleanclock.bean.CleanClockListBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.CameraBean;
+import com.bit.communityProperty.activity.deviceManagement.bean.CarBrakeBean;
+import com.bit.communityProperty.activity.deviceManagement.bean.CarBrakeDetailBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.DeviceBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.DeviceBeanPar;
 import com.bit.communityProperty.activity.deviceManagement.bean.DoorControlBean;
@@ -341,7 +343,27 @@ public interface HttpService {
     @POST("/v1/communityIoT/elevator/get/auth/list")
     Observable<BaseEntity<List<ElevatorListBean>>> getDoorGetAuthsList(@Body Map<String, Object> map);
 
-
+    /**
+     * 获取版本更新
+     * @param appId
+     * @param sequence
+     * @return
+     */
     @GET("/v1/sys/{appId}/version/{sequence}/new")
     Observable<BaseEntity<AppVersionInfo>> getVersion(@Path("appId") String appId, @Path("sequence") String sequence);
+
+    /**
+     * 获取车闸列表
+     * @return
+     */
+    @GET("/v1/vehicle/car-gate/list")
+    Observable<BaseEntity<List<CarBrakeBean>>> getCarGateList();
+
+    /**
+     * 获取车闸进出详情
+     * @param map
+     * @return
+     */
+    @POST("/v1/vehicle/inout/list")
+    Observable<BaseEntity<CarBrakeDetailBean>> getCarBrakeDetail(@Body Map<String, Object> map);
 }

@@ -25,6 +25,7 @@ import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.net.ThrowableUtils;
 import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.SPUtil;
+import com.bit.communityProperty.utils.TimeUtils;
 import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.utils.UploadInfo;
 import com.classic.common.MultipleStatusView;
@@ -92,6 +93,10 @@ public class CleanClockListActivity extends BaseActivity {
         btnRightActionBar.setVisibility(View.VISIBLE);
         uploadDialog = new PromptDialog(this);
         multipleStatusView.showLoading();
+        uploadInfo = (UploadInfo) SPUtil.getObject(this, AppConfig.UPLOAD_INFO);
+        if (uploadInfo == null || TimeUtils.isExpiration(uploadInfo.getExpiration())) {
+            initOssToken();
+        }
         initDate();
         multipleStatusView.setOnRetryClickListener(new View.OnClickListener() {
             @Override
@@ -283,6 +288,35 @@ public class CleanClockListActivity extends BaseActivity {
             @Override
             public void onComplete() {
                 uploadDialog.dismiss();
+            }
+        });
+    }
+
+    private void initOssToken() {
+        RetrofitManage.getInstance().subscribe(Api.getInstance().ossToken(), new Observer<BaseEntity<UploadInfo>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseEntity<UploadInfo> uploadInfoBaseEntity) {
+                if (uploadInfoBaseEntity.isSuccess()) {
+                    uploadInfo = uploadInfoBaseEntity.getData();
+                    SPUtil.saveObject(mContext, AppConfig.UPLOAD_INFO, uploadInfo);
+                    if (uploadInfo != null) {
+                        OssManager.getInstance().init(mContext, uploadInfo);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
             }
         });
     }

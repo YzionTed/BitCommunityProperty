@@ -44,10 +44,21 @@ public class GlideUtils {
         Glide.with(mContext).load(path).apply(options).into(mImageView);
     }
 
-    public static void loadImage(Context mContext, String path, ImageView mImageView){
-        RequestOptions options = new RequestOptions();
+    public static void loadImage(final Context mContext, final String path, final ImageView mImageView) {
+        final RequestOptions options = new RequestOptions();
         options.diskCacheStrategy(DiskCacheStrategy.RESOURCE);
-        Glide.with(mContext).load(new CacheGlideUrl(path)).apply(options).into(mImageView);
+        Glide.with(mContext).load(new CacheGlideUrl(path)).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                Glide.with(mContext).load(path).apply(options).into(mImageView);
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                return false;
+            }
+        }).apply(options).into(mImageView);
     }
 
     //默认加载 本地

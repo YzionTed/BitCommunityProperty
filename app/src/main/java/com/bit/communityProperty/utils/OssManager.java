@@ -53,29 +53,15 @@ public class OssManager {
     }
 
     public String getUrl(String url) {
-        if (uploadInfo != null && TimeUtils.isExpiration(uploadInfo.getExpiration())) {
-            initOssToken();
-        }
         if (oss != null) {
             try {
-                return oss.presignConstrainedObjectURL("bit-test", url, 30 * 60);
+                return oss.presignConstrainedObjectURL(StringUtils.getBucket(url), url, 30 * 60);
             } catch (ClientException e) {
                 e.printStackTrace();
             }
         }
         return url;
     }
-
-//    public String getUrl(String url,String bucket){
-//        if (oss!=null){
-//            try {
-//                return oss.presignConstrainedObjectURL(bucket, url,30 * 60);
-//            } catch (ClientException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return url;
-//    }
 
     /**
      * 文件异步上传阿里云
@@ -92,7 +78,6 @@ public class OssManager {
                 PutObjectRequest put = new PutObjectRequest(data.getBucket() /*+ "-trans"*/, data.getName
                         (), filePath);
                 OSSAsyncTask task = oss.asyncPutObject(put, callback);
-//                String url = oss.presignConstrainedObjectURL(data.getBucket(), data.getName(),30 * 60);
                 Log.d("okhttp", getUrl(filePath));
                 data.setPath(getUrl(filePath));
             }
@@ -103,6 +88,11 @@ public class OssManager {
         }
     }
 
+    public void refreshToken() {
+        if ((uploadInfo == null || TimeUtils.isExpiration(uploadInfo.getExpiration())) && (boolean) SPUtil.get(MyApplication.getInstance(), AppConfig.IS_LOGIN, false)) {
+            initOssToken();
+        }
+    }
 
     private void initOssToken() {
         RetrofitManage.getInstance().subscribe(Api.getInstance().ossToken(), new Observer<BaseEntity<UploadInfo>>() {
@@ -115,8 +105,8 @@ public class OssManager {
             public void onNext(BaseEntity<UploadInfo> uploadInfoBaseEntity) {
                 if (uploadInfoBaseEntity.isSuccess()) {
                     UploadInfo uploadInfo = uploadInfoBaseEntity.getData();
-                    SPUtil.saveObject(MyApplication.getInstance(), AppConfig.UPLOAD_INFO, uploadInfo);
                     if (uploadInfo != null) {
+                        SPUtil.saveObject(MyApplication.getInstance(), AppConfig.UPLOAD_INFO, uploadInfo);
                         oss = null;
                         init(MyApplication.getInstance(), uploadInfo);
                     }

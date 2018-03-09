@@ -20,6 +20,7 @@ import com.bit.communityProperty.activity.faultDeclare.FaultDeclareActivity;
 import com.bit.communityProperty.activity.faultManager.FaultManagementActivity;
 import com.bit.communityProperty.activity.household.HouseholdManagementActivity;
 import com.bit.communityProperty.activity.propertyFee.PropertyFeeActivity;
+import com.bit.communityProperty.activity.propertyFee.fragment.PropertyFeeFragment;
 import com.bit.communityProperty.activity.safetywarning.SafeWarningListActivity;
 import com.bit.communityProperty.activity.videomonitor.MonitorListActivity;
 import com.bit.communityProperty.activity.workplan.PersonalWorkActivity;
@@ -35,6 +36,7 @@ import com.bit.communityProperty.utils.CommonAdapter;
 import com.bit.communityProperty.utils.GsonUtils;
 import com.bit.communityProperty.utils.LogManager;
 import com.bit.communityProperty.utils.SPUtil;
+import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.utils.ViewHolder;
 import com.bit.communityProperty.widget.NoScrollGridView;
 import com.zhouwei.mzbanner.MZBannerView;
@@ -108,6 +110,15 @@ public class MainWorkFragment extends BaseFragment {
             AppConfig.Work_Schedule,AppConfig.Repair_Orders};
     private int[] repairmanImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_wxgd};
 
+    private String ROLE_TYPE = AppConfig.ROLE_MANAGER;
+
+    public static MainWorkFragment newInstance(String type) {
+        MainWorkFragment fragment = new MainWorkFragment();
+        Bundle args = new Bundle();
+        args.putString(AppConfig.ROLE_TYPE,type);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     protected int getLayoutId() {
@@ -116,6 +127,11 @@ public class MainWorkFragment extends BaseFragment {
 
     @Override
     protected void initViewAndData() {
+        Bundle bundle = getArguments();
+        if (bundle!=null){
+            ROLE_TYPE = bundle.getString(AppConfig.ROLE_TYPE);
+        }
+
         initBanner();
         initGridView();
         goHouseholdManagement.setOnClickListener(new View.OnClickListener() {
@@ -231,7 +247,7 @@ public class MainWorkFragment extends BaseFragment {
 
     private void initTabData() {
         List<MainWorkBean> mainWorkBeanList = new ArrayList<>();
-        switch ((String) SPUtil.get(mContext, AppConfig.ROLE_TYPE, AppConfig.ROLE_MANAGER)) {
+        switch (ROLE_TYPE) {
             case AppConfig.ROLE_MANAGER:
                 for (int i = 0; i < managerTitles.length; i++) {
                     MainWorkBean bean = new MainWorkBean();

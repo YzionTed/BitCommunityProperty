@@ -25,6 +25,7 @@ import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.net.ThrowableUtils;
 import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.SPUtil;
+import com.bit.communityProperty.utils.TimeUtils;
 import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.utils.UploadInfo;
 import com.classic.common.MultipleStatusView;
@@ -94,7 +95,7 @@ public class SecurityClockListActivity extends BaseActivity {
         uploadDialog = new PromptDialog(this);
         initDate();
         uploadInfo = (UploadInfo) SPUtil.getObject(this, AppConfig.UPLOAD_INFO);
-        if (uploadInfo == null) {
+        if (uploadInfo == null || TimeUtils.isExpiration(uploadInfo.getExpiration())) {
             initOssToken();
         }
     }
@@ -168,24 +169,24 @@ public class SecurityClockListActivity extends BaseActivity {
 
             @Override
             public void onNext(BaseEntity<CleanClockListBean> cleanClockListBeanBaseEntity) {
-                if (cleanClockListBeanBaseEntity.isSuccess()){
+                if (cleanClockListBeanBaseEntity.isSuccess()) {
                     lvSecurity.refreshComplete(AppConfig.pageSize);
                     cleanClockListBean = cleanClockListBeanBaseEntity.getData();
-                    if (cleanClockListBean != null&&cleanClockListBean.getRecords()!=null) {
-                        if (isRefresh){
-                            if (cleanClockListBean.getRecords().size()>0){
+                    if (cleanClockListBean != null && cleanClockListBean.getRecords() != null) {
+                        if (isRefresh) {
+                            if (cleanClockListBean.getRecords().size() > 0) {
                                 multipleStatusView.showContent();
                                 adapter.setDataList(cleanClockListBean.getRecords());
-                            }else{
+                            } else {
                                 multipleStatusView.showEmpty();
                             }
-                        }else{
+                        } else {
                             adapter.addAll(cleanClockListBean.getRecords());
                         }
-                    }else{
+                    } else {
                         multipleStatusView.showEmpty();
                     }
-                }else{
+                } else {
                     multipleStatusView.showError();
                 }
             }

@@ -20,6 +20,7 @@ import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.GlideUtils;
 import com.bit.communityProperty.utils.LogManager;
 import com.bit.communityProperty.utils.OssManager;
+import com.bit.communityProperty.utils.StringUtils;
 import com.bit.communityProperty.utils.TimeUtils;
 import com.bit.communityProperty.utils.UploadInfo;
 

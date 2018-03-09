@@ -165,6 +165,7 @@ dependencies {
     compile 'com.amap.api:location:3.8.0'
     //支持多种状态切换的ActivityView https://github.com/qyxxjd/MultipleStatusView
     compile 'com.classic.common:multiple-status-view:1.4'
+    implementation files('libs/lite-orm-1.9.2.jar')
 }
 repositories {
     flatDir { dirs 'aars' }

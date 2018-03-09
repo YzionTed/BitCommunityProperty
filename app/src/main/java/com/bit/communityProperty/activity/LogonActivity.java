@@ -144,10 +144,12 @@ public class LogonActivity extends BaseActivity {
                     messageEvent.setLoginSuccess(true);
                     EventBus.getDefault().post(messageEvent);
 
+                    SPUtil.put(mContext, AppConfig.ROLE_TYPE, AppConfig.ROLE_MANAGER);//用户角色
                     Intent intent = new Intent(mContext, MainActivity.class);
                     if(getIntent().getBundleExtra(AppConfig.EXTRA_BUNDLE) != null){
                         intent.putExtra(AppConfig.EXTRA_BUNDLE, getIntent().getBundleExtra(AppConfig.EXTRA_BUNDLE));
                     }
+                    intent.putExtra(AppConfig.ROLE_TYPE, AppConfig.ROLE_MANAGER);//用户角色
                     startActivity(intent);
                     finish();
                 } else {

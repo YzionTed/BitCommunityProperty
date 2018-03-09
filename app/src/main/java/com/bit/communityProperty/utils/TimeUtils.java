@@ -1,6 +1,7 @@
 package com.bit.communityProperty.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -59,8 +60,14 @@ public class TimeUtils {
      * @return
      */
     public static String getCurrentTimeWithT() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        return sdf.format(new java.util.Date());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.HOUR, -8);// 24小时制
+        date = cal.getTime();
+        cal = null;
+        return format.format(date);
     }
 
     /**

@@ -8,6 +8,7 @@ import android.util.Log;
 import com.bit.communityProperty.Bluetooth.BluetoothApplication;
 import com.bit.communityProperty.bean.ApkInfo;
 import com.bit.communityProperty.utils.GlideUtils;
+import com.bit.communityProperty.utils.LiteOrmUtil;
 import com.ddclient.push.DongPushMsgManager;
 import com.inuker.bluetooth.library.BluetoothClientManger;
 import com.smarthome.yunintercom.sdk.IntercomSDK;
@@ -49,6 +50,8 @@ public class MyApplication extends Application {
         IntercomSDK.initializePush(this, DongPushMsgManager.PUSH_TYPE_GETUI);
         IntercomSDK.initializePush(this, DongPushMsgManager.PUSH_TYPE_JG);
 
+        //初始化数据库
+        LiteOrmUtil.getInstance().init(this);
     }
 
 

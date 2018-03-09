@@ -37,4 +37,19 @@ public class StringUtils {
         }else
             return false;
     }
+
+
+    public static String getBucket(String str){
+        try {
+            if (str!=null){
+                String[] sResult = str.split("_");
+                if (sResult!=null&&sResult.length>=3){
+                    return sResult[1];
+                }
+            }
+        }catch (Exception e){
+
+        }
+        return "bit-app";
+    }
 }

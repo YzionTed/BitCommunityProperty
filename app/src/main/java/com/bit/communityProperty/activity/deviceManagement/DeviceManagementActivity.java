@@ -8,7 +8,12 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.bit.communityProperty.R;
+import com.bit.communityProperty.activity.deviceManagement.fragment.CarFragmet;
 import com.bit.communityProperty.activity.deviceManagement.fragment.DoorControlFragment;
+import com.bit.communityProperty.activity.elevator.adapter.FragmentAdapter;
+import com.bit.communityProperty.activity.safetywarning.fragment.FinishedListFragment;
+import com.bit.communityProperty.activity.safetywarning.fragment.WaitDealListFragment;
+import com.bit.communityProperty.activity.safetywarning.fragment.WaitSolveListFragment;
 import com.bit.communityProperty.base.BaseActivity;
 import com.bit.communityProperty.activity.deviceManagement.fragment.CameraFragment;
 import com.bit.communityProperty.utils.LogManager;
@@ -16,6 +21,7 @@ import com.bit.communityProperty.view.TitleBarView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,10 +32,10 @@ import java.util.Map;
 public class DeviceManagementActivity extends BaseActivity {
 
     private TitleBarView mTitleBarView;//标题栏
-    private SectionsPagerAdapter mSectionsPagerAdapter;
     private TabLayout tabLayout;//顶部菜单
     private ViewPager mViewPager;
 
+    private String[] tabTitles = new String[]{"摄像头", "门禁", "车闸"};
     @Override
     public int getLayoutId() {
         return R.layout.activity_device_management;
@@ -61,35 +67,14 @@ public class DeviceManagementActivity extends BaseActivity {
      * 初始化数据
      */
     private void initData() {
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-    }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-//            return PlaceholderFragment.newInstance(position + 1,mContext);
-            if (position == 0) {
-                return CameraFragment.newInstance(position + 1, mContext);
-            } else {
-                return DoorControlFragment.newInstance(position + 1, mContext);
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
+        final List<Fragment> list = new ArrayList();
+        list.add(new CameraFragment());
+        list.add(new DoorControlFragment());
+        list.add(new CarFragmet());
+        FragmentAdapter adapter = new FragmentAdapter(this.getSupportFragmentManager(), list, tabTitles);
+        mViewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(mViewPager);
+//        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+//        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
     }
 }
