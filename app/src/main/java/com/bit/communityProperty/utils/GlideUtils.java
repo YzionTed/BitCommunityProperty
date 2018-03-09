@@ -15,6 +15,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
+import java.util.logging.Handler;
+
 /**
  * 图片加载工具类glide
  * Created by kezhangzhao on 2018/1/25.
@@ -47,18 +49,9 @@ public class GlideUtils {
     public static void loadImage(final Context mContext, final String path, final ImageView mImageView) {
         final RequestOptions options = new RequestOptions();
         options.diskCacheStrategy(DiskCacheStrategy.RESOURCE);
-        Glide.with(mContext).load(new CacheGlideUrl(path)).listener(new RequestListener<Drawable>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                Glide.with(mContext).load(path).apply(options).into(mImageView);
-                return false;
-            }
-
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                return false;
-            }
-        }).apply(options).into(mImageView);
+        options.placeholder(R.mipmap.image_default);
+        options.error(R.mipmap.image_default);
+        Glide.with(mContext).load(new CacheGlideUrl(path)).apply(options).into(mImageView);
     }
 
     //默认加载 本地

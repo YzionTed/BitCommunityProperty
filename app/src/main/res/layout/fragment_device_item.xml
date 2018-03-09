@@ -46,19 +46,20 @@
     </LinearLayout>
 
     <TextView
+        android:padding="2dp"
         android:id="@+id/tv_status"
         android:layout_width="60dp"
         android:layout_height="20dp"
         android:layout_gravity="center_vertical"
         android:layout_marginRight="10dp"
-        android:background="@color/bg_yellow_b148"
+        android:background="@drawable/shape_rad22_blue"
         android:gravity="center"
         android:text="运行正常"
         android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:textSize="12sp" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="@color/gray_f1"></View>
+        android:background="@color/appbg"></View>
 </LinearLayout>

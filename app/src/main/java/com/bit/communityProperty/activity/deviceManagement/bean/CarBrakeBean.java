@@ -1,10 +1,12 @@
 package com.bit.communityProperty.activity.deviceManagement.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by DELL60 on 2018/3/9.
  */
 
-public class CarBrakeBean {
+public class CarBrakeBean implements Serializable{
     private String id;
     private String gateNO;
     private String gateName;

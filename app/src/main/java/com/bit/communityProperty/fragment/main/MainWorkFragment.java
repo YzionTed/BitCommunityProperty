@@ -26,26 +26,33 @@ import com.bit.communityProperty.activity.videomonitor.MonitorListActivity;
 import com.bit.communityProperty.activity.workplan.PersonalWorkActivity;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.base.BaseFragment;
+import com.bit.communityProperty.bean.LoginData;
 import com.bit.communityProperty.config.AppConfig;
+import com.bit.communityProperty.fragment.main.bean.BannerBean;
 import com.bit.communityProperty.fragment.main.bean.MainWorkBean;
 import com.bit.communityProperty.fragment.main.bean.OwnerApplyNumBean;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.receiver.RxBus;
 import com.bit.communityProperty.utils.CommonAdapter;
+import com.bit.communityProperty.utils.GlideUtils;
 import com.bit.communityProperty.utils.GsonUtils;
 import com.bit.communityProperty.utils.LogManager;
+import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.utils.ViewHolder;
 import com.bit.communityProperty.widget.NoScrollGridView;
+import com.bumptech.glide.Glide;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -100,9 +107,8 @@ public class MainWorkFragment extends BaseFragment {
      * "小区门禁", "智能梯控", "工作排班", "保洁打卡"
      */
     private String[] cleanerTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator,
-            AppConfig.Work_Schedule, AppConfig.Punch_Cleaning, AppConfig.Online_Consultation};
-    private int[] cleanerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_bjdk, R.mipmap
-            .ic_work_zxzx};
+            AppConfig.Work_Schedule, AppConfig.Punch_Cleaning};
+    private int[] cleanerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_bjdk};
 
     /**
      * 维修人员
@@ -159,12 +165,46 @@ public class MainWorkFragment extends BaseFragment {
                             tvLocal.setText((String) SPUtil.get(mContext, AppConfig.CITY, "包头市"));
                         }
                     }
+                }else if (o instanceof LoginData){
+                    ROLE_TYPE = AppConfig.ROLE_MANAGER;
+                    initTabData();
                 }
             }
         });
     }
 
     private void initBanner() {
+//        Map<String, Object> map = new HashMap<>();
+//        RetrofitManage.getInstance().subscribe(Api.getInstance().getBanner(map), new Observer<BaseEntity<BannerBean>>() {
+//            @Override
+//            public void onSubscribe(Disposable d) {
+//
+//            }
+//
+//            @Override
+//            public void onNext(BaseEntity<BannerBean> bannerBeanBaseEntity) {
+//                if (bannerBeanBaseEntity.isSuccess()){
+//                    banner.setPages(bannerBeanBaseEntity.getData().getRecords(), new MZHolderCreator<BannerViewHolder>() {
+//                        @Override
+//                        public BannerViewHolder createViewHolder() {
+//                            return new BannerViewHolder();
+//                        }
+//                    });
+//                    banner.start();
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//
+//            }
+//
+//            @Override
+//            public void onComplete() {
+//
+//            }
+//        });
+
         List<Integer> s = new ArrayList<>();
         s.add(R.mipmap.banner_1);
         s.add(R.mipmap.banner_2);
@@ -388,6 +428,7 @@ public class MainWorkFragment extends BaseFragment {
         public void onBind(Context context, int position, Integer data) {
             // 数据绑定
             mImageView.setImageResource(data);
+//            GlideUtils.loadImage(context,OssManager.getInstance().getUrl(data.getMaterialUrl()),mImageView);
         }
     }
 }

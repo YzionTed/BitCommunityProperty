@@ -6,7 +6,7 @@ package com.bit.communityProperty.activity.deviceManagement.bean;
 
 public class CarBrakeDetailBean {
     private String carNo;
-    private String chargeType;
+    private int chargeType;
     private String inTime;
 
     public String getCarNo() {
@@ -17,11 +17,11 @@ public class CarBrakeDetailBean {
         this.carNo = carNo;
     }
 
-    public String getChargeType() {
+    public int getChargeType() {
         return chargeType;
     }
 
-    public void setChargeType(String chargeType) {
+    public void setChargeType(int chargeType) {
         this.chargeType = chargeType;
     }
 

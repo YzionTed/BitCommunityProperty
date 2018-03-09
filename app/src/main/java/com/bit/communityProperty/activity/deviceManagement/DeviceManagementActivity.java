@@ -10,6 +10,7 @@ import android.view.View;
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.deviceManagement.fragment.CarFragmet;
 import com.bit.communityProperty.activity.deviceManagement.fragment.DoorControlFragment;
+import com.bit.communityProperty.activity.deviceManagement.fragment.ElevatorFragment;
 import com.bit.communityProperty.activity.elevator.adapter.FragmentAdapter;
 import com.bit.communityProperty.activity.safetywarning.fragment.FinishedListFragment;
 import com.bit.communityProperty.activity.safetywarning.fragment.WaitDealListFragment;
@@ -35,7 +36,7 @@ public class DeviceManagementActivity extends BaseActivity {
     private TabLayout tabLayout;//顶部菜单
     private ViewPager mViewPager;
 
-    private String[] tabTitles = new String[]{"摄像头", "门禁", "车闸"};
+    private String[] tabTitles = new String[]{"摄像头", "门禁","电梯","车闸"};
     @Override
     public int getLayoutId() {
         return R.layout.activity_device_management;
@@ -70,11 +71,10 @@ public class DeviceManagementActivity extends BaseActivity {
         final List<Fragment> list = new ArrayList();
         list.add(new CameraFragment());
         list.add(new DoorControlFragment());
+        list.add(new ElevatorFragment());
         list.add(new CarFragmet());
         FragmentAdapter adapter = new FragmentAdapter(this.getSupportFragmentManager(), list, tabTitles);
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);
-//        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-//        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
     }
 }
