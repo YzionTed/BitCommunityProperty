@@ -1,12 +1,13 @@
 package com.bit.communityProperty.activity.deviceManagement.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by DELL60 on 2018/3/9.
  */
 
-public class ElevatorListBean {
+public class ElevatorListBean implements Serializable{
 
     /**
      * total : 6
@@ -62,7 +63,7 @@ public class ElevatorListBean {
         this.records = records;
     }
 
-    public static class RecordsBean {
+    public static class RecordsBean implements Serializable{
         /**
          * deviceNum : 460060514066888
          * houseName : 办公楼

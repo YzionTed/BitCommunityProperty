@@ -7,6 +7,8 @@ import com.bit.communityProperty.activity.deviceManagement.bean.CarBrakeDetailBe
 import com.bit.communityProperty.activity.deviceManagement.bean.DeviceBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.DeviceBeanPar;
 import com.bit.communityProperty.activity.deviceManagement.bean.DoorControlBean;
+import com.bit.communityProperty.activity.deviceManagement.bean.DoorControlDetailBean;
+import com.bit.communityProperty.activity.deviceManagement.bean.ElevatorDetailBean;
 import com.bit.communityProperty.activity.elevatorcontrol.bean.ElevatorListBean;
 import com.bit.communityProperty.activity.faultManager.bean.FaultDetailBean;
 import com.bit.communityProperty.activity.faultManager.bean.FaultManagementBean;
@@ -20,6 +22,7 @@ import com.bit.communityProperty.activity.userinfo.bean.UserData;
 import com.bit.communityProperty.activity.workplan.bean.PersonalWorkListBean;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.bean.AppVersionInfo;
+import com.bit.communityProperty.bean.CardListBean;
 import com.bit.communityProperty.bean.DoorMILiBean;
 import com.bit.communityProperty.bean.LoginData;
 import com.bit.communityProperty.bean.PublicKeybean;
@@ -50,6 +53,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
 
@@ -230,7 +234,7 @@ public interface HttpService {
      * @return
      */
     @POST("/v1/sys/door-record/page")
-    Observable<BaseEntity<Object>> getDoorUseList(@Body Map<String, Object> map);
+    Observable<BaseEntity<DoorControlDetailBean>> getDoorUseList(@Body Map<String, Object> map);
 
     /**
      * 放行条详情
@@ -358,16 +362,16 @@ public interface HttpService {
      * 设备管理-获取车闸列表
      * @return
      */
-    @GET("/v1/vehicle/car-gate/list")
-    Observable<BaseEntity<List<CarBrakeBean>>> getCarGateList();
+    @POST("/v1/vehicle/car-gate/page")
+    Observable<BaseEntity<CarBrakeBean>> getCarGateList(@Query("page") int page,@Query("size") int size);
 
     /**
      * 设备管理-获取车闸进出详情
      * @param map
      * @return
      */
-    @POST("/v1/vehicle/inout/list")
-    Observable<BaseEntity<List<CarBrakeDetailBean>>> getCarBrakeDetail(@Body Map<String, Object> map);
+    @POST("/v1/vehicle/inout/page")
+    Observable<BaseEntity<CarBrakeDetailBean>> getCarBrakeDetail(@Body Map<String, Object> map);
 
     /**
      * 设备管理-获取电梯列表
@@ -380,7 +384,7 @@ public interface HttpService {
      * 设备管理-获取电梯使用记录
      */
     @POST("/v1/sys/elevator-record/page")
-    Observable<BaseEntity<Object>> getElevatorUseList(@Body Map<String, Object> map);
+    Observable<BaseEntity<ElevatorDetailBean>> getElevatorUseList(@Body Map<String, Object> map);
 
     /**
      * 获取轮播图
@@ -419,4 +423,12 @@ public interface HttpService {
     @POST("v1/property/fault/editFaultStatus")
     Observable<BaseEntity<FaultDetailBean>> handleFault(@Body Map<String, Object> map);
 
+
+    /**
+     * 查询虚拟卡片
+     * @param map
+     * @return
+     */
+    @POST("/v1/user/card/get/list")
+    Observable<BaseEntity<List<CardListBean>>> getCardList(@Body Map<String, Object> map);
 }

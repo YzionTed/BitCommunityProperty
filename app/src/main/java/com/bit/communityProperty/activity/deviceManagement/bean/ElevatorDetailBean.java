@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by DELL60 on 2018/3/9.
+ * Created by DELL60 on 2018/3/10.
  */
 
-public class CarBrakeDetailBean {
+public class ElevatorDetailBean {
     /**
      * currentPage : 1
      * records : [{"computerName":"PC-20171213BHNH","gateNO":2,"gateName":"出口车道1","gateStatus":1,"id":6,"inOutTag":2},{"computerName":"PC-20171213BHNH","gateNO":1,"gateName":"入口车道1","gateStatus":1,"id":5,"inOutTag":1}]
@@ -53,32 +53,50 @@ public class CarBrakeDetailBean {
     }
 
     public static class RecordsBean implements Serializable {
-        private String carNo;
-        private int chargeType;
-        private String inTime;
+        /**
+         * computerName : PC-20171213BHNH
+         * gateNO : 2
+         * gateName : 出口车道1
+         * gateStatus : 1
+         * id : 6
+         * inOutTag : 2
+         */
 
-        public String getCarNo() {
-            return carNo;
+        private String userName;
+        private String time;
+        private String userCommand;
+        private int id;
+
+        public String getUserName() {
+            return userName;
         }
 
-        public void setCarNo(String carNo) {
-            this.carNo = carNo;
+        public void setUserName(String userName) {
+            this.userName = userName;
         }
 
-        public int getChargeType() {
-            return chargeType;
+        public String getTime() {
+            return time;
         }
 
-        public void setChargeType(int chargeType) {
-            this.chargeType = chargeType;
+        public void setTime(String time) {
+            this.time = time;
         }
 
-        public String getInTime() {
-            return inTime;
+        public String getUserCommand() {
+            return userCommand;
         }
 
-        public void setInTime(String inTime) {
-            this.inTime = inTime;
+        public void setUserCommand(String userCommand) {
+            this.userCommand = userCommand;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
         }
     }
 }

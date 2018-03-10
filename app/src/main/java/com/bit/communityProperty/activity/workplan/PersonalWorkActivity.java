@@ -16,6 +16,8 @@ import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.CommonAdapter;
+import com.bit.communityProperty.utils.LiteOrmUtil;
+import com.bit.communityProperty.utils.LogManager;
 import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.TimeUtils;
 import com.bit.communityProperty.utils.ViewHolder;

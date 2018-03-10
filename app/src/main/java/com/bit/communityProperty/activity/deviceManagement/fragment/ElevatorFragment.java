@@ -17,6 +17,7 @@ import com.bit.communityProperty.activity.deviceManagement.bean.DeviceBeanPar;
 import com.bit.communityProperty.activity.deviceManagement.bean.ElevatorListBean;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.base.BaseFragment;
+import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.GsonUtils;
@@ -30,6 +31,7 @@ import com.github.jdsjlzx.recyclerview.ProgressStyle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -49,11 +51,13 @@ public class ElevatorFragment extends BaseFragment {
     @BindView(R.id.recyclerview)
     LRecyclerView mRecyclerView;
     Unbinder unbinder;
-    private ArrayList<DeviceBean> mDeviceBeanList = new ArrayList<>();//数据列表
     private DeviceAdapter adapter;//设备管理的adapter
     private LRecyclerViewAdapter mLRecyclerViewAdapter;//上下拉的recyclerView的adapter
     private PromptDialog sinInLogin;
+    private List<ElevatorListBean.RecordsBean> recordsBean;
 
+    private int page = 1;
+    private boolean isRefresh = true;
     @Override
     protected int getLayoutId() {
         return R.layout.layout_recyclerview_refresh;
@@ -69,21 +73,24 @@ public class ElevatorFragment extends BaseFragment {
         mRecyclerView.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                isRefresh = true;
+                getData();
             }
         });
         mRecyclerView.setLoadMoreEnabled(true);
         mRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
+                isRefresh = false;
+                getData();
             }
         });
         mLRecyclerViewAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {//跳转到设备详情信息页面
-                DeviceBean bean = mDeviceBeanList.get(position);
+                ElevatorListBean.RecordsBean bean = recordsBean.get(position);
                 Intent intent = new Intent(mContext, DeviceInfoActivity.class);
-                intent.putExtra("AuditingBean", bean);
+                intent.putExtra("bean", bean);
                 startActivity(intent);
             }
         });
@@ -93,6 +100,13 @@ public class ElevatorFragment extends BaseFragment {
     private void getData(){
         Map<String, Object> map = new HashMap<>();
         map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        if (isRefresh){
+            page=1;
+        }else{
+            page++;
+        }
+        map.put("page", page);
+        map.put("size", AppConfig.pageSize);
         RetrofitManage.getInstance().subscribe(Api.getInstance().getElevatorList(map), new Observer<BaseEntity<ElevatorListBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -101,8 +115,10 @@ public class ElevatorFragment extends BaseFragment {
 
             @Override
             public void onNext(BaseEntity<ElevatorListBean> objectBaseEntity) {
+                mRecyclerView.refreshComplete(AppConfig.pageSize);
                 if (objectBaseEntity.isSuccess()){
-                    adapter.setDataList(objectBaseEntity.getData().getRecords());
+                    recordsBean = objectBaseEntity.getData().getRecords();
+                    adapter.setDataList(recordsBean);
                 }
             }
 

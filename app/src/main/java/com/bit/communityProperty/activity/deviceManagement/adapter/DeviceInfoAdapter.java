@@ -11,7 +11,10 @@ import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.deviceManagement.bean.CarBrakeBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.CarBrakeDetailBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.DeviceInfoBean;
+import com.bit.communityProperty.activity.deviceManagement.bean.DoorControlDetailBean;
+import com.bit.communityProperty.activity.deviceManagement.bean.ElevatorDetailBean;
 import com.bit.communityProperty.adapter.ListBaseAdapter;
+import com.bit.communityProperty.utils.TimeUtils;
 import com.bit.communityProperty.view.CircleImageView;
 
 /**
@@ -39,8 +42,8 @@ public class DeviceInfoAdapter extends ListBaseAdapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ViewHolder viewHolder = (ViewHolder) holder;
-        if (mDataList.get(position) instanceof CarBrakeDetailBean) {
-            CarBrakeDetailBean bean = (CarBrakeDetailBean) mDataList.get(position);
+        if (mDataList.get(position) instanceof CarBrakeDetailBean.RecordsBean) {
+            CarBrakeDetailBean.RecordsBean bean = (CarBrakeDetailBean.RecordsBean) mDataList.get(position);
             switch (bean.getChargeType()) {
                 case 1:
                     viewHolder.tvStatus.setText("月卡");
@@ -58,14 +61,17 @@ public class DeviceInfoAdapter extends ListBaseAdapter {
             viewHolder.tvName.setText(bean.getCarNo());
             viewHolder.tvId.setText(bean.getInTime());
             viewHolder.ivIcon.setImageResource(R.mipmap.ic_sbgl_che);
+        } else if (mDataList.get(position) instanceof ElevatorDetailBean.RecordsBean) {
+            ElevatorDetailBean.RecordsBean bean = (ElevatorDetailBean.RecordsBean) mDataList.get(position);
+            viewHolder.tvName.setText(bean.getUserName());
+            viewHolder.tvId.setText(bean.getTime());
+            viewHolder.tvStatus.setText(bean.getUserCommand());
+        }else if (mDataList.get(position) instanceof DoorControlDetailBean.RecordsBean){
+            DoorControlDetailBean.RecordsBean bean = (DoorControlDetailBean.RecordsBean) mDataList.get(position);
+            viewHolder.tvName.setText(bean.getUserName());
+            viewHolder.tvId.setText(TimeUtils.stampToDate(bean.getTime()));
+            viewHolder.tvStatus.setText(bean.getUserCommand());
         }
-//        if (bean.getDataStatus()==0){
-//            viewHolder.tvStatus.setText("运行正常");
-//        }else {
-//            viewHolder.tvStatus.setText("运行故障");
-//        }
-//        viewHolder.tvName.setText(bean.getName());
-//        viewHolder.tvId.setText(bean.getDoorId());
     }
 
     /**

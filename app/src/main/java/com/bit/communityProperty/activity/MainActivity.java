@@ -29,6 +29,7 @@ import com.bit.communityProperty.activity.safetywarning.SafeWarningListActivity;
 import com.bit.communityProperty.base.BaseActivity;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.bean.AppVersionInfo;
+import com.bit.communityProperty.bean.CardListBean;
 import com.bit.communityProperty.bean.IMToken;
 import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.fragment.main.MainMineFragment;
@@ -45,6 +46,7 @@ import com.bit.communityProperty.utils.AppUtil;
 import com.bit.communityProperty.utils.CheckSumBuilder;
 import com.bit.communityProperty.utils.DialogUtil;
 import com.bit.communityProperty.utils.DownloadUtils;
+import com.bit.communityProperty.utils.LiteOrmUtil;
 import com.bit.communityProperty.utils.LogManager;
 import com.bit.communityProperty.utils.LogUtil;
 import com.bit.communityProperty.utils.OssManager;
@@ -61,12 +63,15 @@ import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 
 public class MainActivity extends BaseActivity {
@@ -135,7 +140,50 @@ public class MainActivity extends BaseActivity {
         }
         getVersion();
 
+        getCardList();//获取虚拟卡
+        RxBus.get().toObservable().subscribe(new Consumer<Object>() {
+
+            @Override
+            public void accept(Object o) throws Exception {
+                if (o instanceof String){
+                    if (o.equals("update_card_list")){
+                        getCardList();
+                    }
+                }
+            }
+        });
+
         createAccountId();//测试云信
+    }
+
+    private void getCardList(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        map.put("userId", SPUtil.get(this, AppConfig.id, ""));
+        RetrofitManage.getInstance().subscribe(Api.getInstance().getCardList(map), new Observer<BaseEntity<List<CardListBean>>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseEntity<List<CardListBean>> objectBaseEntity) {
+                if (objectBaseEntity.isSuccess()){
+//                    LiteOrmUtil.getInstance().getOrm().delete(CardListBean.class);
+                    LiteOrmUtil.getInstance().getOrm().save(objectBaseEntity.getData());
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     private void createAccountId() {

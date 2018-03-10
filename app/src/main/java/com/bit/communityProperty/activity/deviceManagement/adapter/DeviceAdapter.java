@@ -69,10 +69,10 @@ public class DeviceAdapter<T> extends ListBaseAdapter<T> {
                 viewHolder.tvStatus.setBackground(ContextCompat.getDrawable(mContext,R.drawable.shape_rad22_yellow));
             }
             viewHolder.tvName.setText(doorBean.getName());
-            viewHolder.tvId.setText(doorBean.getDeviceCode());
+            viewHolder.tvId.setText(doorBean.getSerialNo());
             viewHolder.ivIcon.setImageResource(R.mipmap.ic_sbgl_mj);
-        }else if (mDataList.get(position) instanceof CarBrakeBean){//车闸
-            CarBrakeBean carBrakeBean = (CarBrakeBean) mDataList.get(position);
+        }else if (mDataList.get(position) instanceof CarBrakeBean.RecordsBean){//车闸
+            CarBrakeBean.RecordsBean carBrakeBean = (CarBrakeBean.RecordsBean) mDataList.get(position);
             if (carBrakeBean.getGateStatus() == 1) {
                 viewHolder.tvStatus.setText("运行正常");
                 viewHolder.tvStatus.setBackground(ContextCompat.getDrawable(mContext,R.drawable.shape_rad22_blue));

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -30,7 +31,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="温热舒服舒服"
+            tools:text="温热舒服舒服"
             android:textColor="@color/tv_black_33"
             android:textSize="16sp" />
 
@@ -40,7 +41,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="温热舒服舒服"
+            tools:text="温热舒服舒服"
             android:textColor="@color/tv_gray_66"
             android:textSize="15sp" />
     </LinearLayout>
@@ -54,7 +55,7 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/shape_rad22_blue"
         android:gravity="center"
-        android:text="运行正常"
+        tools:text="运行正常"
         android:textColor="@color/white"
         android:textSize="12sp" />
     </LinearLayout>

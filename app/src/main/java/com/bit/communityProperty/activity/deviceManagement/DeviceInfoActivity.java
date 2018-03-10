@@ -6,10 +6,15 @@ import android.view.View;
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.deviceManagement.bean.CarBrakeBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.CarBrakeDetailBean;
+import com.bit.communityProperty.activity.deviceManagement.bean.DoorControlBean;
+import com.bit.communityProperty.activity.deviceManagement.bean.DoorControlDetailBean;
+import com.bit.communityProperty.activity.deviceManagement.bean.ElevatorDetailBean;
+import com.bit.communityProperty.activity.deviceManagement.bean.ElevatorListBean;
 import com.bit.communityProperty.base.BaseActivity;
 import com.bit.communityProperty.activity.deviceManagement.adapter.DeviceInfoAdapter;
 import com.bit.communityProperty.activity.deviceManagement.bean.DeviceInfoBean;
 import com.bit.communityProperty.base.BaseEntity;
+import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.view.TitleBarView;
@@ -33,15 +38,20 @@ import io.reactivex.disposables.Disposable;
  * Created by kezhangzhao on 2018/2/10.
  */
 
-public class DeviceInfoActivity extends BaseActivity{
+public class DeviceInfoActivity extends BaseActivity {
 
     private TitleBarView mTitleBarView;//标题栏
     private LRecyclerView mRecyclerView;
     private LRecyclerViewAdapter mLRecyclerViewAdapter;//上下拉的recyclerView的adapter
-    private ArrayList<DeviceInfoBean> mDeviceInfoBeanList = new ArrayList<>();//数据列表
     private DeviceInfoAdapter adapter;
 
-    private CarBrakeBean carBrakeBean;
+    private int page = 1;
+    private boolean isRefresh = true;
+
+    private DoorControlBean.RecordsBean doorBean;//门禁
+    private CarBrakeBean.RecordsBean carBrakeBean;//车闸
+    private ElevatorListBean.RecordsBean elevatorBean;//电梯
+    private int type;
 
     @Override
     public int getLayoutId() {
@@ -57,7 +67,7 @@ public class DeviceInfoActivity extends BaseActivity{
     /**
      * 初始化view
      */
-    private void initView(){
+    private void initView() {
         mTitleBarView = findViewById(R.id.titlebarview);
         mTitleBarView.setTvTitleText("设备信息");
         mTitleBarView.setLeftOnClickListener(new View.OnClickListener() {
@@ -72,7 +82,7 @@ public class DeviceInfoActivity extends BaseActivity{
     /**
      * 初始化数据
      */
-    private void initData(){
+    private void initData() {
         adapter = new DeviceInfoAdapter(mContext);
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
         mRecyclerView.setAdapter(mLRecyclerViewAdapter);
@@ -80,38 +90,167 @@ public class DeviceInfoActivity extends BaseActivity{
         mRecyclerView.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
+                isRefresh = true;
+                switch (type){
+                    case 1:
+                        getCarDataInfo();
+                        break;
+                    case 2:
+                        getElevatorInfo();
+                        break;
+                    case 3:
+                        getDoorControlInfo();
+                        break;
+                }
             }
         });
         mRecyclerView.setLoadMoreEnabled(true);
         mRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
+                isRefresh = false;
+                switch (type){
+                    case 1:
+                        getCarDataInfo();
+                        break;
+                    case 2:
+                        getElevatorInfo();
+                        break;
+                    case 3:
+                        getDoorControlInfo();
+                        break;
+                }
             }
         });
-        if (getIntent().getSerializableExtra("bean")!=null){
-            if (getIntent().getSerializableExtra("bean") instanceof CarBrakeBean){
-                carBrakeBean = (CarBrakeBean) getIntent().getSerializableExtra("bean");
+        if (getIntent().getSerializableExtra("bean") != null) {
+            if (getIntent().getSerializableExtra("bean") instanceof CarBrakeBean.RecordsBean) {
+                carBrakeBean = (CarBrakeBean.RecordsBean) getIntent().getSerializableExtra("bean");
                 mTitleBarView.setTvTitleText(carBrakeBean.getGateName());
+                type = 1;
                 getCarDataInfo();
+            } else if (getIntent().getSerializableExtra("bean") instanceof ElevatorListBean.RecordsBean) {
+                elevatorBean = (ElevatorListBean.RecordsBean) getIntent().getSerializableExtra("bean");
+                mTitleBarView.setTvTitleText(elevatorBean.getName());
+                type = 2;
+                getElevatorInfo();
+            }else if (getIntent().getSerializableExtra("bean") instanceof DoorControlBean.RecordsBean){
+                doorBean = (DoorControlBean.RecordsBean) getIntent().getSerializableExtra("bean");
+                mTitleBarView.setTvTitleText(doorBean.getName());
+                type = 3;
+                getDoorControlInfo();
             }
         }
     }
 
-    //车闸记录
-    private void getCarDataInfo(){
+    private void getDoorControlInfo(){
         Map<String, Object> map = new HashMap<>();
-        map.put("gateNO", carBrakeBean.getGateNO());
-        map.put("inOutTag", carBrakeBean.getInOutTag());
-        RetrofitManage.getInstance().subscribe(Api.getInstance().getCarBrakeDetail(map), new Observer<BaseEntity<List<CarBrakeDetailBean>>>() {
+        map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        map.put("deviceId", doorBean.getDeviceId());
+        if (isRefresh){
+            page=1;
+        }else{
+            page++;
+        }
+        map.put("page", page);
+        map.put("size", AppConfig.pageSize);
+        RetrofitManage.getInstance().subscribe(Api.getInstance().getDoorUseList(map), new Observer<BaseEntity<DoorControlDetailBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(BaseEntity<List<CarBrakeDetailBean>> carBrakeDetailBeanBaseEntity) {
-                if (carBrakeDetailBeanBaseEntity.isSuccess()){
-                    adapter.setDataList(carBrakeDetailBeanBaseEntity.getData());
+            public void onNext(BaseEntity<DoorControlDetailBean> objectBaseEntity) {
+                mRecyclerView.refreshComplete(AppConfig.pageSize);
+                if (objectBaseEntity.isSuccess()) {
+                    if (isRefresh){
+                        adapter.setDataList(objectBaseEntity.getData().getRecords());
+                    }else{
+                        adapter.addAll(objectBaseEntity.getData().getRecords());
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    //车闸记录
+    private void getCarDataInfo() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("gateNO", carBrakeBean.getGateNO());
+        map.put("inOutTag", carBrakeBean.getInOutTag());
+        if (isRefresh){
+            page=1;
+        }else{
+            page++;
+        }
+        map.put("page", page);
+        map.put("size", AppConfig.pageSize);
+        RetrofitManage.getInstance().subscribe(Api.getInstance().getCarBrakeDetail(map), new Observer<BaseEntity<CarBrakeDetailBean>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseEntity<CarBrakeDetailBean> carBrakeDetailBeanBaseEntity) {
+                mRecyclerView.refreshComplete(AppConfig.pageSize);
+                if (carBrakeDetailBeanBaseEntity.isSuccess()) {
+                    if (isRefresh){
+                        adapter.setDataList(carBrakeDetailBeanBaseEntity.getData().getRecords());
+                    }else{
+                        adapter.addAll(carBrakeDetailBeanBaseEntity.getData().getRecords());
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void getElevatorInfo() {
+        Map<String, Object> map = new HashMap<>();
+        if (isRefresh){
+            page=1;
+        }else{
+            page++;
+        }
+        map.put("page", page);
+        map.put("size", AppConfig.pageSize);
+        map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        map.put("deviceId", elevatorBean.getId());
+        RetrofitManage.getInstance().subscribe(Api.getInstance().getElevatorUseList(map), new Observer<BaseEntity<ElevatorDetailBean>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseEntity<ElevatorDetailBean> objectBaseEntity) {
+                mRecyclerView.refreshComplete(AppConfig.pageSize);
+                if (objectBaseEntity.isSuccess()) {
+                    if (isRefresh){
+                        adapter.setDataList(objectBaseEntity.getData().getRecords());
+                    }else{
+                        adapter.addAll(objectBaseEntity.getData().getRecords());
+                    }
                 }
             }
 
