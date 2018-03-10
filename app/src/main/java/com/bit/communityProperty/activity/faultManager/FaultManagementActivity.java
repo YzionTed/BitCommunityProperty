@@ -84,11 +84,11 @@ public class FaultManagementActivity extends BaseActivity {
         @Override
         public Fragment getItem(int position) {
 //            return PlaceholderFragment.newInstance(position + 1,mContext);
-            if (position==0) {
+            if (position==0) {//全部
                 return AllFaultFragment.newInstance(position + 1, mContext);
-            }else if (position==1){
+            }else if (position==1){//待受理
                 return WaitFaultFragment.newInstance(position + 1, mContext);
-            }else {
+            }else {//待检修
                 return CheckFaultFragment.newInstance(position + 1, mContext);
             }
         }
