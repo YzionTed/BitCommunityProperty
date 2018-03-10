@@ -2,6 +2,7 @@ package com.bit.communityProperty.activity.deviceManagement.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bit.communityProperty.R;
+import com.bit.communityProperty.activity.deviceManagement.DeviceInfoActivity;
 import com.bit.communityProperty.activity.deviceManagement.adapter.DeviceAdapter;
 import com.bit.communityProperty.activity.deviceManagement.bean.DoorControlBean;
 import com.bit.communityProperty.base.BaseEntity;
@@ -78,10 +80,6 @@ public class DoorControlFragment extends BaseFragment {
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
         mRecyclerView.setAdapter(mLRecyclerViewAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        // 设置RecyclerView刷新加载样式
-        mRecyclerView.setRefreshProgressStyle(ProgressStyle.LineSpinFadeLoader);
-        mRecyclerView.setArrowImageView(R.drawable.ic_pulltorefresh_arrow);
-        mRecyclerView.setLoadingMoreProgressStyle(ProgressStyle.BallSpinFadeLoader);
         // 刷新数据
         mRecyclerView.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -117,24 +115,14 @@ public class DoorControlFragment extends BaseFragment {
             }
         });
 
-        // RecyclewView的item点击事件监听
-//        mLRecyclerViewAdapter.setOnItemClickListener(new MyOnItemClickListener());
-
-        //设置头部加载颜色
-        mRecyclerView.setHeaderViewColor(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2, R.color.swipe_refresh_color3);
-        //设置底部加载颜色
-        mRecyclerView.setFooterViewColor(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2, R.color.swipe_refresh_color3);
-        //设置底部加载文字提示
-        mRecyclerView.setFooterViewHint("拼命加载中", "已经全部为你呈现了", "网络不给力啊，点击再试一次吧");
-
         mRecyclerView.refresh();
         mLRecyclerViewAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {//跳转到设备详情信息页面
-//                DoorControlBean.RecordsBean bean = mDeviceBeanList.get(position);
-//                Intent intent = new Intent(mContext, DeviceInfoActivity.class);
-//                intent.putExtra("RecordsBean", bean);
-//                startActivity(intent);
+                DoorControlBean.RecordsBean bean = mDeviceBeanList.get(position);
+                Intent intent = new Intent(mContext, DeviceInfoActivity.class);
+                intent.putExtra("bean", bean);
+                startActivity(intent);
             }
         });
     }

@@ -45,7 +45,9 @@ public class CarFragmet extends BaseFragment {
 
     private DeviceAdapter adapter;
     private LRecyclerViewAdapter mLRecyclerViewAdapter;
-    private List<CarBrakeBean> carBrakeBeanList;
+    private List<CarBrakeBean.RecordsBean> carBrakeBeanList;
+    private int page = 1;
+    private boolean isRefresh = true;
     @Override
     protected int getLayoutId() {
         return R.layout.layout_recyclerview_refresh;
@@ -61,23 +63,26 @@ public class CarFragmet extends BaseFragment {
         mRecyclerView.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
+                isRefresh = true;
                 getData();
             }
         });
 
-        mRecyclerView.setPullRefreshEnabled(false);
-        mRecyclerView.setLoadMoreEnabled(false);
+        mRecyclerView.setPullRefreshEnabled(true);
+        mRecyclerView.setLoadMoreEnabled(true);
 
         // 加载更多
         mRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
+                isRefresh = false;
+                getData();
             }
         });
         mLRecyclerViewAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {//跳转到设备详情信息页面
-                CarBrakeBean bean = carBrakeBeanList.get(position);
+                CarBrakeBean.RecordsBean bean = carBrakeBeanList.get(position);
                 Intent intent = new Intent(mContext, DeviceInfoActivity.class);
                 intent.putExtra("bean", bean);
                 startActivity(intent);
@@ -87,17 +92,27 @@ public class CarFragmet extends BaseFragment {
     }
 
     private void getData(){
-        RetrofitManage.getInstance().subscribe(Api.getInstance().getCarGateList(), new Observer<BaseEntity<List<CarBrakeBean>>>() {
+        if (isRefresh){
+            page = 1;
+        }else{
+            page++;
+        }
+        RetrofitManage.getInstance().subscribe(Api.getInstance().getCarGateList(page,AppConfig.pageSize), new Observer<BaseEntity<CarBrakeBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(BaseEntity<List<CarBrakeBean>> listBaseEntity) {
+            public void onNext(BaseEntity<CarBrakeBean> listBaseEntity) {
+                mRecyclerView.refreshComplete(AppConfig.pageSize);
                 if (listBaseEntity.isSuccess()){
-                    carBrakeBeanList = listBaseEntity.getData();
-                    adapter.setDataList(carBrakeBeanList);
+                    carBrakeBeanList = listBaseEntity.getData().getRecords();
+                    if (isRefresh){
+                        adapter.setDataList(carBrakeBeanList);
+                    }else{
+                        adapter.addAll(carBrakeBeanList);
+                    }
                 }
             }
 
