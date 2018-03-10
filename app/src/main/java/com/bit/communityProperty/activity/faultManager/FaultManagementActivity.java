@@ -9,8 +9,10 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.bit.communityProperty.R;
+import com.bit.communityProperty.activity.faultManager.fragment.CheckFaultFragment;
+import com.bit.communityProperty.activity.faultManager.fragment.WaitFaultFragment;
 import com.bit.communityProperty.base.BaseActivity;
-import com.bit.communityProperty.activity.faultManager.fragment.FaultManagementCommonFragment;
+import com.bit.communityProperty.activity.faultManager.fragment.AllFaultFragment;
 import com.bit.communityProperty.view.TitleBarView;
 
 
@@ -82,7 +84,13 @@ public class FaultManagementActivity extends BaseActivity {
         @Override
         public Fragment getItem(int position) {
 //            return PlaceholderFragment.newInstance(position + 1,mContext);
-            return FaultManagementCommonFragment.newInstance(position + 1,mContext);
+            if (position==0) {
+                return AllFaultFragment.newInstance(position + 1, mContext);
+            }else if (position==1){
+                return WaitFaultFragment.newInstance(position + 1, mContext);
+            }else {
+                return CheckFaultFragment.newInstance(position + 1, mContext);
+            }
         }
 
         @Override

@@ -17,11 +17,11 @@ import java.util.ArrayList;
  * Created by kezhangzhao on 2018/2/12.
  */
 
-public class StarsAdapter extends RecyclerView.Adapter {
+public class StarsAdapter extends RecyclerView.Adapter<StarsAdapter.MyViewHolder> {
 
     private Context mContext;
     private LayoutInflater inflater = null;
-    private ViewHolder viewHolder = null;
+    private MyViewHolder viewHolder = null;
     private int yellowNum = 0;
     private int grayNum = 5;
     private ArrayList<Boolean> listData = new ArrayList<>();
@@ -33,6 +33,7 @@ public class StarsAdapter extends RecyclerView.Adapter {
     private int mPaddingBottom = 0;//下
     private int mImageYellow= R.mipmap.stars_yellow;//图片：默认是黄色星星
     private int mImageGray= R.mipmap.stars_gray;//图片：默认是黄色星星
+    private OnMyItemClickListener listener;//item点击事件监听
 
 
     /**
@@ -89,6 +90,21 @@ public class StarsAdapter extends RecyclerView.Adapter {
     }
 
     /**
+     * item点击事件监听
+     */
+    public interface OnMyItemClickListener{
+        void myClick(View v,int pos);
+    }
+
+    /**
+     * 设置item监听
+     * @param listener
+     */
+    public void setOnMyItemClickListener (OnMyItemClickListener listener){
+        this.listener = listener;
+    }
+
+    /**
      * 设置星星数量
      *
      * @param yellowNum 黄色星星数量
@@ -136,23 +152,33 @@ public class StarsAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(inflater.inflate(R.layout.stars_item, parent, false));
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new MyViewHolder(inflater.inflate(R.layout.stars_item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ViewHolder viewHolder = (ViewHolder) holder;
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
+        MyViewHolder viewHolder = (MyViewHolder) holder;
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(mStarsWidth, mStarsHeight);
         viewHolder.imageView.setLayoutParams(layoutParams);
         viewHolder.imageView.setPadding(mPaddingLeft, mPaddingTop, mPaddingRight, mPaddingBottom);
         viewHolder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        if(viewHolder!=null){
+            viewHolder.layoutVeiw.removeAllViews();
+        }
         if (listData.get(position)) {
             viewHolder.imageView.setImageResource(mImageYellow);
-            viewHolder.layoutVeiw.addView(viewHolder.imageView);
         } else {
             viewHolder.imageView.setImageResource(mImageGray);
-            viewHolder.layoutVeiw.addView(viewHolder.imageView);
+        }
+        viewHolder.layoutVeiw.addView(viewHolder.imageView);
+        if (listener!=null){//设置监听
+            viewHolder.layoutVeiw.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.myClick(view,position);
+                }
+            });
         }
     }
 
@@ -162,15 +188,16 @@ public class StarsAdapter extends RecyclerView.Adapter {
     }
 
 
+
     /**
      * adapter的ViewHolder
      */
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
 
         LinearLayout layoutVeiw;
         ImageView imageView;
 
-        public ViewHolder(View itemView) {
+        public MyViewHolder(View itemView) {
             super(itemView);
             layoutVeiw = itemView.findViewById(R.id.layout_view);
             imageView = new ImageView(mContext);

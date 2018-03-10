@@ -6,6 +6,8 @@ import com.bit.communityProperty.activity.deviceManagement.bean.DeviceBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.DeviceBeanPar;
 import com.bit.communityProperty.activity.deviceManagement.bean.DoorControlBean;
 import com.bit.communityProperty.activity.elevatorcontrol.bean.ElevatorListBean;
+import com.bit.communityProperty.activity.faultManager.bean.FaultDetailBean;
+import com.bit.communityProperty.activity.faultManager.bean.FaultManagementBean;
 import com.bit.communityProperty.activity.household.bean.AuditedBean;
 import com.bit.communityProperty.activity.household.bean.AuditedUserBean;
 import com.bit.communityProperty.activity.household.bean.AuditingBean;
@@ -344,4 +346,24 @@ public interface HttpService {
 
     @GET("/v1/sys/{appId}/version/{sequence}/new")
     Observable<BaseEntity<AppVersionInfo>> getVersion(@Path("appId") String appId, @Path("sequence") String sequence);
+
+    /**
+     * 获取故障列表
+     *
+     * @param map
+     * @return
+     */
+    @Headers("DEVICE_TYPE:Android")
+    @POST("v1/property/fault/queryFaultPage")
+    Observable<BaseEntity<FaultManagementBean>> getFaultlList(@Body Map<String, Object> map);
+
+    /**
+     * 获取故障设备详情
+     *
+     * @param id
+     * @return
+     */
+    @GET("v1/property/fault/{id}/detail")
+    Observable<BaseEntity<FaultDetailBean>> getFaultDetail(@Path("id") String id);
+
 }

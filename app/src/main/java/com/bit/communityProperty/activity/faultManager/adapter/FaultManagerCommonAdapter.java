@@ -9,19 +9,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bit.communityProperty.R;
+import com.bit.communityProperty.activity.faultManager.bean.FaultManagementBean;
 import com.bit.communityProperty.adapter.ListBaseAdapter;
 import com.bit.communityProperty.bean.FaultManagerCommonBean;
+import com.bit.communityProperty.utils.TimeUtils;
 
 /**
  * 故障管理的adapter
  * Created by kezhangzhao on 2018/1/20.
  */
 
-public class FaultManagerCommonAdapter extends ListBaseAdapter<FaultManagerCommonBean> {
+public class FaultManagerCommonAdapter extends ListBaseAdapter<FaultManagementBean.RecordsBean> {
     private Context mContext;
     private LayoutInflater inflater = null;
     private ViewHolder viewHolder = null;
-    private FaultManagerCommonBean bean;
+    private FaultManagementBean.RecordsBean bean;
 
     public FaultManagerCommonAdapter(Context context) {
         this.mContext = context;
@@ -42,25 +44,34 @@ public class FaultManagerCommonAdapter extends ListBaseAdapter<FaultManagerCommo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         bean = mDataList.get(position);
         ViewHolder viewHolder = (ViewHolder) holder;
-        if (bean.getReason()==1){//电梯故障
-            viewHolder.ivIcon.setImageResource(R.mipmap.elevator_failure2);
-            viewHolder.tvReason.setText("电梯故障");
-        }else {
+        if (bean.getFaultItem()==1){//故障种类 1：水电煤气；2：房屋结构；3：消防安防；9：其它；10：电梯；11：门禁；99：其它；
             viewHolder.ivIcon.setImageResource(R.mipmap.water_eletricity_failure);
             viewHolder.tvReason.setText("水电煤气故障");
-        }
-        if (bean.getType()==1){//公共物业
-            viewHolder.tvType.setText("公共物业");
         }else {
+            viewHolder.ivIcon.setImageResource(R.mipmap.elevator_failure2);
+            viewHolder.tvReason.setText("电梯故障");
+        }
+        if (bean.getFaultType()==1){//故障类型 1：住户；2：公共；
             viewHolder.tvType.setText("住户");
-        }
-        if (bean.getStatus()==0){
-            viewHolder.tvStatus.setText("待确认");
         }else {
-            viewHolder.tvStatus.setText("待接单");
+            viewHolder.tvType.setText("公共物业");
         }
-        viewHolder.tvAddress.setText(bean.getAddress());
-        viewHolder.tvTime.setText(bean.getTime());
+        if (bean.getFaultStatus()==0){//故障状态 0：已取消；1：待接受；2：待分派；3：待检修；4：已完成；-1：已驳回；
+            viewHolder.tvStatus.setText("已取消");
+        }else if (bean.getFaultStatus()==1){
+            viewHolder.tvStatus.setText("待接受");
+        }else if (bean.getFaultStatus()==2){
+            viewHolder.tvStatus.setText("待分派");
+        }else if (bean.getFaultStatus()==3){
+            viewHolder.tvStatus.setText("待检修");
+        }else if (bean.getFaultStatus()==4){
+            viewHolder.tvStatus.setText("已完成");
+        }else if (bean.getFaultStatus()==-1){
+            viewHolder.tvStatus.setText("已驳回");
+        }
+        viewHolder.tvAddress.setText(bean.getFaultAddress());
+        if (bean.getAcceptTime()!=null)
+        viewHolder.tvTime.setText(TimeUtils.stampToDateWithHms(bean.getAcceptTime().toString()));
     }
 
     /**

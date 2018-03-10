@@ -7,7 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bit.communityProperty.R;
 
@@ -46,6 +48,13 @@ public class StarsView extends LinearLayout {
         mStrasAdapter = new StarsAdapter(mContext);
         mStarsList.setAdapter(mStrasAdapter);
         mStarsList.setItemAnimator(new DefaultItemAnimator());
+//        mStrasAdapter
+//        mStrasAdapter.setOnMyItemClickListener(new StarsAdapter.OnMyItemClickListener() {
+//            @Override
+//            public void myClick(View v, int pos) {
+//                Toast.makeText(mContext,pos+"",Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
 
