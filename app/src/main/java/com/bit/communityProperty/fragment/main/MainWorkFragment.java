@@ -230,10 +230,12 @@ public class MainWorkFragment extends BaseFragment {
                     public void onClick(View v) {
                         switch (bean.getTitle()) {
                             case AppConfig.Community_Access://小区门禁
-                                startActivity(new Intent(mContext, DoorControlActivity.class));
+//                                startActivity(new Intent(mContext, DoorControlActivity.class));
+                                startActivity(new Intent(mContext, FaultDeclareActivity.class));//故障申报,暂时
                                 break;
                             case AppConfig.Intelligent_Elevator://智能梯控
-                                startActivity(new Intent(mContext, ElevatorControlActivity.class));
+//                                startActivity(new Intent(mContext, ElevatorControlActivity.class));
+                                startActivity(new Intent(mContext, FaultManagementActivity.class));//故障管理，暂时
                                 break;
                             case AppConfig.Work_Schedule://工作排班
                                 startActivity(new Intent(mContext, PersonalWorkActivity.class));
