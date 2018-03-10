@@ -15,9 +15,11 @@ import com.bit.communityProperty.data.PreferenceConst;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.AppUtil;
+import com.bit.communityProperty.utils.LogManager;
 import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.PreferenceUtils;
 import com.bit.communityProperty.utils.SPUtil;
+import com.bit.communityProperty.utils.TimeUtils;
 import com.bit.communityProperty.utils.UploadInfo;
 
 import java.util.Set;
@@ -48,7 +50,6 @@ public class LauncherActivity extends BaseActivity {
     public void initViewData() {
         registerJPush();
         initScreenParam();
-        SPUtil.put(this, AppConfig.ROLE_TYPE, AppConfig.ROLE_CLEANER);
 //        UploadInfo uploadInfo = (UploadInfo) SPUtil.getObject(this, AppConfig.UPLOAD_INFO);
 //        if (uploadInfo != null) {
 //            OssManager.getInstance().init(this, uploadInfo);

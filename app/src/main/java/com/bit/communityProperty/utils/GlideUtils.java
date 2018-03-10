@@ -15,6 +15,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
+import java.util.logging.Handler;
+
 /**
  * 图片加载工具类glide
  * Created by kezhangzhao on 2018/1/25.
@@ -44,9 +46,11 @@ public class GlideUtils {
         Glide.with(mContext).load(path).apply(options).into(mImageView);
     }
 
-    public static void loadImage(Context mContext, String path, ImageView mImageView){
-        RequestOptions options = new RequestOptions();
+    public static void loadImage(final Context mContext, final String path, final ImageView mImageView) {
+        final RequestOptions options = new RequestOptions();
         options.diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+        options.placeholder(R.mipmap.image_default);
+        options.error(R.mipmap.image_default);
         Glide.with(mContext).load(new CacheGlideUrl(path)).apply(options).into(mImageView);
     }
 

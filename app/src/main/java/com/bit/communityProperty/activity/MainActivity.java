@@ -95,6 +95,7 @@ public class MainActivity extends BaseActivity {
 
     private String downloadUrl;
 
+    private String ROLE_TYPE;
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
@@ -106,7 +107,6 @@ public class MainActivity extends BaseActivity {
         initTabHost();
 //        initOssToken();
         MyApplication.getInstance().getBlueToothApp().openBluetooth();
-
         //从通知点击启动
         Bundle bundle = getIntent().getBundleExtra(AppConfig.EXTRA_BUNDLE);
         if (bundle != null) {
@@ -306,13 +306,20 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initTabHost() {
+        if (getIntent().getStringExtra(AppConfig.ROLE_TYPE)==null){
+            ROLE_TYPE = (String) SPUtil.get(mContext, AppConfig.ROLE_TYPE, AppConfig.ROLE_MANAGER);
+        }else{
+            ROLE_TYPE = getIntent().getStringExtra(AppConfig.ROLE_TYPE);
+        }
         mainTabhost.setup(this, getSupportFragmentManager(), R.id.main_tab_contents);
         mainTabhost.getTabWidget().setDividerDrawable(null);
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConfig.ROLE_TYPE,ROLE_TYPE);
         for (int i = 0; i < mTabItemList.size(); i++) {
             TabItem tabItem = mTabItemList.get(i);
             //实例化一个TabSpec,设置tab的名称和视图
             TabHost.TabSpec tabSpec = mainTabhost.newTabSpec(tabItem.getTitleString()).setIndicator(tabItem.getView(i));
-            mainTabhost.addTab(tabSpec, tabItem.getFragmentClass(), null);
+            mainTabhost.addTab(tabSpec, tabItem.getFragmentClass(), bundle);
 
             //默认选中第一个tab
             if (i == 1) {

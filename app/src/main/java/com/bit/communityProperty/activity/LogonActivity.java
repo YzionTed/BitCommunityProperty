@@ -19,6 +19,7 @@ import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.net.ThrowableUtils;
+import com.bit.communityProperty.receiver.RxBus;
 import com.bit.communityProperty.utils.GsonUtils;
 import com.bit.communityProperty.utils.LogManager;
 import com.bit.communityProperty.utils.OssManager;
@@ -144,10 +145,13 @@ public class LogonActivity extends BaseActivity {
                     messageEvent.setLoginSuccess(true);
                     EventBus.getDefault().post(messageEvent);
 
+                    SPUtil.put(mContext, AppConfig.ROLE_TYPE, AppConfig.ROLE_CLEANER);//用户角色
                     Intent intent = new Intent(mContext, MainActivity.class);
                     if(getIntent().getBundleExtra(AppConfig.EXTRA_BUNDLE) != null){
                         intent.putExtra(AppConfig.EXTRA_BUNDLE, getIntent().getBundleExtra(AppConfig.EXTRA_BUNDLE));
                     }
+                    intent.putExtra(AppConfig.ROLE_TYPE, AppConfig.ROLE_CLEANER);//用户角色
+                    RxBus.get().post(logindata.getData());
                     startActivity(intent);
                     finish();
                 } else {

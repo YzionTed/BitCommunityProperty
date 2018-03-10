@@ -2,6 +2,8 @@ package com.bit.communityProperty.net;
 
 import com.bit.communityProperty.activity.cleanclock.bean.CleanClockListBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.CameraBean;
+import com.bit.communityProperty.activity.deviceManagement.bean.CarBrakeBean;
+import com.bit.communityProperty.activity.deviceManagement.bean.CarBrakeDetailBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.DeviceBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.DeviceBeanPar;
 import com.bit.communityProperty.activity.deviceManagement.bean.DoorControlBean;
@@ -22,6 +24,7 @@ import com.bit.communityProperty.bean.DoorMILiBean;
 import com.bit.communityProperty.bean.LoginData;
 import com.bit.communityProperty.bean.PublicKeybean;
 import com.bit.communityProperty.bean.SkuAccountInfo;
+import com.bit.communityProperty.fragment.main.bean.BannerBean;
 import com.bit.communityProperty.fragment.main.bean.MainNewsBean;
 import com.bit.communityProperty.fragment.main.bean.MainNewsDetailBean;
 import com.bit.communityProperty.fragment.main.bean.OwnerApplyNumBean;
@@ -209,7 +212,6 @@ public interface HttpService {
      * @param map
      * @return
      */
-    @Headers("DEVICE_TYPE:Android")
     @POST("v1/communityIoT/camera/auth/page")
     Observable<BaseEntity<CameraBean>> getMonitorList(@Body Map<String, Object> map);
 
@@ -219,9 +221,16 @@ public interface HttpService {
      * @param map
      * @return
      */
-    @Headers("DEVICE_TYPE:Android")
     @POST("v1/communityIoT/door/page")
     Observable<BaseEntity<DoorControlBean>> getDoorControlList(@Body Map<String, Object> map);
+
+    /**
+     * 设备管理-获取门禁使用记录
+     * @param map
+     * @return
+     */
+    @POST("/v1/sys/door-record/page")
+    Observable<BaseEntity<Object>> getDoorUseList(@Body Map<String, Object> map);
 
     /**
      * 放行条详情
@@ -229,7 +238,6 @@ public interface HttpService {
      * @param url "/v1/property/rpass/{id}/detail"
      * @return
      */
-    @Headers("DEVICE_TYPE:Android")
     @GET
     Observable<BaseEntity<ReleasePassDetailsBean>> getReleasePassInfo(@Url String url);
 
@@ -239,7 +247,6 @@ public interface HttpService {
      * @param url /v1/user/{communityId}/count-unreviewed-proprietors
      * @return
      */
-    @Headers("DEVICE_TYPE:Android")
     @GET
     Observable<BaseEntity<OwnerApplyNumBean>> getOwnerApplyNum(@Url String url);
 
@@ -249,7 +256,6 @@ public interface HttpService {
      * @param url  v1/user/{communityId}/getByCommunityId
      * @return
      */
-    @Headers("DEVICE_TYPE:Android")
     @GET
     Observable<BaseEntity<AuditingBean>> getAuditingList(@Url String url, @QueryMap Map<String, Object> map);
 
@@ -258,7 +264,6 @@ public interface HttpService {
      * @param url  "/v1/user/{communityId}/proprietors-statistics"
      * @return
      */
-    @Headers("DEVICE_TYPE:Android")
     @GET
     Observable<BaseEntity<ArrayList<AuditedBean>>> getHouseholdNum(@Url String url);
 
@@ -267,7 +272,6 @@ public interface HttpService {
      * @param url  "/v1/user/{buildingId}/by-building-id
      * @return
      */
-    @Headers("DEVICE_TYPE:Android")
     @GET
     Observable<BaseEntity<AuditedUserBean>> getUsersByBuildingId(@Url String url, @QueryMap Map<String, Object> map);
 
@@ -277,7 +281,6 @@ public interface HttpService {
      * @param map
      * @return
      */
-    @Headers("DEVICE_TYPE:Android")
     @POST("/v1/user/property/audit")
     Observable<BaseEntity<String>> auditingHouseUser(@Body Map<String, Object> map);
 
@@ -288,7 +291,6 @@ public interface HttpService {
      * @param map
      * @return
      */
-    @Headers("DEVICE_TYPE:Android")
     @POST("/v1/property/rpass/check")
     Observable<BaseEntity<ReleasePassDetailsBean>> approvalPass(@Body Map<String, Object> map);
 
@@ -343,9 +345,50 @@ public interface HttpService {
     @POST("/v1/communityIoT/elevator/get/auth/list")
     Observable<BaseEntity<List<ElevatorListBean>>> getDoorGetAuthsList(@Body Map<String, Object> map);
 
-
+    /**
+     * 获取版本更新
+     * @param appId
+     * @param sequence
+     * @return
+     */
     @GET("/v1/sys/{appId}/version/{sequence}/new")
     Observable<BaseEntity<AppVersionInfo>> getVersion(@Path("appId") String appId, @Path("sequence") String sequence);
+
+    /**
+     * 设备管理-获取车闸列表
+     * @return
+     */
+    @GET("/v1/vehicle/car-gate/list")
+    Observable<BaseEntity<List<CarBrakeBean>>> getCarGateList();
+
+    /**
+     * 设备管理-获取车闸进出详情
+     * @param map
+     * @return
+     */
+    @POST("/v1/vehicle/inout/list")
+    Observable<BaseEntity<List<CarBrakeDetailBean>>> getCarBrakeDetail(@Body Map<String, Object> map);
+
+    /**
+     * 设备管理-获取电梯列表
+     * @return
+     */
+    @POST("/v1/communityIoT/elevator/list")
+    Observable<BaseEntity<com.bit.communityProperty.activity.deviceManagement.bean.ElevatorListBean>> getElevatorList(@Body Map<String, Object> map);
+
+    /**
+     * 设备管理-获取电梯使用记录
+     */
+    @POST("/v1/sys/elevator-record/page")
+    Observable<BaseEntity<Object>> getElevatorUseList(@Body Map<String, Object> map);
+
+    /**
+     * 获取轮播图
+     * @param map
+     * @return
+     */
+    @POST("/v1/sys/slide/page")
+    Observable<BaseEntity<BannerBean>> getBanner(@Body Map<String, Object> map);
 
     /**
      * 获取故障列表

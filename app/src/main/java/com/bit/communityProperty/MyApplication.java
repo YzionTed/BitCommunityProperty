@@ -7,6 +7,7 @@ import android.content.Context;
 import com.bit.communityProperty.Bluetooth.BluetoothApplication;
 import com.bit.communityProperty.bean.ApkInfo;
 import com.bit.communityProperty.utils.GlideUtils;
+import com.bit.communityProperty.utils.LiteOrmUtil;
 import com.ddclient.push.DongPushMsgManager;
 import com.inuker.bluetooth.library.BluetoothClientManger;
 import com.netease.nim.uikit.api.NimUIKit;
@@ -60,6 +61,8 @@ public class MyApplication extends Application {
 
 
         x.Ext.init(this);
+        //初始化数据库
+        LiteOrmUtil.getInstance().init(this);
     }
 
 
