@@ -169,7 +169,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onNext(BaseEntity<List<CardListBean>> objectBaseEntity) {
                 if (objectBaseEntity.isSuccess()){
-                    LiteOrmUtil.getInstance().getOrm().delete(CardListBean.class);
+//                    LiteOrmUtil.getInstance().getOrm().delete(CardListBean.class);
                     LiteOrmUtil.getInstance().getOrm().save(objectBaseEntity.getData());
                 }
             }
