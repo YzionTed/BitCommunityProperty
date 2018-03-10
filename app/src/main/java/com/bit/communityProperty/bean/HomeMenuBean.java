@@ -8,6 +8,7 @@ package com.bit.communityProperty.bean;
 public class HomeMenuBean {
 
     private int mImageID;//图片id
+    private String mImageUrl;//图片路径Url
     private String mText;//图片的文字说明
 
     public int getmImageID() {
@@ -18,6 +19,14 @@ public class HomeMenuBean {
         this.mImageID = mImageID;
     }
 
+    public String getmImageUrl() {
+        return mImageUrl;
+    }
+
+    public void setmImageUrl(String mImageUrl) {
+        this.mImageUrl = mImageUrl;
+    }
+
     public String getmText() {
         return mText;
     }
@@ -25,4 +34,5 @@ public class HomeMenuBean {
     public void setmText(String mText) {
         this.mText = mText;
     }
+
 }

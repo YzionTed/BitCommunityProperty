@@ -13,7 +13,6 @@ import com.bit.communityProperty.activity.faultDeclare.fragment.EvaluateFaultAct
 import com.bit.communityProperty.activity.faultManager.fragment.CheckFaultFragment;
 import com.bit.communityProperty.activity.faultManager.fragment.WaitFaultFragment;
 import com.bit.communityProperty.base.BaseActivity;
-import com.bit.communityProperty.activity.faultManager.FaultAddActivity;
 import com.bit.communityProperty.activity.faultManager.fragment.AllFaultFragment;
 import com.bit.communityProperty.view.TitleBarView;
 

@@ -820,7 +820,7 @@
             android:theme="@style/AppTheme"/>
         <!-- 故障新增主页面 -->
         <activity
-            android:name=".activity.faultManager.FaultAddActivity"
+            android:name=".activity.faultDeclare.FaultAddActivity"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
