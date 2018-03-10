@@ -43,19 +43,19 @@ public class FaultManagementActivity extends BaseActivity {
     private void initView(){
         mTitleBarView = findViewById(R.id.titlebarview);
         mTitleBarView.setTvTitleText("故障管理");
-        mTitleBarView.setRightText("添加");
+//        mTitleBarView.setRightText("添加");
         mTitleBarView.setLeftOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        mTitleBarView.setRightOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(mContext,FaultAddActivity.class));
-            }
-        });
+//        mTitleBarView.setRightOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(mContext,FaultAddActivity.class));
+//            }
+//        });
         mViewPager = findViewById(R.id.container);
         tabLayout = findViewById(R.id.tabs);
     }

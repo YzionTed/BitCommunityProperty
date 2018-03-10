@@ -1,14 +1,17 @@
 package com.bit.communityProperty.activity.faultManager;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bit.communityProperty.R;
+import com.bit.communityProperty.activity.LogonActivity;
 import com.bit.communityProperty.activity.faultManager.bean.FaultDetailBean;
 import com.bit.communityProperty.activity.faultManager.bean.FaultManagementBean;
 import com.bit.communityProperty.base.BaseActivity;
@@ -33,6 +36,7 @@ import java.util.Map;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import me.leefeng.promptlibrary.PromptDialog;
 
 /**
  * 故障详情页面
@@ -42,6 +46,7 @@ import io.reactivex.disposables.Disposable;
 public class FaultDetailsActivity extends BaseActivity {
 
     private TitleBarView mTitleBarView;//标题栏
+    private PromptDialog mPromptDialog;//弹窗
     private String faultID;
     private ArrayList<HomeMenuBean> mHomeMenuBeanList = new ArrayList<>();
     private NoScrollGridView noScrollGridView;//评论图片布局
@@ -60,8 +65,12 @@ public class FaultDetailsActivity extends BaseActivity {
     private TextView tvRepairUser;//维修人员
     private TextView tvRepairPhone;//维修人员电话
     private TextView tvEvaluate;//评价
+    private LinearLayout layoutReject;//拒绝理由布局，只有被驳回的申报才显示这个布局
+    private LinearLayout layoutRepair;//维修人员信息布局，指派后才显示这个布局
+    private LinearLayout layoutEvaluate;//评价布局，评价后才显示这个布局
     private Button btCancel;//取消申报
     private Button btConfirm;//确认受理
+    private Button btAssign;//确认分派
 
 
     @Override
@@ -107,8 +116,13 @@ public class FaultDetailsActivity extends BaseActivity {
         tvEvaluate = findViewById(R.id.tv_evaluate);
         btCancel = findViewById(R.id.bt_cancel);
         btConfirm = findViewById(R.id.bt_confirm);
+        btAssign = findViewById(R.id.bt_assign);
+        layoutReject = findViewById(R.id.layout_reject);
+        layoutRepair = findViewById(R.id.layout_repair);
+        layoutEvaluate = findViewById(R.id.layout_evaluate);
         btCancel.setOnClickListener(new MyOnClickListener());
         btConfirm.setOnClickListener(new MyOnClickListener());
+        btAssign.setOnClickListener(new MyOnClickListener());
     }
 
     /**
@@ -117,6 +131,7 @@ public class FaultDetailsActivity extends BaseActivity {
     private void initDate() {
         getFaultDetail(faultID);
         initGridView();
+        mPromptDialog = new PromptDialog((Activity) mContext);
     }
 
     /**
@@ -162,6 +177,7 @@ public class FaultDetailsActivity extends BaseActivity {
 
     /**
      * 网络请求获取故障详情
+     *
      * @param faultID 故障ID
      */
     private void getFaultDetail(String faultID) {
@@ -192,6 +208,7 @@ public class FaultDetailsActivity extends BaseActivity {
 
     /**
      * 将信息设置到页面中去
+     *
      * @param mFaultDetailBean 故障详情bean
      */
     private void setViewDate(FaultDetailBean mFaultDetailBean) {
@@ -219,16 +236,38 @@ public class FaultDetailsActivity extends BaseActivity {
         //故障状态 0：已取消；1：待接受；2：待分派；3：待检修；4：已完成；-1：已驳回；
         if (mFaultDetailBean.getFaultStatus() == 0) {
             tvStatus.setText("已取消");
+            btCancel.setVisibility(View.GONE);//隐藏驳回申请按钮
+            btConfirm.setVisibility(View.GONE);//隐藏确认受理按钮
+            btAssign.setVisibility(View.GONE);//隐藏确认分派按钮
         } else if (mFaultDetailBean.getFaultStatus() == 1) {
             tvStatus.setText("待接受");
+            btCancel.setVisibility(View.VISIBLE);//显示驳回申请按钮
+            btConfirm.setVisibility(View.VISIBLE);//显示确认受理按钮
+            btAssign.setVisibility(View.GONE);//隐藏确认分派按钮
         } else if (mFaultDetailBean.getFaultStatus() == 2) {
             tvStatus.setText("待分派");
+            btCancel.setVisibility(View.GONE);//隐藏驳回申请按钮
+            btConfirm.setVisibility(View.GONE);//隐藏确认受理按钮
+            btAssign.setVisibility(View.VISIBLE);//显示确认分派按钮
         } else if (mFaultDetailBean.getFaultStatus() == 3) {
             tvStatus.setText("待检修");
+            btCancel.setVisibility(View.GONE);//隐藏驳回申请按钮
+            btConfirm.setVisibility(View.GONE);//隐藏确认受理按钮
+            btAssign.setVisibility(View.GONE);//隐藏确认分派按钮
+            layoutRepair.setVisibility(View.VISIBLE);//维修人员信息布局
         } else if (mFaultDetailBean.getFaultStatus() == 4) {
             tvStatus.setText("已完成");
+            btCancel.setVisibility(View.GONE);//隐藏驳回申请按钮
+            btConfirm.setVisibility(View.GONE);//隐藏确认受理按钮
+            btAssign.setVisibility(View.GONE);//隐藏确认分派按钮
+            layoutRepair.setVisibility(View.VISIBLE);//维修人员信息布局
+            layoutEvaluate.setVisibility(View.VISIBLE);//评价布局
         } else if (mFaultDetailBean.getFaultStatus() == -1) {
             tvStatus.setText("已驳回");
+            btCancel.setVisibility(View.GONE);//隐藏驳回申请按钮
+            btConfirm.setVisibility(View.GONE);//隐藏确认受理按钮
+            btAssign.setVisibility(View.GONE);//隐藏确认分派按钮
+            layoutReject.setVisibility(View.VISIBLE);//驳回理由布局
         }
         tvName.setText(mFaultDetailBean.getUserName());
         tvPhone.setText(mFaultDetailBean.getContact());
@@ -254,12 +293,70 @@ public class FaultDetailsActivity extends BaseActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.bt_cancel://驳回申请
+                    if (mFaultDetailBean != null)
+                        handleFault(mFaultDetailBean.getId(), -1);
                     break;
                 case R.id.bt_confirm://确认受理
+                    if (mFaultDetailBean != null)
+                        handleFault(mFaultDetailBean.getId(), 2);
+                    break;
+                case R.id.bt_assign://确认分派
                     break;
                 default:
                     break;
             }
         }
+    }
+
+    /**
+     * 网络请求处理故障单（驳回、受理）
+     *
+     * @param faultID     故障ID
+     * @param faultStatus （0：已取消；1：待接受；2：待分派；3：待检修；4：已完成；-1：已驳回；）
+     */
+    private void handleFault(String faultID, final int faultStatus) {
+        if (faultStatus == -1) {
+            mPromptDialog.showLoading("正在驳回中...");
+        } else if (faultStatus == 2) {
+            mPromptDialog.showLoading("正在受理中...");
+        }
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id", faultID);
+        map.put("faultStatus", faultStatus);
+        RetrofitManage.getInstance().subscribe(Api.getInstance().handleFault(map), new Observer<BaseEntity<FaultDetailBean>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseEntity<FaultDetailBean> baseEntity) {
+                LogManager.printErrorLog("backinfo", GsonUtils.getInstance().toJson(baseEntity));
+                if (baseEntity.getData() != null) {
+                    if (faultStatus == -1) {
+                        mPromptDialog.showLoading("已驳回");
+                    } else if (faultStatus == 2) {
+                        mPromptDialog.showLoading("已受理");
+                    }
+                    mFaultDetailBean = baseEntity.getData();
+                    //重新设置页面的数据
+                    setViewDate(mFaultDetailBean);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (faultStatus == -1) {
+                    mPromptDialog.showError("驳回失败");
+                } else if (faultStatus == 2) {
+                    mPromptDialog.showError("已受理失败");
+                }
+            }
+
+            @Override
+            public void onComplete() {
+                mPromptDialog.dismiss();
+            }
+        });
     }
 }

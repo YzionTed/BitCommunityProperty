@@ -233,6 +233,7 @@
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:padding="15dp">
 
                 <TextView
@@ -262,7 +263,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -405,7 +407,8 @@
                 android:background="@color/white"
                 android:text="驳回申报"
                 android:textColor="@color/tv_blue_status"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/bt_confirm"
@@ -418,7 +421,22 @@
                 android:background="@color/white"
                 android:text="确认受理"
                 android:textColor="@color/tv_blue_status"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:visibility="gone"/>
+            <Button
+                android:id="@+id/bt_assign"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="55dp"
+                android:background="@color/white"
+                android:text="确认分派"
+                android:textColor="@color/tv_blue_status"
+                android:textSize="17sp"
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
