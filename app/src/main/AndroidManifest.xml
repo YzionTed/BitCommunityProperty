@@ -279,6 +279,8 @@
             android:taskAffinity="com.igexin.sdk.PushActivityTask"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
+        <activity android:name=".activity.OnlineActivity"/>
+
         <service
             android:name="com.igexin.download.DownloadService"
             android:process=":pushservice"/>
