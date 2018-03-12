@@ -20,6 +20,7 @@ import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
+import com.bit.communityProperty.receiver.RxBus;
 
 import java.util.List;
 
@@ -95,26 +96,26 @@ public class OssManager {
 
     /**
      * 文件异步批量上传阿里云
-     *
      * @param data
-     * @param filePath
-     * @return
+     * @param filePath 文件本地路径
+     * @param finalPath 返回的文件名列表
+     * @param uploadFinishListener 上传完成回调
      */
-    public boolean uploadFileToAliYun(final UploadInfo data, final List<String> filePath, final List<String> fileName) {
+    public void uploadFileToAliYun(final UploadInfo data, final List<String> filePath, final List<String> finalPath, final UploadFinishListener uploadFinishListener) {
         try {
-            if (filePath.size()<=0){
-                return true;
+            if (filePath!=null&&filePath.size()<=0){
+                uploadFinishListener.uploadFinish(finalPath);
+                return;
             }
             if (oss != null) {
                 data.setName("ap1" + SPUtil.get(MyApplication.getInstance(), AppConfig.id, "") + "_" + data.getBucket() + "_" + TimeUtils.getCurrentTime() + ".jpg");
-                PutObjectRequest put = new PutObjectRequest(data.getBucket() /*+ "-trans"*/, data.getName
-                        (), filePath.get(0));
+                PutObjectRequest put = new PutObjectRequest(data.getBucket() /*+ "-trans"*/, data.getName(), filePath.get(0));
                 OSSAsyncTask task = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
                     @Override
                     public void onSuccess(PutObjectRequest putObjectRequest, PutObjectResult putObjectResult) {
                         filePath.remove(0);
-                        uploadFileToAliYun(data, filePath, fileName);
-                        fileName.add(data.getName());
+                        finalPath.add(data.getName());
+                        uploadFileToAliYun(data,filePath,finalPath,uploadFinishListener);
                     }
 
                     @Override
@@ -125,10 +126,10 @@ public class OssManager {
                 Log.d("okhttp", getUrl(filePath.get(0)));
                 data.setPath(getUrl(filePath.get(0)));
             }
-            return false;
+            return;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return;
         }
     }
 
@@ -166,5 +167,9 @@ public class OssManager {
             public void onComplete() {
             }
         });
+    }
+
+    public interface UploadFinishListener{
+        void uploadFinish(List<String> finalName);
     }
 }
