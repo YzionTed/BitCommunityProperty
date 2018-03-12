@@ -1,6 +1,5 @@
 package com.bit.communityProperty.fragment.main.bean;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,88 +7,168 @@ import java.util.List;
  */
 
 public class BannerBean {
+
     /**
-     * total : 1
-     * totalPage : 2
-     * currentPage : 88
-     * records : [{"id":"Google","callerId":"http://www.google.com","callerName":"fadf","callerPhoneNum":"fef","callTime":"asdf","communityId":"fead","communityName":"fead","buildingName":"fea","roomId":"fea","roomName":"efad","receiveStatus":1,"receiverId":"fefad","receiverName":"fef","receiverPhoneNum":"fef","receiveTime":"fef","troubleShootingTime":"fef","troubleShootingReport":"fef","dataStatus":1},{"id":"Google","callerId":"http://www.google.com","callerName":"fadf","callerPhoneNum":"fef","callTime":"asdf","communityId":"fead","communityName":"fead","buildingName":"fea","roomId":"fea","roomName":"efad","receiveStatus":"fedf","receiverId":"fefad","receiverName":"fef","receiverPhoneNum":"fef","receiveTime":"fef","troubleShootingTime":"fef","troubleShootingReport":"fef","dataStatus":"fef"}]
+     * beginAt : 1520416445363
+     * client : 1000
+     * createAt : 1520416482521
+     * creatorId : 5a82a22c9ce93e30677c3f9a
+     * dataStatus : 1
+     * deadline : 1520416445363
+     * href : 跳转链接
+     * id : 5a9fb6e2e3634e0809774564
+     * materialType : 2
+     * materialUrl : 素材链接
+     * publishAt : 1520416517441
+     * published : true
+     * rank : 1
+     * tags : ["标签"]
+     * title : 标题
+     * updateAt : 1520416698921
      */
 
-    private int total;
-    private int totalPage;
-    private int currentPage;
-    private List<RecordsBean> records;
+    private String beginAt;
+    private int client;
+    private String createAt;
+    private String creatorId;
+    private int dataStatus;
+    private String deadline;
+    private String href;
+    private String id;
+    private int materialType;
+    private String materialUrl;
+    private String publishAt;
+    private boolean published;
+    private int rank;
+    private String title;
+    private String updateAt;
+    private List<String> tags;
 
-    public int getTotal() {
-        return total;
+    public String getBeginAt() {
+        return beginAt;
     }
 
-    public void setTotal(int total) {
-        this.total = total;
+    public void setBeginAt(String beginAt) {
+        this.beginAt = beginAt;
     }
 
-    public int getTotalPage() {
-        return totalPage;
+    public int getClient() {
+        return client;
     }
 
-    public void setTotalPage(int totalPage) {
-        this.totalPage = totalPage;
+    public void setClient(int client) {
+        this.client = client;
     }
 
-    public int getCurrentPage() {
-        return currentPage;
+    public String getCreateAt() {
+        return createAt;
     }
 
-    public void setCurrentPage(int currentPage) {
-        this.currentPage = currentPage;
+    public void setCreateAt(String createAt) {
+        this.createAt = createAt;
     }
 
-    public List<RecordsBean> getRecords() {
-        return records;
+    public String getCreatorId() {
+        return creatorId;
     }
 
-    public void setRecords(List<RecordsBean> records) {
-        this.records = records;
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
     }
 
-    public static class RecordsBean implements Serializable {
+    public int getDataStatus() {
+        return dataStatus;
+    }
 
+    public void setDataStatus(int dataStatus) {
+        this.dataStatus = dataStatus;
+    }
 
-        private String title;
-        private String materialUrl;
-        private int materialType;
-        private String href;
+    public String getDeadline() {
+        return deadline;
+    }
 
-        public String getTitle() {
-            return title;
-        }
+    public void setDeadline(String deadline) {
+        this.deadline = deadline;
+    }
 
-        public void setTitle(String title) {
-            this.title = title;
-        }
+    public String getHref() {
+        return href;
+    }
 
-        public String getMaterialUrl() {
-            return materialUrl;
-        }
+    public void setHref(String href) {
+        this.href = href;
+    }
 
-        public void setMaterialUrl(String materialUrl) {
-            this.materialUrl = materialUrl;
-        }
+    public String getId() {
+        return id;
+    }
 
-        public int getMaterialType() {
-            return materialType;
-        }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-        public void setMaterialType(int materialType) {
-            this.materialType = materialType;
-        }
+    public int getMaterialType() {
+        return materialType;
+    }
 
-        public String getHref() {
-            return href;
-        }
+    public void setMaterialType(int materialType) {
+        this.materialType = materialType;
+    }
 
-        public void setHref(String href) {
-            this.href = href;
-        }
+    public String getMaterialUrl() {
+        return materialUrl;
+    }
+
+    public void setMaterialUrl(String materialUrl) {
+        this.materialUrl = materialUrl;
+    }
+
+    public String getPublishAt() {
+        return publishAt;
+    }
+
+    public void setPublishAt(String publishAt) {
+        this.publishAt = publishAt;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(String updateAt) {
+        this.updateAt = updateAt;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }

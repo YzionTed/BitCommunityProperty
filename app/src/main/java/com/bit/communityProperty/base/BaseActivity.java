@@ -39,9 +39,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mContext = this;
         MyApplication.getInstance().addActivity(this);
+        OssManager.getInstance().refreshToken();
         this.initViewData();
         mContext = this;
-        OssManager.getInstance().refreshToken();
     }
 
     @Override

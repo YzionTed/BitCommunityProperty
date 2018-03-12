@@ -97,9 +97,9 @@ public class JPushReceiver extends BroadcastReceiver {
                 LogManager.i(extras + "通知");
                 final JPushBean jPushBean = GsonUtils.getInstance().fromJson(extras, JPushBean.class);
                 switch (jPushBean.getAction()){
-                    case "100101":
+                    case "100101"://社区公告
                         break;
-                    case "100301":
+                    case "100301"://一键报警
                         if (MyApplication.getActivitySize() != 0) {
                             DialogUtil.dissmiss();
                             DialogUtil.showTipDialog(MyApplication.getInstance().getCurrentActivity(), R.mipmap.ic_jb_yuan, jPushBean.getData().getTitle(), "取消", "确定", true, new View.OnClickListener() {

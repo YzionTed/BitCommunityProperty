@@ -391,8 +391,8 @@ public interface HttpService {
      * @param map
      * @return
      */
-    @POST("/v1/sys/slide/page")
-    Observable<BaseEntity<BannerBean>> getBanner(@Body Map<String, Object> map);
+    @POST("/v1/sys/slide/list")
+    Observable<BaseEntity<List<BannerBean>>> getBanner(@Body Map<String, Object> map);
 
     /**
      * 获取故障列表

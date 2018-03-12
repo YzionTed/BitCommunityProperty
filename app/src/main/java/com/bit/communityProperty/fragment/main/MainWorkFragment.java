@@ -118,7 +118,7 @@ public class MainWorkFragment extends BaseFragment {
             AppConfig.Work_Schedule, AppConfig.Repair_Orders};
     private int[] repairmanImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_wxgd};
 
-    private String ROLE_TYPE = AppConfig.ROLE_MANAGER;
+    private String ROLE_TYPE;
 
     public static MainWorkFragment newInstance(String type) {
         MainWorkFragment fragment = new MainWorkFragment();
@@ -138,6 +138,8 @@ public class MainWorkFragment extends BaseFragment {
         Bundle bundle = getArguments();
         if (bundle!=null){
             ROLE_TYPE = bundle.getString(AppConfig.ROLE_TYPE);
+        }else{
+            ROLE_TYPE = (String) SPUtil.get(mContext, AppConfig.ROLE_TYPE, AppConfig.ROLE_MANAGER);
         }
 
         initBanner();
@@ -166,7 +168,7 @@ public class MainWorkFragment extends BaseFragment {
                         }
                     }
                 }else if (o instanceof LoginData){
-                    ROLE_TYPE = AppConfig.ROLE_MANAGER;
+                    ROLE_TYPE = ((LoginData) o).getRoles().get(0);
                     initTabData();
                 }
             }
@@ -174,49 +176,50 @@ public class MainWorkFragment extends BaseFragment {
     }
 
     private void initBanner() {
-//        Map<String, Object> map = new HashMap<>();
-//        RetrofitManage.getInstance().subscribe(Api.getInstance().getBanner(map), new Observer<BaseEntity<BannerBean>>() {
-//            @Override
-//            public void onSubscribe(Disposable d) {
-//
-//            }
-//
-//            @Override
-//            public void onNext(BaseEntity<BannerBean> bannerBeanBaseEntity) {
-//                if (bannerBeanBaseEntity.isSuccess()){
-//                    banner.setPages(bannerBeanBaseEntity.getData().getRecords(), new MZHolderCreator<BannerViewHolder>() {
-//                        @Override
-//                        public BannerViewHolder createViewHolder() {
-//                            return new BannerViewHolder();
-//                        }
-//                    });
-//                    banner.start();
-//                }
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//
-//            }
-//
-//            @Override
-//            public void onComplete() {
-//
-//            }
-//        });
-
-        List<Integer> s = new ArrayList<>();
-        s.add(R.mipmap.banner_1);
-        s.add(R.mipmap.banner_2);
-        s.add(R.mipmap.banner_3);
-        banner.setIndicatorVisible(false);
-        banner.setPages(s, new MZHolderCreator<BannerViewHolder>() {
+        Map<String, Object> map = new HashMap<>();
+        RetrofitManage.getInstance().subscribe(Api.getInstance().getBanner(map), new Observer<BaseEntity<List<BannerBean>>>() {
             @Override
-            public BannerViewHolder createViewHolder() {
-                return new BannerViewHolder();
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseEntity<List<BannerBean>> bannerBeanBaseEntity) {
+                if (bannerBeanBaseEntity.isSuccess()){
+                    List<BannerBean> list = bannerBeanBaseEntity.getData();
+                    banner.setPages(list, new MZHolderCreator<BannerViewHolder>() {
+                        @Override
+                        public BannerViewHolder createViewHolder() {
+                            return new BannerViewHolder();
+                        }
+                    });
+                    banner.start();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         });
-        banner.start();
+
+//        List<Integer> s = new ArrayList<>();
+//        s.add(R.mipmap.banner_1);
+//        s.add(R.mipmap.banner_2);
+//        s.add(R.mipmap.banner_3);
+        banner.setIndicatorVisible(false);
+//        banner.setPages(s, new MZHolderCreator<BannerViewHolder>() {
+//            @Override
+//            public BannerViewHolder createViewHolder() {
+//                return new BannerViewHolder();
+//            }
+//        });
+//        banner.start();
     }
 
     private void initGridView() {
@@ -415,7 +418,7 @@ public class MainWorkFragment extends BaseFragment {
     }
 
 
-    public static class BannerViewHolder implements MZViewHolder<Integer> {
+    public static class BannerViewHolder implements MZViewHolder<BannerBean> {
         private ImageView mImageView;
 
         @Override
@@ -427,10 +430,10 @@ public class MainWorkFragment extends BaseFragment {
         }
 
         @Override
-        public void onBind(Context context, int position, Integer data) {
+        public void onBind(Context context, int position, BannerBean data) {
             // 数据绑定
-            mImageView.setImageResource(data);
-//            GlideUtils.loadImage(context,OssManager.getInstance().getUrl(data.getMaterialUrl()),mImageView);
+//            mImageView.setImageResource(data);
+            GlideUtils.loadImage(context,OssManager.getInstance().getUrl(data.getMaterialUrl()),mImageView);
         }
     }
 }

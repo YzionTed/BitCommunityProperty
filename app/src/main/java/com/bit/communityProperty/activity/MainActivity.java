@@ -210,11 +210,11 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public void onSuccess(IMToken data) {
-            Toast.makeText(mContext, "onSuccess", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(mContext, "onSuccess", Toast.LENGTH_SHORT).show();
             NimUIKit.login(new LoginInfo(data.getInfo().getAccid(), data.getInfo().getToken()), new RequestCallback<LoginInfo>() {
                 @Override
                 public void onSuccess(LoginInfo param) {
-                    Toast.makeText(mContext, "login im onSuccess", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mContext, "login im onSuccess", Toast.LENGTH_SHORT).show();
                     LogUtil.d(TAG, "login im onSuccess");
                 }
 
