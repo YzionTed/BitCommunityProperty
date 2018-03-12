@@ -21,7 +21,9 @@ import com.bit.communityProperty.activity.faultManager.FaultManagementActivity;
 import com.bit.communityProperty.activity.household.HouseholdManagementActivity;
 import com.bit.communityProperty.activity.propertyFee.PropertyFeeActivity;
 import com.bit.communityProperty.activity.propertyFee.fragment.PropertyFeeFragment;
+import com.bit.communityProperty.activity.repairwork.RepairWorkListActivity;
 import com.bit.communityProperty.activity.safetywarning.SafeWarningListActivity;
+import com.bit.communityProperty.activity.securityclock.SecurityClockListActivity;
 import com.bit.communityProperty.activity.videomonitor.MonitorListActivity;
 import com.bit.communityProperty.activity.workplan.PersonalWorkActivity;
 import com.bit.communityProperty.base.BaseEntity;
@@ -233,12 +235,10 @@ public class MainWorkFragment extends BaseFragment {
                     public void onClick(View v) {
                         switch (bean.getTitle()) {
                             case AppConfig.Community_Access://小区门禁
-//                                startActivity(new Intent(mContext, DoorControlActivity.class));
-                                startActivity(new Intent(mContext, FaultDeclareActivity.class));//故障申报,暂时
+                                startActivity(new Intent(mContext, DoorControlActivity.class));
                                 break;
                             case AppConfig.Intelligent_Elevator://智能梯控
-//                                startActivity(new Intent(mContext, ElevatorControlActivity.class));
-                                startActivity(new Intent(mContext, FaultManagementActivity.class));//故障管理，暂时
+                                startActivity(new Intent(mContext, ElevatorControlActivity.class));
                                 break;
                             case AppConfig.Work_Schedule://工作排班
                                 startActivity(new Intent(mContext, PersonalWorkActivity.class));
@@ -265,6 +265,7 @@ public class MainWorkFragment extends BaseFragment {
 //                                startActivity(new Intent(mContext, IntelligentElevatorActivity.class));
                                 break;
                             case AppConfig.Statistics://数据统计
+                                ToastUtil.showShort("该功能暂未开放");
 //                                startActivity(new Intent(mContext, PoliceClockActivity.class));
 //                                startActivity(new Intent(mContext, HouseholdManagementActivity.class));//暂时在这调试住户管理
                                 break;
@@ -275,6 +276,7 @@ public class MainWorkFragment extends BaseFragment {
                                 }
                                 break;
                             case AppConfig.Patrol_Punch://巡逻打卡
+                                startActivity(new Intent(mContext, SecurityClockListActivity.class));
                                 break;
                             case AppConfig.Fault_Reporting://故障申报
                                 startActivity(new Intent(mContext, FaultDeclareActivity.class));
@@ -286,6 +288,7 @@ public class MainWorkFragment extends BaseFragment {
                                 startActivity(new Intent(mContext, CleanClockListActivity.class));
                                 break;
                             case AppConfig.Repair_Orders://维修工单
+                                startActivity(new Intent(mContext, RepairWorkListActivity.class));
                                 break;
                         }
                     }

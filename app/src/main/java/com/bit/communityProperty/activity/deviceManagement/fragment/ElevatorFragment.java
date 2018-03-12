@@ -55,6 +55,7 @@ public class ElevatorFragment extends BaseFragment {
     private LRecyclerViewAdapter mLRecyclerViewAdapter;//上下拉的recyclerView的adapter
     private PromptDialog sinInLogin;
     private List<ElevatorListBean.RecordsBean> recordsBean;
+    private ElevatorListBean elevatorListBean;
 
     private int page = 1;
     private boolean isRefresh = true;
@@ -81,8 +82,12 @@ public class ElevatorFragment extends BaseFragment {
         mRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                isRefresh = false;
-                getData();
+                if (elevatorListBean.getCurrentPage()<elevatorListBean.getTotalPage()){
+                    isRefresh = false;
+                    getData();
+                }else{
+                    mRecyclerView.setNoMore(true);
+                }
             }
         });
         mLRecyclerViewAdapter.setOnItemClickListener(new OnItemClickListener() {
@@ -117,8 +122,13 @@ public class ElevatorFragment extends BaseFragment {
             public void onNext(BaseEntity<ElevatorListBean> objectBaseEntity) {
                 mRecyclerView.refreshComplete(AppConfig.pageSize);
                 if (objectBaseEntity.isSuccess()){
+                    elevatorListBean = objectBaseEntity.getData();
                     recordsBean = objectBaseEntity.getData().getRecords();
-                    adapter.setDataList(recordsBean);
+                    if (isRefresh){
+                        adapter.setDataList(recordsBean);
+                    }else{
+                        adapter.addAll(recordsBean);
+                    }
                 }
             }
 

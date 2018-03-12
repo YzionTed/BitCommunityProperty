@@ -1,22 +1,27 @@
 package com.bit.communityProperty.utils;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.alibaba.sdk.android.oss.ClientException;
 import com.alibaba.sdk.android.oss.OSS;
 import com.alibaba.sdk.android.oss.OSSClient;
+import com.alibaba.sdk.android.oss.ServiceException;
 import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
 import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSPlainTextAKSKCredentialProvider;
 import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
 import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
+import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bit.communityProperty.MyApplication;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
+
+import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -85,6 +90,45 @@ public class OssManager {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    /**
+     * 文件异步批量上传阿里云
+     *
+     * @param data
+     * @param filePath
+     * @return
+     */
+    public boolean uploadFileToAliYun(final UploadInfo data, final List<String> filePath, final List<String> fileName) {
+        try {
+            if (filePath.size()<=0){
+                return true;
+            }
+            if (oss != null) {
+                data.setName("ap1" + SPUtil.get(MyApplication.getInstance(), AppConfig.id, "") + "_" + data.getBucket() + "_" + TimeUtils.getCurrentTime() + ".jpg");
+                PutObjectRequest put = new PutObjectRequest(data.getBucket() /*+ "-trans"*/, data.getName
+                        (), filePath.get(0));
+                OSSAsyncTask task = oss.asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+                    @Override
+                    public void onSuccess(PutObjectRequest putObjectRequest, PutObjectResult putObjectResult) {
+                        filePath.remove(0);
+                        uploadFileToAliYun(data, filePath, fileName);
+                        fileName.add(data.getName());
+                    }
+
+                    @Override
+                    public void onFailure(PutObjectRequest putObjectRequest, ClientException e, ServiceException e1) {
+
+                    }
+                });
+                Log.d("okhttp", getUrl(filePath.get(0)));
+                data.setPath(getUrl(filePath.get(0)));
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
