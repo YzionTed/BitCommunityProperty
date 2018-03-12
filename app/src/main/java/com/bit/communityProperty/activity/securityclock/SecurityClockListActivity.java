@@ -219,7 +219,7 @@ public class SecurityClockListActivity extends BaseActivity {
                     // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
                     if (uploadInfo != null) {
                         uploadDialog.showLoading("上传图片中...");
-                        uploadInfo.setBucket("bit-test");
+                        uploadInfo.setBucket(AppConfig.BUCKET_NAME);
                         imgUrl = OssManager.getInstance().uploadFileToAliYun(uploadInfo, selectList.get(0).getPath(), new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
                             @Override
                             public void onSuccess(PutObjectRequest ossRequest, PutObjectResult ossResult) {
