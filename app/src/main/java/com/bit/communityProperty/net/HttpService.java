@@ -414,6 +414,16 @@ public interface HttpService {
     Observable<BaseEntity<FaultDetailBean>> getFaultDetail(@Path("id") String id);
 
     /**
+     * 添加故障申请
+     *
+     * @param map
+     * @return
+     */
+    @Headers("DEVICE_TYPE:Android")
+    @POST("v1/property/fault/addFault")
+    Observable<BaseEntity<FaultDetailBean>> addFault(@Body Map<String, Object> map);
+
+    /**
      * 处理故障报修单
      *
      * @param map
