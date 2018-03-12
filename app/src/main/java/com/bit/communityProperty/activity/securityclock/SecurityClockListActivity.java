@@ -219,7 +219,7 @@ public class SecurityClockListActivity extends BaseActivity {
                     // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
                     if (uploadInfo != null) {
                         uploadDialog.showLoading("上传图片中...");
-                        uploadInfo.setBucket("bit-test");
+                        uploadInfo.setBucket(AppConfig.BUCKET_NAME);
                         imgUrl = OssManager.getInstance().uploadFileToAliYun(uploadInfo, selectList.get(0).getPath(), new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
                             @Override
                             public void onSuccess(PutObjectRequest ossRequest, PutObjectResult ossResult) {
@@ -275,7 +275,7 @@ public class SecurityClockListActivity extends BaseActivity {
 //        map.put("username", SPUtil.get(this, AppConfig.name, ""));
         map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
         map.put("taskType", 2);
-        map.put("url", uploadInfo.getName());
+        map.put("url", imgUrl);
 //        map.put("creatorId", SPUtil.get(this, AppConfig.id, ""));
 //        map.put("createAt", TimeUtils.getCurrentTimeWithT());
 //        map.put("dataStatus", "1");

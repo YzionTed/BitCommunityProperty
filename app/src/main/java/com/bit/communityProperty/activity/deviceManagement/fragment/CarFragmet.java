@@ -46,6 +46,7 @@ public class CarFragmet extends BaseFragment {
     private DeviceAdapter adapter;
     private LRecyclerViewAdapter mLRecyclerViewAdapter;
     private List<CarBrakeBean.RecordsBean> carBrakeBeanList;
+    private CarBrakeBean carBrakeBean;
     private int page = 1;
     private boolean isRefresh = true;
     @Override
@@ -75,8 +76,12 @@ public class CarFragmet extends BaseFragment {
         mRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                isRefresh = false;
-                getData();
+                if (carBrakeBean!=null&&carBrakeBean.getCurrentPage()<carBrakeBean.getTotalPage()){
+                    isRefresh = false;
+                    getData();
+                }else{
+                    mRecyclerView.setNoMore(true);
+                }
             }
         });
         mLRecyclerViewAdapter.setOnItemClickListener(new OnItemClickListener() {
@@ -107,6 +112,7 @@ public class CarFragmet extends BaseFragment {
             public void onNext(BaseEntity<CarBrakeBean> listBaseEntity) {
                 mRecyclerView.refreshComplete(AppConfig.pageSize);
                 if (listBaseEntity.isSuccess()){
+                    carBrakeBean = listBaseEntity.getData();
                     carBrakeBeanList = listBaseEntity.getData().getRecords();
                     if (isRefresh){
                         adapter.setDataList(carBrakeBeanList);

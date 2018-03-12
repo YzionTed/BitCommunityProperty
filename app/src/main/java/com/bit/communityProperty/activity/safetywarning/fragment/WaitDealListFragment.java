@@ -174,6 +174,8 @@ public class WaitDealListFragment extends BaseFragment implements SafeWarningAda
                     }else{
                         multipleStatusView.showEmpty();
                     }
+                }else{
+                    multipleStatusView.showError();
                 }
             }
 
