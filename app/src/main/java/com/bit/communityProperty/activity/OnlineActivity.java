@@ -10,14 +10,9 @@ import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.bean.OnlineData;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
-import com.bit.communityProperty.utils.GlideUtils;
 import com.bit.communityProperty.utils.GsonUtils;
 import com.bit.communityProperty.utils.LogManager;
-import com.bit.communityProperty.utils.ViewHolder;
-import com.bit.communityProperty.view.CircleImageView;
 import com.bit.communityProperty.view.TitleBarView;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.zhy.adapter.abslistview.CommonAdapter;
 
@@ -82,19 +77,23 @@ public class OnlineActivity extends BaseActivity {
             public void onNext(BaseEntity<ArrayList<OnlineData>> stringBaseEntity) {
                 if (stringBaseEntity.isSuccess() && stringBaseEntity.getData() != null) {
                     onlineDataList = (ArrayList<OnlineData>) stringBaseEntity.getData();
+
+                    if (onlineDataList != null && onlineDataList.size() > 0){
+                        lvOnline.setAdapter(new CommonAdapter<OnlineData>(OnlineActivity.this, R.layout.item_online, onlineDataList) {
+                            @Override
+                            protected void convert(com.zhy.adapter.abslistview.ViewHolder viewHolder, OnlineData item, int position) {
+                                if (position == onlineDataList.size() - 1){
+                                    viewHolder.getView(R.id.divider).setVisibility(View.GONE);
+                                }
+                                viewHolder.setText(R.id.tv_name, item.getCommunityName() + item.getPropertyName());
+
+
+                            }
+                        });
+                    }
                 }
                 LogManager.printErrorLog("online", GsonUtils.getInstance().toJson(stringBaseEntity));
-                lvOnline.setAdapter(new CommonAdapter<OnlineData>(OnlineActivity.this, R.layout.item_online, onlineDataList) {
-                    @Override
-                    protected void convert(com.zhy.adapter.abslistview.ViewHolder viewHolder, OnlineData item, int position) {
-                        if (position == onlineDataList.size() - 1){
-                            viewHolder.getView(R.id.divider).setVisibility(View.GONE);
-                        }
-                        viewHolder.setText(R.id.tv_name, item.getCommunityName() + item.getPropertyName());
 
-
-                    }
-                });
             }
 
             @Override
