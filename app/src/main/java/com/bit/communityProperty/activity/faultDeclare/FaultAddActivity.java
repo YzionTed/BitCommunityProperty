@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -56,6 +57,7 @@ import java.util.Map;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import me.leefeng.promptlibrary.PromptDialog;
 
 /**
  * 新增故障的页面
@@ -69,7 +71,6 @@ public class FaultAddActivity extends BaseActivity {
     private CommonAdapter mAdapter;//图片评论adapter
     private HomeMenuBean addPicture;//+号图片的bean类
     private int pictureNum = 0;//用来计算用的
-//    private TextView tvFaultType;//故障类型选择
     private ListView mTypeLv;//popup窗口里的ListView
     private List<String> faultTypeList;//故障类型列表
     private ArrayAdapter<String> faultDataAdapter;//故障类型列表适配器
@@ -79,6 +80,8 @@ public class FaultAddActivity extends BaseActivity {
     private EditText edFaultType,edFaultAddress,edFaultInfo;//故障类型选择/故障地址/故障描述
     private Button btConfirm;//提交申请
     private UploadInfo uploadInfo;
+    private ArrayList<String> imagUrlPar = new ArrayList<>();//上传图片地址列表，是个网络请求参数
+    private PromptDialog uploadDialog;
     /**
      * 添加故障申请的请求参数
      * 1：水电煤气；2：房屋结构；3：消防安防；9：其它；10：电梯；11：门禁；99：其它；
@@ -199,7 +202,7 @@ public class FaultAddActivity extends BaseActivity {
         if (uploadInfo == null || TimeUtils.isExpiration(uploadInfo.getExpiration())) {
             initOssToken();
         }
-
+        uploadDialog = new PromptDialog(this);
     }
 
     /**
@@ -243,21 +246,36 @@ public class FaultAddActivity extends BaseActivity {
         mAdapter.setDatas(mainWorkBeanList);
     }
 
-    private void getImageUrl(String path){
-        String imgUrl = OssManager.getInstance().uploadFileToAliYun(uploadInfo,path, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
-            @Override
-            public void onSuccess(PutObjectRequest ossRequest, PutObjectResult ossResult) {
-//                                uploadDialog.showSuccess("上传成功");
-//                                uploadDialog.dismiss();
-//                addClock();
-            }
+    /**
+     * 图片地址转换，本地转换成云地址
+     * @param path
+     */
+    String imgUrl;
+    private void getImageHttpUrl(final List<HomeMenuBean> listPath){
+        if (listPath.size()>0) {
+            for (int i=0;i<listPath.size();i++) {
+                final int finalI = i;
+                uploadInfo.setBucket("bit-test");
+                imgUrl = OssManager.getInstance().uploadFileToAliYun(uploadInfo, listPath.get(i).getmImageUrl(), new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+                    @Override
+                    public void onSuccess(PutObjectRequest ossRequest, PutObjectResult ossResult) {
+                        imagUrlPar.add(imgUrl);
+                        if (finalI+1 ==listPath.size()){
+                            uploadDialog.showSuccess("上传成功");
+                            uploadDialog.dismiss();
+                            if (!TextUtils.isEmpty(edFaultAddress.getText())&&!TextUtils.isEmpty(edFaultInfo.getText()))
+                            getFaultDetail(AppConfig.id,2,faultType,edFaultAddress.getText().toString(),edFaultInfo.getText().toString(),imagUrlPar);
+                        }
+                    }
 
-            @Override
-            public void onFailure(PutObjectRequest ossRequest, ClientException e, ServiceException e1) {
-//                uploadDialog.dismiss();
-                ToastUtil.showShort("上传失败");
+                    @Override
+                    public void onFailure(PutObjectRequest ossRequest, ClientException e, ServiceException e1) {
+                uploadDialog.dismiss();
+                        ToastUtil.showShort("上传失败");
+                    }
+                });
             }
-        });
+        }
     }
 
     /**
@@ -312,7 +330,18 @@ public class FaultAddActivity extends BaseActivity {
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.bt_confirm:
-                    getFaultDetail(AppConfig.id,2,faultType,edFaultAddress.getText().toString(),edFaultInfo.getText().toString(),null);
+                    if (TextUtils.isEmpty(edFaultType.getText())){
+                        ToastUtil.showShort("请选择故障类型");
+                    }else if (TextUtils.isEmpty(edFaultAddress.getText())){
+                        ToastUtil.showShort("请填写故障地址信息");
+                    }else if (TextUtils.isEmpty(edFaultInfo.getText())){
+                        ToastUtil.showShort("请填写故障详情信息");
+                    }else if (mAdapter.getDatas()!=null){
+                        uploadDialog.showLoading("上传图片中...");
+                        getImageHttpUrl(mAdapter.getDatas());
+                    }else {
+                        ToastUtil.showShort("填写信息有误");
+                    }
                     break;
             }
         }

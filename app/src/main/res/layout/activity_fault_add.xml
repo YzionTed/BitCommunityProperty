@@ -23,6 +23,8 @@
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
             android:layout_alignRight="@+id/tv_21"
+            android:textSize="14sp"
+            android:textColor="@color/tv_gray_66"
             android:text="报修人：" />
 
         <TextView
@@ -34,6 +36,8 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@+id/tv_11"
+            android:textSize="14sp"
+            android:textColor="@color/tv_black_33"
             android:text="忘我" />
     <View
         android:id="@+id/v_line"
@@ -50,6 +54,8 @@
             android:paddingBottom="15dp"
             android:layout_below="@+id/v_line"
             android:paddingLeft="10dp"
+            android:textSize="14sp"
+            android:textColor="@color/tv_gray_66"
             android:text="联系电话：" />
 
         <TextView
@@ -62,6 +68,8 @@
             android:layout_below="@+id/v_line"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
+            android:textSize="14sp"
+            android:textColor="@color/tv_black_33"
             android:text="12345678654" />
     </RelativeLayout>
     <LinearLayout
@@ -77,6 +85,8 @@
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
+            android:textSize="14sp"
+            android:textColor="@color/tv_gray_66"
             android:text="故障类型："/>
         <EditText
             android:id="@+id/ed_fault_type"
@@ -88,6 +98,8 @@
             android:layout_marginLeft="5dp"
             android:background="@null"
             android:focusable="false"
+            android:textSize="14sp"
+            android:textColor="@color/tv_black_33"
             android:hint="请选择故障类型"/>
     </LinearLayout>
     <include layout="@layout/line_gray"></include>
@@ -103,6 +115,8 @@
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
+            android:textSize="14sp"
+            android:textColor="@color/tv_gray_66"
             android:text="故障地址："/>
         <EditText
             android:id="@+id/ed_fault_address"
@@ -113,6 +127,8 @@
             android:layout_weight="1"
             android:layout_marginLeft="5dp"
             android:background="@null"
+            android:textSize="14sp"
+            android:textColor="@color/tv_black_33"
             android:hint="请输入故障地址"/>
     </LinearLayout>
     <include layout="@layout/line_gray"></include>
@@ -128,6 +144,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/tv_gray_66"
             android:text="故障描述："/>
         <EditText
             android:id="@+id/ed_fault_info"
@@ -136,6 +154,8 @@
             android:layout_weight="1"
             android:layout_marginLeft="5dp"
             android:background="@null"
+            android:textSize="14sp"
+            android:textColor="@color/tv_black_33"
             android:hint="请输入故障描述"/>
     </LinearLayout>
     <LinearLayout
@@ -159,10 +179,12 @@
 
     <Button
         android:id="@+id/bt_confirm"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="60dp"
-        android:background="@color/title_background"
+        android:background="@drawable/shape_rad22_blue"
         android:textColor="@color/white"
         android:layout_gravity="center_horizontal"
         android:gravity="center"

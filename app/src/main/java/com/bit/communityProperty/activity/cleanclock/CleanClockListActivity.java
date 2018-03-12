@@ -259,7 +259,7 @@ public class CleanClockListActivity extends BaseActivity {
 //        map.put("username", SPUtil.get(this, AppConfig.name, ""));
         map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
         map.put("taskType", 2);
-        map.put("url", uploadInfo.getName());
+        map.put("url", imgUrl);
 //        map.put("creatorId", SPUtil.get(this, AppConfig.id, ""));
 //        map.put("createAt", TimeUtils.getCurrentTimeWithT());
 //        map.put("dataStatus", "1");

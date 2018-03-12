@@ -1,6 +1,7 @@
 package com.bit.communityProperty.activity.faultManager;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -301,6 +302,11 @@ public class FaultDetailsActivity extends BaseActivity {
                         handleFault(mFaultDetailBean.getId(), 2);
                     break;
                 case R.id.bt_assign://确认分派
+                    if (mFaultDetailBean != null) {
+                        Intent intent = new Intent(mContext, AssignSelectActivity.class);
+                        intent.putExtra("Fault_Id", mFaultDetailBean.getId());
+                        startActivity(intent);
+                    }
                     break;
                 default:
                     break;

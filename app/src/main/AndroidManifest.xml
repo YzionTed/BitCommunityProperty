@@ -825,6 +825,13 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
+        <!-- 故障选择分派页面 -->
+        <activity
+            android:name=".activity.faultManager.AssignSelectActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
         <!-- 故障详情页面 -->
         <activity
             android:name=".activity.faultManager.FaultDetailsActivity"
