@@ -34,6 +34,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observer;
@@ -145,13 +146,19 @@ public class LogonActivity extends BaseActivity {
                     messageEvent.setLoginSuccess(true);
                     EventBus.getDefault().post(messageEvent);
 
-                    SPUtil.put(mContext, AppConfig.ROLE_TYPE, AppConfig.ROLE_MANAGER);//用户角色
                     Intent intent = new Intent(mContext, MainActivity.class);
                     if(getIntent().getBundleExtra(AppConfig.EXTRA_BUNDLE) != null){
                         intent.putExtra(AppConfig.EXTRA_BUNDLE, getIntent().getBundleExtra(AppConfig.EXTRA_BUNDLE));
                     }
-                    intent.putExtra(AppConfig.ROLE_TYPE, AppConfig.ROLE_MANAGER);//用户角色
-                    RxBus.get().post(logindata.getData());
+                    if (logindata.getData()!=null){
+                        List<String> roleTypes = logindata.getData().getRoles();
+                        if (roleTypes!=null&&roleTypes.size()>0){
+                            String roleType = roleTypes.get(0);
+                            SPUtil.put(mContext, AppConfig.ROLE_TYPE, roleType);//用户角色
+                            intent.putExtra(AppConfig.ROLE_TYPE, roleType);//用户角色
+                            RxBus.get().post(logindata.getData());
+                        }
+                    }
                     RxBus.get().post("update_card_list");
                     startActivity(intent);
                     finish();

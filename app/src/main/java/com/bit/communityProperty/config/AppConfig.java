@@ -23,10 +23,10 @@ public class AppConfig {
     public static final String ROLE_TYPE = "ROLE_TYPE";  //用户角色
     public static final String IS_LOGIN = "IS_LOGIN";  //是否登录
 
-    public static final String ROLE_MANAGER = "管理人员";
-    public static final String ROLE_SECURITY = "保安门卫";
-    public static final String ROLE_CLEANER = "保洁人员";
-    public static final String ROLE_REPAINMAN = "维修人员";
+    public static final String ROLE_MANAGER = "MANAGER";//管理人员
+    public static final String ROLE_SECURITY = "SECURITY";//保安门卫
+    public static final String ROLE_CLEANER = "CLEANER";//保洁人员
+    public static final String ROLE_REPAINMAN = "SERVICEMAN";//维修人员
 
     public static final String Community_Access = "小区门禁";
     public static final String Intelligent_Elevator = "智能梯控";

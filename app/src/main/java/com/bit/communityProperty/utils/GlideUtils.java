@@ -51,7 +51,17 @@ public class GlideUtils {
         options.diskCacheStrategy(DiskCacheStrategy.RESOURCE);
         options.placeholder(R.mipmap.image_default);
         options.error(R.mipmap.image_default);
-        Glide.with(mContext).load(new CacheGlideUrl(path)).apply(options).into(mImageView);
+        Glide.with(mContext).load(new CacheGlideUrl(path)).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                return false;
+            }
+        }).apply(options).into(mImageView);
     }
 
     //默认加载 本地

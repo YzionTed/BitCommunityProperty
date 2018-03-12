@@ -53,8 +53,8 @@ public enum RetrofitManage {
     INSTANCE;
 
 //    public static String BASE_URL = "http://39.106.249.8:9000"; // 测试环境API环境
-//    public static String BASE_URL = "http://apismcm.test.bitiot.com.cn"; // 测试环境API环境
-    public static String BASE_URL = "http://192.168.10.151:9000"; // 测试小宇电脑id
+    public static String BASE_URL = "http://apismcm.test.bitiot.com.cn"; // 测试环境API环境
+//    public static String BASE_URL = "http://192.168.10.151:9000"; // 测试小宇电脑id
 //    public static String BASE_URL = "https://api.smcm.bitiot.com.cn"; // 生产环境API环境 api.smcm.bitiot.com.cn
     private static Retrofit mRetrofit;
     private static HttpService mHttpService;
