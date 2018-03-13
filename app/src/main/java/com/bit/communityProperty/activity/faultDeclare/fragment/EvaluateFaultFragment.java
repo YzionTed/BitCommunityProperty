@@ -11,14 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bit.communityProperty.R;
+import com.bit.communityProperty.activity.faultDeclare.FaultDetailsSBActivity;
 import com.bit.communityProperty.activity.faultManager.FaultDetailsActivity;
 import com.bit.communityProperty.activity.faultManager.adapter.FaultManagerCommonAdapter;
 import com.bit.communityProperty.activity.faultManager.bean.FaultManagementBean;
 import com.bit.communityProperty.base.BaseEntity;
+import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.GsonUtils;
 import com.bit.communityProperty.utils.LogManager;
+import com.bit.communityProperty.utils.SPUtil;
 import com.github.jdsjlzx.interfaces.OnItemClickListener;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
 import com.github.jdsjlzx.interfaces.OnRefreshListener;
@@ -40,7 +43,7 @@ import io.reactivex.disposables.Disposable;
  * Created by kezhangzhao on 2018/3/10.
  */
 
-public class EvaluateFaultActivity extends Fragment {
+public class EvaluateFaultFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private int pageIndex;//当前列表数据的页数
@@ -49,6 +52,7 @@ public class EvaluateFaultActivity extends Fragment {
     private LRecyclerView mRecyclerView;
     private FaultManagerCommonAdapter adapter;//普通物业人员的adapter
     private LRecyclerViewAdapter mLRecyclerViewAdapter;//上下拉的recyclerView的adapter
+    private int TYPE;//(0：故障申报进来的，1：是故障管理进来的)
     /**
      * 服务器端一共多少条数据
      */
@@ -64,7 +68,7 @@ public class EvaluateFaultActivity extends Fragment {
      */
     private static int mCurrentCounter = 0;
 
-    public EvaluateFaultActivity() {
+    public EvaluateFaultFragment() {
     }
 
     @Override
@@ -76,16 +80,17 @@ public class EvaluateFaultActivity extends Fragment {
         this.mContext = context;
     }
 
-    private void initView(Context context) {
+    private void initView(Context context,int type) {
         this.mContext = context;
+        this.TYPE = type;
 //        adapter = new FaultManagerCommonAdapter(context);
 //        mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
     }
 
 
-    public static EvaluateFaultActivity newInstance(int sectionNumber, Context context) {
-        EvaluateFaultActivity fragment = new EvaluateFaultActivity();
-        fragment.initView(context);
+    public static EvaluateFaultFragment newInstance(int type, int sectionNumber, Context context) {
+        EvaluateFaultFragment fragment = new EvaluateFaultFragment();
+        fragment.initView(context,type);
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
@@ -154,8 +159,13 @@ public class EvaluateFaultActivity extends Fragment {
             @Override
             public void onItemClick(View view, int position) {//跳转到故障的详情页面
                 FaultManagementBean.RecordsBean bean = FaultManagementBeanList.get(position);
-                Intent intent = new Intent(mContext, FaultDetailsActivity.class);
-                if (bean!=null)
+                Intent intent;
+                if (TYPE == 0) {//故障申报详情页面
+                    intent = new Intent(mContext, FaultDetailsSBActivity.class);
+                } else {//故障管理详情页面
+                    intent = new Intent(mContext, FaultDetailsActivity.class);
+                }
+                if (bean != null)
                     intent.putExtra("FaultID", bean.getId());
                 startActivity(intent);
             }
@@ -177,6 +187,8 @@ public class EvaluateFaultActivity extends Fragment {
                               String faultItem,String faultStatus,int page,int size) {
         Map<String, Object> map = new HashMap();
         map.put("communityId", communityId);
+        if (TYPE==0)
+            map.put("userId", SPUtil.get(mContext, AppConfig.id, ""));//故障申报需要添加这个参数用户ID，因为只能看自己的申报单
         if (!TextUtils.isEmpty(faultType))
             map.put("faultType", faultType);
         if (!TextUtils.isEmpty(faultItem))

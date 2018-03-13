@@ -832,9 +832,23 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
-        <!-- 故障详情页面 -->
+        <!-- 故障详情页面-故障管理 -->
         <activity
             android:name=".activity.faultManager.FaultDetailsActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <!--故障详情页面-故障申报-->
+        <activity
+            android:name=".activity.faultDeclare.FaultDetailsSBActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+        <!--故障维修评价-->
+        <activity
+            android:name=".activity.faultDeclare.EvaluateActivity"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"

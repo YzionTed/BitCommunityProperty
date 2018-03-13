@@ -1,5 +1,7 @@
 package com.bit.communityProperty.activity.faultManager.bean;
 
+import java.util.List;
+
 /**
  * 故障详情bean类
  * Created by kezhangzhao on 2018/3/9.
@@ -55,12 +57,12 @@ public class FaultDetailBean {
     private Object createAt;
     private String createId;
     private int dataStatus;
-    private Object evaluate;
+    private int evaluate;
     private String evaluation;
     private Object evaluationAccessory;
     private int evaluationGrade;
     private Object evaluationTime;
-    private Object faultAccessory;
+    private List<String> faultAccessory;
     private String faultAddress;
     private String faultContent;
     private int faultItem;
@@ -148,11 +150,11 @@ public class FaultDetailBean {
         this.dataStatus = dataStatus;
     }
 
-    public Object getEvaluate() {
+    public int getEvaluate() {
         return evaluate;
     }
 
-    public void setEvaluate(Object evaluate) {
+    public void setEvaluate(int evaluate) {
         this.evaluate = evaluate;
     }
 
@@ -188,11 +190,11 @@ public class FaultDetailBean {
         this.evaluationTime = evaluationTime;
     }
 
-    public Object getFaultAccessory() {
+    public List<String> getFaultAccessory() {
         return faultAccessory;
     }
 
-    public void setFaultAccessory(Object faultAccessory) {
+    public void setFaultAccessory(List<String> faultAccessory) {
         this.faultAccessory = faultAccessory;
     }
 

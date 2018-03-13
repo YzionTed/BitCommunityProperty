@@ -425,6 +425,26 @@ public interface HttpService {
     Observable<BaseEntity<FaultDetailBean>> addFault(@Body Map<String, Object> map);
 
     /**
+     * 删除故障申报单
+     *
+     * @param id
+     * @return
+     */
+    @GET("v1/property/fault/{id}/delete")
+    Observable<BaseEntity<String>> deleteFault(@Path("id") String id);
+
+    /**
+     * 住户评论故障申请
+     *
+     * @param map
+     * @return
+     */
+    @Headers("DEVICE_TYPE:Android")
+    @POST("v1/property/fault/comment")
+    Observable<BaseEntity<String>> evaluateFault(@Body Map<String, Object> map);
+
+
+    /**
      * 物业根据岗位获取人员列表
      * @param communityId
      * @param map
@@ -441,7 +461,7 @@ public interface HttpService {
      */
     @Headers("DEVICE_TYPE:Android")
     @POST("v1/property/fault/allocation")
-    Observable<BaseEntity<String>> submitAssign(@Body Map<String, Object> map);
+    Observable<BaseEntity<FaultDetailBean>> submitAssign(@Body Map<String, Object> map);
 
 
     /**

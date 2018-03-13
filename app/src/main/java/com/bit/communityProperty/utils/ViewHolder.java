@@ -178,6 +178,12 @@ public class ViewHolder {
         view.setImageURI(imageUri);
         return this;
     }
+    public ViewHolder setImageResource(int viewId, String httpImageURL) {
+        ImageView view = getView(viewId);
+//        view.setImageResource(resId);
+        GlideUtils.loadImageView(mContext,httpImageURL,view);
+        return this;
+    }
 
     public ViewHolder setImageBitmap(int viewId, Bitmap bitmap) {
         ImageView view = getView(viewId);

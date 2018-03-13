@@ -93,7 +93,7 @@ public class StarsAdapter extends RecyclerView.Adapter<StarsAdapter.MyViewHolder
      * item点击事件监听
      */
     public interface OnMyItemClickListener{
-        void myClick(View v,int pos);
+        void myClick(View view,int position);
     }
 
     /**

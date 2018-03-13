@@ -47,6 +47,7 @@ public class AllFaultFragment extends Fragment {
     private LRecyclerView mRecyclerView;
     private FaultManagerCommonAdapter adapter;//普通物业人员的adapter
     private LRecyclerViewAdapter mLRecyclerViewAdapter;//上下拉的recyclerView的adapter
+    private int TYPE;//(0：故障申报进来的，1：是故障管理进来的)
     /**
      * 服务器端一共多少条数据
      */
@@ -74,14 +75,15 @@ public class AllFaultFragment extends Fragment {
         this.mContext = context;
     }
 
-    private void initView(Context context) {
+    private void initView(Context context,int type) {
         this.mContext = context;
+        this.TYPE = type;
     }
 
 
-    public static AllFaultFragment newInstance(int sectionNumber, Context context) {
+    public static AllFaultFragment newInstance(int type,int sectionNumber, Context context) {
         AllFaultFragment fragment = new AllFaultFragment();
-        fragment.initView(context);
+        fragment.initView(context,type);
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
@@ -153,6 +155,7 @@ public class AllFaultFragment extends Fragment {
                 Intent intent = new Intent(mContext, FaultDetailsActivity.class);
                 if (bean!=null)
                 intent.putExtra("FaultID", bean.getId());
+                intent.putExtra("TYPE",TYPE);
                 startActivity(intent);
             }
         });

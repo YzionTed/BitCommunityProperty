@@ -1,5 +1,6 @@
 package com.bit.communityProperty.activity.faultManager;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -63,9 +64,15 @@ public class AssignSelectActivity extends BaseActivity{
             public void onClick(View view) {
                 if (lastPosition!=-1){
                     assignPersonBean = (personList.get(lastPosition));
-                    if (assignPersonBean!=null)
-                    submitAssign(faultId,assignPersonBean.getUserId(),
-                            assignPersonBean.getUserName(),assignPersonBean.getPhone());
+                    if (assignPersonBean!=null){
+                        Intent intent = new Intent();
+                        intent.putExtra("FaultId",faultId);
+                        intent.putExtra("UserId",assignPersonBean.getUserId());
+                        intent.putExtra("UserName",assignPersonBean.getUserName());
+                        intent.putExtra("Phone",assignPersonBean.getPhone());
+                        AssignSelectActivity.this.setResult(RESULT_OK,intent);
+                        finish();
+                    }
                 }else {
                     ToastUtil.showTextShort(mContext,"请选择分派人员");
                 }
@@ -113,46 +120,6 @@ public class AssignSelectActivity extends BaseActivity{
                     personList = baseEntity.getData();
                     adapter = new AssignSelectAdapter(mContext,personList);
                     mListView.setAdapter(adapter);
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        });
-    }
-
-
-    /**
-     *为故障单分配维修人员
-     * @param id 故障申请单的ID
-     * @param repairId 维修人ID
-     * @param repairName 维修人名称
-     * @param repairContact 联系方式
-     */
-    private void submitAssign(String id,String repairId,String repairName,String repairContact){
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",id);
-        map.put("repairId",repairId);
-        map.put("repairName",repairName);
-        map.put("repairContact",repairContact);
-
-        RetrofitManage.getInstance().subscribe(Api.getInstance().submitAssign(map), new Observer<BaseEntity<String>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(BaseEntity<String> baseEntity) {
-                LogManager.printErrorLog("backinfo", GsonUtils.getInstance().toJson(baseEntity));
-                if (baseEntity.getData() != null) {
-//                    adapter = new AssignSelectAdapter(mContext,baseEntity.getData());
-//                    mListView.setAdapter(adapter);
                 }
             }
 

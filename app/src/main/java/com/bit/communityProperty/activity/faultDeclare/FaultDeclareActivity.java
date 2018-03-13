@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.bit.communityProperty.R;
-import com.bit.communityProperty.activity.faultDeclare.fragment.EvaluateFaultActivity;
+import com.bit.communityProperty.activity.faultDeclare.fragment.EvaluateFaultFragment;
 import com.bit.communityProperty.activity.faultManager.fragment.CheckFaultFragment;
 import com.bit.communityProperty.activity.faultManager.fragment.WaitFaultFragment;
 import com.bit.communityProperty.base.BaseActivity;
@@ -28,6 +28,7 @@ public class FaultDeclareActivity extends BaseActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private TabLayout tabLayout;//顶部菜单
     private ViewPager mViewPager;
+    private int TYPE = 0;//(0：故障申报进来的，1：是故障管理进来的)
 
     @Override
     public int getLayoutId() {
@@ -88,13 +89,13 @@ public class FaultDeclareActivity extends BaseActivity {
         public Fragment getItem(int position) {
 //            return PlaceholderFragment.newInstance(position + 1,mContext);
             if (position==0) {//全部
-                return AllFaultFragment.newInstance(position + 1, mContext);
+                return AllFaultFragment.newInstance(TYPE,position + 1, mContext);
             }else if (position==1){//待受理
-                return WaitFaultFragment.newInstance(position + 1, mContext);
+                return WaitFaultFragment.newInstance(TYPE,position + 1, mContext);
             }else if (position==1) {//待检修
-                return CheckFaultFragment.newInstance(position + 1, mContext);
+                return CheckFaultFragment.newInstance(TYPE,position + 1, mContext);
             }else {//待评价
-                return EvaluateFaultActivity.newInstance(position + 1, mContext);
+                return EvaluateFaultFragment.newInstance(TYPE,position + 1, mContext);
             }
         }
 

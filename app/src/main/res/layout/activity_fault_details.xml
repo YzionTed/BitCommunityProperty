@@ -255,6 +255,40 @@
                     android:textColor="@color/tv_black_33"
                     android:textSize="14sp" />
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_selete_people"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="15dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:text="维修人员"
+                    android:textColor="@color/tv_gray_66"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_repair_user_selete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="right"
+                    android:singleLine="true"
+                    android:textColor="@color/tv_black_33"
+                    android:textSize="14sp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/more_gray"/>
+            </LinearLayout>
 
             <!--维修人员布局：看情况是否显示这个布局-->
             <LinearLayout
@@ -335,7 +369,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -354,14 +389,6 @@
                         android:text="评价等级"
                         android:textColor="@color/tv_gray_66"
                         android:textSize="14sp" />
-
-                    <!--<TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:text="星号布局"
-                        android:textSize="20sp" />-->
                     <com.bit.communityProperty.view.StarsView.StarsView
                         android:id="@+id/view_stars"
                         android:layout_width="wrap_content"
