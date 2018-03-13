@@ -21,7 +21,6 @@ import com.bit.communityProperty.activity.faultDeclare.FaultDeclareActivity;
 import com.bit.communityProperty.activity.faultManager.FaultManagementActivity;
 import com.bit.communityProperty.activity.household.HouseholdManagementActivity;
 import com.bit.communityProperty.activity.propertyFee.PropertyFeeActivity;
-import com.bit.communityProperty.activity.propertyFee.fragment.PropertyFeeFragment;
 import com.bit.communityProperty.activity.repairwork.RepairWorkListActivity;
 import com.bit.communityProperty.activity.safetywarning.SafeWarningListActivity;
 import com.bit.communityProperty.activity.securityclock.SecurityClockListActivity;
@@ -46,8 +45,9 @@ import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.utils.ViewHolder;
 import com.bit.communityProperty.widget.NoScrollGridView;
-import com.bumptech.glide.Glide;
 import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -92,9 +92,9 @@ public class MainWorkFragment extends BaseFragment {
      */
     private String[] managerTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator, AppConfig.Work_Schedule,
             AppConfig.Device_Management, AppConfig.Household_Management, AppConfig.Security_Alarm,
-            AppConfig.Fault_Management,AppConfig.Online_Consultation};
+            AppConfig.Fault_Management, AppConfig.Online_Consultation};
     private int[] managerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb,
-            R.mipmap.ic_work_sbgl, R.mipmap.ic_work_zhgl, R.mipmap.ic_work_afjb, R.mipmap.ic_work_gzgl,R.mipmap.ic_work_zxzx};
+            R.mipmap.ic_work_sbgl, R.mipmap.ic_work_zhgl, R.mipmap.ic_work_afjb, R.mipmap.ic_work_gzgl, R.mipmap.ic_work_zxzx};
 
     /**
      * 保安门卫
@@ -122,11 +122,12 @@ public class MainWorkFragment extends BaseFragment {
     private int[] repairmanImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_wxgd};
 
     private String ROLE_TYPE;
+    private boolean isIMLogin;
 
     public static MainWorkFragment newInstance(String type) {
         MainWorkFragment fragment = new MainWorkFragment();
         Bundle args = new Bundle();
-        args.putString(AppConfig.ROLE_TYPE,type);
+        args.putString(AppConfig.ROLE_TYPE, type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -139,9 +140,9 @@ public class MainWorkFragment extends BaseFragment {
     @Override
     protected void initViewAndData() {
         Bundle bundle = getArguments();
-        if (bundle!=null){
+        if (bundle != null) {
             ROLE_TYPE = bundle.getString(AppConfig.ROLE_TYPE);
-        }else{
+        } else {
             ROLE_TYPE = (String) SPUtil.get(mContext, AppConfig.ROLE_TYPE, AppConfig.ROLE_MANAGER);
         }
 
@@ -170,7 +171,7 @@ public class MainWorkFragment extends BaseFragment {
                             tvLocal.setText((String) SPUtil.get(mContext, AppConfig.CITY, "包头市"));
                         }
                     }
-                }else if (o instanceof LoginData){
+                } else if (o instanceof LoginData) {
                     ROLE_TYPE = ((LoginData) o).getRoles().get(0);
                     initTabData();
                 }
@@ -188,7 +189,7 @@ public class MainWorkFragment extends BaseFragment {
 
             @Override
             public void onNext(BaseEntity<List<BannerBean>> bannerBeanBaseEntity) {
-                if (bannerBeanBaseEntity.isSuccess()){
+                if (bannerBeanBaseEntity.isSuccess()) {
                     List<BannerBean> list = bannerBeanBaseEntity.getData();
                     banner.setPages(list, new MZHolderCreator<BannerViewHolder>() {
                         @Override
@@ -275,29 +276,59 @@ public class MainWorkFragment extends BaseFragment {
 ////                                NimUIKit.startP2PSession(getContext(), (String) SPUtil.get(mContext, AppConfig.phone, ""));
 //                                    NimUIKit.startP2PSession(getContext(), "15900020005");
 //                                }
-                                startActivity(new Intent(mContext, OnlineActivity.class));
+
+                                if (isIMLogin) {
+                                    startActivity(new Intent(mContext, OnlineActivity.class));
+                                } else {
+                                    String uid = (String) SPUtil.get(mContext, AppConfig.id, "");
+                                    String token = (String) SPUtil.get(mContext, AppConfig.token, "");
+                                    NimUIKit.login(new LoginInfo(uid, token), new RequestCallback<LoginInfo>() {
+                                        @Override
+                                        public void onSuccess(LoginInfo param) {
+                                            isIMLogin = true;
+                                            startActivity(new Intent(mContext, OnlineActivity.class));
+                                        }
+
+                                        @Override
+                                        public void onFailed(int code) {
+                                        }
+
+                                        @Override
+                                        public void onException(Throwable exception) {
+                                        }
+                                    });
+                                }
+
                                 break;
                             case AppConfig.Patrol_Punch://巡逻打卡
+
                                 startActivity(new Intent(mContext, SecurityClockListActivity.class));
                                 break;
                             case AppConfig.Fault_Reporting://故障申报
+
                                 startActivity(new Intent(mContext, FaultDeclareActivity.class));
                                 break;
                             case AppConfig.Scanning_Release://条形扫码
+
                                 startActivity(new Intent(mContext, CaptureActivity.class));
                                 break;
                             case AppConfig.Punch_Cleaning://保洁打卡
+
                                 startActivity(new Intent(mContext, CleanClockListActivity.class));
                                 break;
                             case AppConfig.Repair_Orders://维修工单
+
                                 startActivity(new Intent(mContext, RepairWorkListActivity.class));
                                 break;
                         }
                     }
                 });
             }
-        };
+        }
+
+        ;
         nsGrid.setAdapter(mAdapter);
+
         initTabData();
     }
 
@@ -438,7 +469,7 @@ public class MainWorkFragment extends BaseFragment {
         public void onBind(Context context, int position, BannerBean data) {
             // 数据绑定
 //            mImageView.setImageResource(data);
-            GlideUtils.loadImage(context,OssManager.getInstance().getUrl(data.getMaterialUrl()),mImageView);
+            GlideUtils.loadImage(context, OssManager.getInstance().getUrl(data.getMaterialUrl()), mImageView);
         }
     }
 }
