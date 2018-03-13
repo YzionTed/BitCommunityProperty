@@ -31,6 +31,8 @@ import com.bit.communityProperty.utils.TimeUtils;
 import com.bit.communityProperty.utils.UploadInfo;
 import com.github.jdsjlzx.ItemDecoration.DividerDecoration;
 import com.github.jdsjlzx.interfaces.OnItemClickListener;
+import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
+import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.github.jdsjlzx.view.CommonHeader;
@@ -70,6 +72,10 @@ public class MainNewsFragment extends BaseFragment {
     private LinearLayout llEmpty;
 
     private List<MainNewsBean.RecordsBean> noticeList;
+    private MainNewsBean mainNewsBean;
+    private int page = 1;
+    private boolean isRefresh = true;
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_main_news;
@@ -85,8 +91,8 @@ public class MainNewsFragment extends BaseFragment {
 
             @Override
             public void accept(Object o) throws Exception {
-                if (o instanceof String){
-                    if (o!=null&&o.equals("location")){
+                if (o instanceof String) {
+                    if (o != null && o.equals("location")) {
                         getWeatherInfo();
                     }
                 }
@@ -94,7 +100,7 @@ public class MainNewsFragment extends BaseFragment {
         });
     }
 
-    private void getWeatherInfo(){
+    private void getWeatherInfo() {
         Map<String, Object> map = new HashMap<>();
         map.put("city", SPUtil.get(mActivity, AppConfig.CITY, "包头市"));
         RetrofitManage.getInstance().subscribe(Api.getInstance().getWeatherInfo(map), new Observer<BaseEntity<WeatherInfoBean>>() {
@@ -105,11 +111,11 @@ public class MainNewsFragment extends BaseFragment {
 
             @Override
             public void onNext(BaseEntity<WeatherInfoBean> weatherInfoBeanBaseEntity) {
-                if (weatherInfoBeanBaseEntity.isSuccess()){
+                if (weatherInfoBeanBaseEntity.isSuccess()) {
                     WeatherInfoBean weatherInfoBean = weatherInfoBeanBaseEntity.getData();
-                    tvTemperature.setText(weatherInfoBean.getLow()+"/"+weatherInfoBean.getHigh()+"℃");
+                    tvTemperature.setText(weatherInfoBean.getLow() + "/" + weatherInfoBean.getHigh() + "℃");
                     tvWeather.setText(weatherInfoBean.getType());
-                    tvQuality.setText("空气质量指数："+weatherInfoBean.getAqi()+" "+weatherInfoBean.getQuality());
+                    tvQuality.setText("空气质量指数：" + weatherInfoBean.getAqi() + " " + weatherInfoBean.getQuality());
                 }
             }
 
@@ -125,9 +131,16 @@ public class MainNewsFragment extends BaseFragment {
         });
     }
 
-    private void getNoticeList(){
+    private void getNoticeList() {
         Map<String, Object> map = new HashMap<>();
-        map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        map.put("communityId", AppConfig.COMMUNITYID);
+        if (isRefresh) {
+            page = 1;
+        } else {
+            page++;
+        }
+        map.put("page", page);
+        map.put("size", AppConfig.pageSize);
         RetrofitManage.getInstance().subscribe(Api.getInstance().getNoticeList(map), new Observer<BaseEntity<MainNewsBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -136,25 +149,36 @@ public class MainNewsFragment extends BaseFragment {
 
             @Override
             public void onNext(BaseEntity<MainNewsBean> listBaseEntity) {
-                if (listBaseEntity.isSuccess()){
+                rlvNews.refreshComplete(AppConfig.pageSize);
+                if (listBaseEntity.isSuccess()) {
+                    mainNewsBean = listBaseEntity.getData();
                     noticeList = listBaseEntity.getData().getRecords();
-                    if (noticeList!=null&&noticeList.size()>0){
-                        llEmpty.setVisibility(View.GONE);
-                        newsAdapter.setDataList(noticeList);
-                    }else{
-                        llEmpty.setVisibility(View.VISIBLE);
+                    if (isRefresh) {
+                        if (mainNewsBean.getCurrentPage() < mainNewsBean.getTotalPage()) {
+                            rlvNews.setLoadMoreEnabled(true);
+                        } else {
+                            rlvNews.setLoadMoreEnabled(false);
+                        }
+                        if (noticeList != null && noticeList.size() > 0) {
+                            llEmpty.setVisibility(View.GONE);
+                            newsAdapter.setDataList(noticeList);
+                        } else {
+                            llEmpty.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        newsAdapter.addAll(noticeList);
                     }
                 }
             }
 
             @Override
             public void onError(Throwable e) {
-
+                rlvNews.refreshComplete(AppConfig.pageSize);
             }
 
             @Override
             public void onComplete() {
-
+                rlvNews.refreshComplete(AppConfig.pageSize);
             }
         });
     }
@@ -195,12 +219,30 @@ public class MainNewsFragment extends BaseFragment {
         rlvNews.addItemDecoration(divider);
         rlvNews.setAdapter(mLRecyclerViewAdapter);
         rlvNews.setLayoutManager(new LinearLayoutManager(mActivity));
-        rlvNews.setPullRefreshEnabled(false);
-        rlvNews.setLoadMoreEnabled(false);
+        rlvNews.setPullRefreshEnabled(true);
+        rlvNews.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                isRefresh = true;
+                getNoticeList();
+                getWeatherInfo();
+            }
+        });
+        rlvNews.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                if (mainNewsBean.getCurrentPage() < mainNewsBean.getTotalPage()) {
+                    isRefresh = false;
+                    getNoticeList();
+                } else {
+                    rlvNews.setNoMore(true);
+                }
+            }
+        });
         mLRecyclerViewAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent=new Intent(getActivity(), NewsDetail.class);
+                Intent intent = new Intent(getActivity(), NewsDetail.class);
                 intent.putExtra("id", noticeList.get(position).getId());
                 startActivity(intent);
             }
@@ -223,7 +265,7 @@ public class MainNewsFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (timer!=null){
+        if (timer != null) {
             timer.cancel();
         }
     }
