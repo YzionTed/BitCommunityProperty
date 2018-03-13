@@ -123,6 +123,7 @@ public interface HttpService {
 
     /**
      * 获取小区详情
+     *
      * @param id
      * @return
      */
@@ -231,6 +232,7 @@ public interface HttpService {
 
     /**
      * 设备管理-获取门禁使用记录
+     *
      * @param map
      * @return
      */
@@ -266,7 +268,8 @@ public interface HttpService {
     /**
      * 住户管理模块
      * 按社区获取用户列表
-     * @param url  v1/user/{communityId}/getByCommunityId
+     *
+     * @param url v1/user/{communityId}/getByCommunityId
      * @return
      */
     @GET
@@ -274,7 +277,8 @@ public interface HttpService {
 
     /**
      * 根据社区统计各楼宇有效业主数量
-     * @param url  "/v1/user/{communityId}/proprietors-statistics"
+     *
+     * @param url "/v1/user/{communityId}/proprietors-statistics"
      * @return
      */
     @GET
@@ -282,7 +286,8 @@ public interface HttpService {
 
     /**
      * 按楼宇ID获取用户关系列表
-     * @param url  "/v1/user/{buildingId}/by-building-id
+     *
+     * @param url "/v1/user/{buildingId}/by-building-id
      * @return
      */
     @GET
@@ -291,6 +296,7 @@ public interface HttpService {
     /**
      * 审核房屋认证
      * （0：未审核；1：审核通过；-1：驳回；-2：违规; 2: 已注销; 3: 已解绑;）
+     *
      * @param map
      * @return
      */
@@ -349,7 +355,8 @@ public interface HttpService {
      */
     @POST("/v1/communityIoT/door/auth/list")
     Observable<BaseEntity<List<DoorMILiBean>>> getDoorAuthList(@Body Map<String, Object> map);
-   /**
+
+    /**
      * 经过后台请求，得到电梯物联网的电梯数据
      *
      * @param
@@ -360,6 +367,7 @@ public interface HttpService {
 
     /**
      * 获取版本更新
+     *
      * @param appId
      * @param sequence
      * @return
@@ -369,13 +377,15 @@ public interface HttpService {
 
     /**
      * 设备管理-获取车闸列表
+     *
      * @return
      */
     @POST("/v1/vehicle/car-gate/page")
-    Observable<BaseEntity<CarBrakeBean>> getCarGateList(@Query("page") int page,@Query("size") int size);
+    Observable<BaseEntity<CarBrakeBean>> getCarGateList(@Query("page") int page, @Query("size") int size);
 
     /**
      * 设备管理-获取车闸进出详情
+     *
      * @param map
      * @return
      */
@@ -384,6 +394,7 @@ public interface HttpService {
 
     /**
      * 设备管理-获取电梯列表
+     *
      * @return
      */
     @POST("/v1/communityIoT/elevator/list")
@@ -397,6 +408,7 @@ public interface HttpService {
 
     /**
      * 获取轮播图
+     *
      * @param map
      * @return
      */
@@ -435,6 +447,7 @@ public interface HttpService {
 
     /**
      * 查询虚拟卡片
+     *
      * @param map
      * @return
      */

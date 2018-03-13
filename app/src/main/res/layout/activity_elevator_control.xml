@@ -28,8 +28,8 @@
                 app:progress_bg_color="#e6f2fe"
                 app:progress_location="top"
                 app:progress_paint_color="#606ff8"
-                app:progress_sweep_angle="360"
-                app:progress_paint_width="5dp"/>
+                app:progress_paint_width="5dp"
+                app:progress_sweep_angle="360" />
 
             <ImageView
                 android:id="@+id/iv_open"
@@ -50,13 +50,13 @@
     </LinearLayout>
 
     <TextView
-        android:drawablePadding="10dp"
         android:id="@+id/tv_change"
         android:layout_width="match_parent"
         android:layout_height="54dp"
         android:layout_marginTop="10dp"
         android:background="@color/white"
         android:drawableLeft="@mipmap/icon_access_change"
+        android:drawablePadding="10dp"
         android:drawableRight="@mipmap/more_gray"
         android:gravity="center_vertical"
         android:padding="16dp"

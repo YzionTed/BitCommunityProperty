@@ -20,6 +20,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.bit.communityProperty.Bluetooth.util.BluetoothNetUtils;
 import com.bit.communityProperty.Bluetooth.yunduijiang.YunDuiJIangUtils;
 import com.bit.communityProperty.MyApplication;
 import com.bit.communityProperty.R;
@@ -31,6 +32,8 @@ import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.bean.AppVersionInfo;
 import com.bit.communityProperty.bean.CardListBean;
 import com.bit.communityProperty.bean.IMToken;
+import com.bit.communityProperty.bean.StoreDoorMILiBeanList;
+import com.bit.communityProperty.bean.StoreElevatorListBeans;
 import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.fragment.main.MainMineFragment;
 import com.bit.communityProperty.fragment.main.MainNewsFragment;
@@ -101,6 +104,8 @@ public class MainActivity extends BaseActivity {
     private String downloadUrl;
 
     private String ROLE_TYPE;
+    private BluetoothNetUtils bluetoothNetUtils;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
@@ -154,6 +159,48 @@ public class MainActivity extends BaseActivity {
         });
 
         createAccountId();//测试云信
+        upBlueToothDate();
+    }
+
+    /**
+     * 更新蓝牙数据
+     */
+    public void upBlueToothDate(){
+        miLiUpDate();
+        upElevatorDate();
+    }
+    /**
+     * 米粒的数据更新缓存
+     */
+    private void miLiUpDate() {
+        if (bluetoothNetUtils == null) {
+            bluetoothNetUtils = new BluetoothNetUtils();
+        }
+        StoreDoorMILiBeanList doorMILiBeans = bluetoothNetUtils.getBletoothDoorDate();
+        if (doorMILiBeans != null) {
+            if (doorMILiBeans.isTimeOutNow()) {
+                bluetoothNetUtils.getMiLiNetDate(null, 2, null);
+            }
+        } else {
+            bluetoothNetUtils.getMiLiNetDate(null, 2, null);
+        }
+    }
+
+    /**
+     * 电梯蓝牙的数据更新缓存
+     */
+    private void upElevatorDate() {
+        if (bluetoothNetUtils == null) {
+            bluetoothNetUtils = new BluetoothNetUtils();
+        }
+        StoreElevatorListBeans bletoothElevateDate = bluetoothNetUtils.getBletoothElevateDate();
+        if (bletoothElevateDate != null) {
+            if (bletoothElevateDate.isTimeOutNow()) {
+                bluetoothNetUtils.getBluetoothElevatorDate(2, null);
+            }
+        } else {
+            bluetoothNetUtils.getBluetoothElevatorDate( 2, null);
+        }
     }
 
     private void getCardList(){
@@ -390,6 +437,7 @@ public class MainActivity extends BaseActivity {
                         tabitem.setChecked(false);
                     }
                 }
+                upBlueToothDate();
             }
         });
     }
@@ -402,6 +450,7 @@ public class MainActivity extends BaseActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (mIsExit) {
                 toast.cancel();
+              //  MyApplication.getInstance().getBlueToothApp().closeBluetooth();
                 MyApplication.getInstance().exitApp();
             } else {
                 if (toast == null) {
