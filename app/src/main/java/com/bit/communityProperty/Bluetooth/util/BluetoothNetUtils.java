@@ -4,6 +4,7 @@ package com.bit.communityProperty.Bluetooth.util;
  * Created by Dell on 2018/3/8.
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -41,10 +42,12 @@ public class BluetoothNetUtils {
     private static final String TAG = "BluetoothNetUtils";
     public final String user_id;
     public String communityId;
+    private Context context;
 
-    public BluetoothNetUtils() {
+    public BluetoothNetUtils(Context context) {
+        this.context = context;
         user_id = (String) SPUtil.get(MyApplication.getInstance(), AppConfig.id, "");
-        communityId = "5a82adf3b06c97e0cd6c0f3d";
+        communityId = AppConfig.COMMUNITYID;
     }
 
     /**
@@ -58,12 +61,17 @@ public class BluetoothNetUtils {
 
         if (!isNetworkAvailable(MyApplication.getInstance())) {
             if (type == 1) {
-                ToastUtil.showShort("连接异常，请检查网络");
+                ((Activity) context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtil.showShort("连接异常，请检查网络");
+                    }
+                });
             }
             return;
         }
         Map<String, Object> getDoorAuth = new HashMap<>();
-        getDoorAuth.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        getDoorAuth.put("communityId", AppConfig.COMMUNITYID);
         RetrofitManage.getInstance().subscribe(Api.getInstance().getDoorAuthList(getDoorAuth), new Observer<BaseEntity<List<DoorMILiBean>>>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -71,7 +79,7 @@ public class BluetoothNetUtils {
             }
 
             @Override
-            public void onNext(BaseEntity<List<DoorMILiBean>> logindata) {
+            public void onNext(final BaseEntity<List<DoorMILiBean>> logindata) {
                 if (logindata.getErrorCode().equals("0")) {
 
                     if (logindata != null) {
@@ -91,7 +99,13 @@ public class BluetoothNetUtils {
                                 if (onBlutoothDoorCallBackListener != null) {
                                     onBlutoothDoorCallBackListener.OnCallBack(2, null);
                                 }
-                                ToastUtil.showShort("您还没有可以开锁的设备");
+
+                                ((Activity) context).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ToastUtil.showShort("您还没有可以开锁的设备");
+                                    }
+                                });
                             }
                         }
                     } else {
@@ -99,7 +113,14 @@ public class BluetoothNetUtils {
                             if (onBlutoothDoorCallBackListener != null) {
                                 onBlutoothDoorCallBackListener.OnCallBack(2, null);
                             }
-                            ToastUtil.showShort("您还没有可以开锁的设备");
+
+                            ((Activity) context).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ToastUtil.showShort("您还没有可以开锁的设备");
+                                }
+                            });
+
                         }
                     }
                 } else {
@@ -107,7 +128,14 @@ public class BluetoothNetUtils {
                         if (onBlutoothDoorCallBackListener != null) {
                             onBlutoothDoorCallBackListener.OnCallBack(2, null);
                         }
-                        ToastUtil.showShort(logindata.getErrorMsg());
+
+                        ((Activity) context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtil.showShort(logindata.getErrorMsg());
+                            }
+                        });
+
                     }
                 }
             }
@@ -148,7 +176,7 @@ public class BluetoothNetUtils {
             }
 
             @Override
-            public void onNext(BaseEntity<List<ElevatorListBean>> listBaseEntity) {
+            public void onNext(final BaseEntity<List<ElevatorListBean>> listBaseEntity) {
                 if (listBaseEntity.isSuccess()) {
                     if (listBaseEntity.getData() != null) {
                         if (listBaseEntity.getData().size() > 0) {
@@ -166,30 +194,55 @@ public class BluetoothNetUtils {
                                 if (onBlutoothDoorCallBackListener != null) {
                                     onBlutoothDoorCallBackListener.OnCallBack(2, null);
                                 }
-                                ToastUtil.showShort("没有找到您可以开的电梯");
+
+                                ((Activity) context).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        ToastUtil.showShort("没有找到您可以开的电梯");
+                                    }
+                                });
+
                             }
                         }
-                    }
-                    if (type == 1) {
+                    } else if (type == 1) {
                         if (onBlutoothDoorCallBackListener != null) {
                             onBlutoothDoorCallBackListener.OnCallBack(2, null);
                         }
-                        ToastUtil.showShort("没有找到您可以开的电梯");
+
+                        ((Activity) context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtil.showShort("没有找到您可以开的电梯");
+                            }
+                        });
+
                     }
                 } else {
                     if (type == 1) {
                         if (onBlutoothDoorCallBackListener != null) {
                             onBlutoothDoorCallBackListener.OnCallBack(2, null);
                         }
-                        ToastUtil.showShort(listBaseEntity.getErrorMsg());
+
+                        ((Activity) context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtil.showShort(listBaseEntity.getErrorMsg());
+                            }
+                        });
                     }
                 }
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onError(final Throwable e) {
                 if (onBlutoothDoorCallBackListener != null) {
-                    ToastUtil.showShort(e.getMessage());
+
+                    ((Activity) context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtil.showShort(e.getMessage());
+                        }
+                    });
                     onBlutoothDoorCallBackListener.OnCallBack(2, null);
                 }
             }

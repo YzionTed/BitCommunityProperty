@@ -54,13 +54,12 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public enum RetrofitManage {
     INSTANCE;
 
-//    public static String BASE_URL = "http://39.106.249.8:9000"; // 测试环境API环境
+    //    public static String BASE_URL = "http://39.106.249.8:9000"; // 测试环境API环境
     public static String BASE_URL = "https://apismcm.test.bitiot.com.cn"; // 测试环境API环境
-//    public static String BASE_URL = "http://192.168.10.151:9000"; // 测试小宇电脑id
+    //    public static String BASE_URL = "http://192.168.10.151:9000"; // 测试小宇电脑id
 //    public static String BASE_URL = "https://api.smcm.bitiot.com.cn"; // 生产环境API环境 api.smcm.bitiot.com.cn
     private static Retrofit mRetrofit;
     private static HttpService mHttpService;
-
 
 //    public static String SKU_URL = getSkuUrl(); // 自动获取API环境
 //    public static String SKU_URL = "https://api.e-gatenet.cn/";
@@ -105,17 +104,17 @@ public enum RetrofitManage {
                     Request request = chain.request()
                             .newBuilder()
                             .addHeader(AppConfig.OS, "2")
-                            .addHeader("OS-VERSION",AppUtil.getSystemVersion())
+                            .addHeader("OS-VERSION", AppUtil.getSystemVersion())
                             .addHeader("CLIENT", "1001")
                             .addHeader("APP-VERSION", AppUtil.getVersionName(MyApplication.getInstance()))
                             .addHeader("DEVICE-TYPE", AppUtil.getSystemModel())
-                            .addHeader("DEVICE-ID",AppUtil.getImei())
+                            .addHeader("DEVICE-ID", AppUtil.getImei())
                             .addHeader(AppConfig.BIT_UID, (String) SPUtil.get(MyApplication.getInstance(), AppConfig.id, ""))
                             .addHeader(AppConfig.BIT_TOKEN, (String) SPUtil.get(MyApplication.getInstance(), AppConfig.token, ""))
                             .addHeader("PUSH-ID", JPushInterface.getRegistrationID(MyApplication.getInstance()))
-                            .addHeader("Content-Type","application/json")
+                            .addHeader("Content-Type", "application/json")
                             .build();
-                    Log.e("header===","header=="+request.headers().toString());
+                    Log.e("header===", "header==" + request.headers().toString());
                     return chain.proceed(request);
                 }
             });
@@ -217,7 +216,7 @@ public enum RetrofitManage {
                     switch (response.body().errorCode) {
 
                         case "1000"://请求成功
-                            Log.e("responce","responce=="+response.body().toString());
+                            Log.e("responce", "responce==" + response.body().toString());
                             break;
 
                         case "9050001"://token失效
@@ -308,7 +307,7 @@ public enum RetrofitManage {
 
             @Override
             public void onError(Throwable e) {
-                ToastUtil.showSingletonText(MyApplication.getInstance(),ThrowableUtils.getInstance(MyApplication.getInstance()).catchHttpConnectException(e),3000);
+                ToastUtil.showSingletonText(MyApplication.getInstance(), ThrowableUtils.getInstance(MyApplication.getInstance()).catchHttpConnectException(e), 3000);
                 observer.onError(e);
             }
 

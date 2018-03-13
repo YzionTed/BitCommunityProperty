@@ -162,7 +162,7 @@ public class MainActivity extends BaseActivity {
      */
     private void miLiUpDate() {
         if (bluetoothNetUtils == null) {
-            bluetoothNetUtils = new BluetoothNetUtils();
+            bluetoothNetUtils = new BluetoothNetUtils(this);
         }
         StoreDoorMILiBeanList doorMILiBeans = bluetoothNetUtils.getBletoothDoorDate();
         if (doorMILiBeans != null) {
@@ -179,7 +179,7 @@ public class MainActivity extends BaseActivity {
      */
     private void upElevatorDate() {
         if (bluetoothNetUtils == null) {
-            bluetoothNetUtils = new BluetoothNetUtils();
+            bluetoothNetUtils = new BluetoothNetUtils(this);
         }
         StoreElevatorListBeans bletoothElevateDate = bluetoothNetUtils.getBletoothElevateDate();
         if (bletoothElevateDate != null) {

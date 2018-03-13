@@ -63,9 +63,13 @@ public class MonitorListActivity extends BaseActivity {
         initDate();
     }
 
+    //    public String strCloudServerUrl = "http://ezcloud.uniview.com";
+//    public String strCloudUserName = "Ib77w2";
+//    public String strCloudPassword = "bit@123456";
+
     public String strCloudServerUrl = "http://ezcloud.uniview.com";
-    public String strCloudUserName = "Ib77w2";
-    public String strCloudPassword = "bit@123456";
+    public String strCloudUserName = "j00504";
+    public String strCloudPassword = "j00504";
 
     /**
      * 初始化摄像头数据
@@ -82,22 +86,18 @@ public class MonitorListActivity extends BaseActivity {
             int dwFileHandle = NetDEVSDK.NETDEV_FindCloudDevList(NetDEVSDK.glpcloudID);
             if (dwFileHandle == 0) {
                 Log.e(Tag, "搜索云端设备失败");
-            }else {
+            } else {
                 Log.e(Tag, "搜索云端设备成功");
                 String[] szDevList = new String[10];
                 int dwCount = 0;
                 NETDEV_CLOUD_DEV_INFO_S stclouddeviceinfo = new NETDEV_CLOUD_DEV_INFO_S();
-                for(int i = 0;i < 10; i++)
-                {
+                for (int i = 0; i < 10; i++) {
                     String strMeg = "";
                     String strOut = "";
                     int iRet = NetDEVSDK.NETDEV_FindNextCloudDevInfo(dwFileHandle, stclouddeviceinfo);
-                    if(0 == iRet)
-                    {
+                    if (0 == iRet) {
                         break;
-                    }
-                    else
-                    {
+                    } else {
                         strMeg = "IP:" + stclouddeviceinfo.szIPAddr + "\n";
                         strOut += strMeg;
                         strMeg = "User Name:" + stclouddeviceinfo.szDevUserName + "\n";
@@ -112,7 +112,7 @@ public class MonitorListActivity extends BaseActivity {
                         strOut += strMeg;
                         szDevList[dwCount++] = strOut;
                     }
-                    Log.e(Tag, "搜索的设备"+strOut);
+                    Log.e(Tag, "搜索的设备" + strOut);
                 }
 
             }
