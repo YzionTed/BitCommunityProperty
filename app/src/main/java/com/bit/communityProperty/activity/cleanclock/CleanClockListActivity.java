@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.alibaba.sdk.android.oss.ClientException;
 import com.alibaba.sdk.android.oss.ServiceException;
 import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.model.OSSRequest;
+import com.alibaba.sdk.android.oss.model.OSSResult;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bit.communityProperty.R;
@@ -23,6 +25,8 @@ import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.net.ThrowableUtils;
+import com.bit.communityProperty.receiver.RxBus;
+import com.bit.communityProperty.utils.LogManager;
 import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.TimeUtils;
@@ -40,6 +44,7 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +54,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import me.leefeng.promptlibrary.PromptDialog;
 
 public class CleanClockListActivity extends BaseActivity {
@@ -225,19 +231,17 @@ public class CleanClockListActivity extends BaseActivity {
                 case PictureConfig.CHOOSE_REQUEST:
                     // 图片选择结果回调
                     List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
-                    // 例如 LocalMedia 里面返回三种path
-                    // 1.media.getPath(); 为原图path
-                    // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
-                    // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
-                    // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
+//                     例如 LocalMedia 里面返回三种path
+//                     1.media.getPath(); 为原图path
+//                     2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
+//                     3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
+//                     如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
                     if (uploadInfo != null) {
                         uploadDialog.showLoading("上传图片中...");
-                        uploadInfo.setBucket("bit-test");
+                        uploadInfo.setBucket(AppConfig.BUCKET_NAME);
                         imgUrl = OssManager.getInstance().uploadFileToAliYun(uploadInfo, selectList.get(0).getPath(), new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
                             @Override
                             public void onSuccess(PutObjectRequest ossRequest, PutObjectResult ossResult) {
-//                                uploadDialog.showSuccess("上传成功");
-//                                uploadDialog.dismiss();
                                 addClock();
                             }
 
@@ -259,7 +263,7 @@ public class CleanClockListActivity extends BaseActivity {
 //        map.put("username", SPUtil.get(this, AppConfig.name, ""));
         map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
         map.put("taskType", 2);
-        map.put("url", uploadInfo.getName());
+        map.put("url", imgUrl);
 //        map.put("creatorId", SPUtil.get(this, AppConfig.id, ""));
 //        map.put("createAt", TimeUtils.getCurrentTimeWithT());
 //        map.put("dataStatus", "1");
