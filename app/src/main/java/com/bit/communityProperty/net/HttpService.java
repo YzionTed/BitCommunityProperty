@@ -25,6 +25,7 @@ import com.bit.communityProperty.bean.AppVersionInfo;
 import com.bit.communityProperty.bean.CardListBean;
 import com.bit.communityProperty.bean.DoorMILiBean;
 import com.bit.communityProperty.bean.LoginData;
+import com.bit.communityProperty.bean.OnlineData;
 import com.bit.communityProperty.bean.PublicKeybean;
 import com.bit.communityProperty.bean.SkuAccountInfo;
 import com.bit.communityProperty.fragment.main.bean.BannerBean;
@@ -253,6 +254,14 @@ public interface HttpService {
      */
     @GET
     Observable<BaseEntity<OwnerApplyNumBean>> getOwnerApplyNum(@Url String url);
+
+    /**
+     * 在线客服
+     * ("/v1/user/property/{communityId}/user-list")
+     */
+
+    @GET
+    Observable<BaseEntity<ArrayList<OnlineData>>> online(@Url String url, @QueryMap Map<String, Object> map);
 
     /**
      * 住户管理模块

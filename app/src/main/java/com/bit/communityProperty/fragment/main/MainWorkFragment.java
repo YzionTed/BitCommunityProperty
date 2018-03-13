@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.Zxing.CaptureActivity;
+import com.bit.communityProperty.activity.OnlineActivity;
 import com.bit.communityProperty.activity.access.DoorControlActivity;
 import com.bit.communityProperty.activity.cleanclock.CleanClockListActivity;
 import com.bit.communityProperty.activity.deviceManagement.DeviceManagementActivity;
@@ -91,9 +92,9 @@ public class MainWorkFragment extends BaseFragment {
      */
     private String[] managerTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator, AppConfig.Work_Schedule,
             AppConfig.Device_Management, AppConfig.Household_Management, AppConfig.Security_Alarm,
-            AppConfig.Fault_Management};
+            AppConfig.Fault_Management,AppConfig.Online_Consultation};
     private int[] managerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb,
-            R.mipmap.ic_work_sbgl, R.mipmap.ic_work_zhgl, R.mipmap.ic_work_afjb, R.mipmap.ic_work_gzgl};
+            R.mipmap.ic_work_sbgl, R.mipmap.ic_work_zhgl, R.mipmap.ic_work_afjb, R.mipmap.ic_work_gzgl,R.mipmap.ic_work_zxzx};
 
     /**
      * 保安门卫
@@ -270,10 +271,11 @@ public class MainWorkFragment extends BaseFragment {
 //                                startActivity(new Intent(mContext, HouseholdManagementActivity.class));//暂时在这调试住户管理
                                 break;
                             case AppConfig.Online_Consultation://在线咨询
-                                if (NimUIKit.getAccount() != null) {
-//                                NimUIKit.startP2PSession(getContext(), (String) SPUtil.get(mContext, AppConfig.phone, ""));
-                                    NimUIKit.startP2PSession(getContext(), "15900020005");
-                                }
+//                                if (NimUIKit.getAccount() != null) {
+////                                NimUIKit.startP2PSession(getContext(), (String) SPUtil.get(mContext, AppConfig.phone, ""));
+//                                    NimUIKit.startP2PSession(getContext(), "15900020005");
+//                                }
+                                startActivity(new Intent(mContext, OnlineActivity.class));
                                 break;
                             case AppConfig.Patrol_Punch://巡逻打卡
                                 startActivity(new Intent(mContext, SecurityClockListActivity.class));
