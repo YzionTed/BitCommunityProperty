@@ -28,6 +28,8 @@ import com.bit.communityProperty.MyApplication;
 import com.inuker.bluetooth.library.BluetoothClientManger;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Dell on 2018/2/10.
@@ -84,12 +86,67 @@ public class BluetoothApplication {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
             scanCallback = initGetCallback();
+            if(mBluetoothLeScanner!=null){
+                mBluetoothLeScanner.startScan(scanCallback);
+            }
+        } else {
+            leScanCallback = leScangetCallback();
+            mBluetoothAdapter.startLeScan(leScanCallback);
+        }
+
+    }
+
+    /**
+     * 搜索蓝牙设备
+     *
+     * @stopMinite 搜索多少秒后停止
+     */
+    // 初始化定时器
+    Timer timer;
+
+    public void scanBluetoothDevice(int stopMinite, final CallBack callBack) {
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                callBack.onCall(getSearchBlueDeviceBeanList());
+                stopScanning();
+                stopTimer();
+                Log.e("lzp", "timer excute");
+            }
+        }, stopMinite);
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Log.d(TAG, "run: stopLeScan...");
+//
+//            }
+//        }, stopMinite);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
+            scanCallback = initGetCallback();
             mBluetoothLeScanner.startScan(scanCallback);
         } else {
             leScanCallback = leScangetCallback();
             mBluetoothAdapter.startLeScan(leScanCallback);
         }
 
+    }
+
+    public interface CallBack {
+        void onCall(ArrayList<SearchBlueDeviceBean> searchBlueDeviceBeanList);
+    }
+
+    // 停止定时器
+    private void stopTimer() {
+        if (timer != null) {
+            timer.cancel();
+            // 一定设置为null，否则定时器不会被回收
+            timer = null;
+        }
     }
 
     @NonNull
@@ -110,7 +167,7 @@ public class BluetoothApplication {
             @Override
             public void onScanResult(int callbackType, ScanResult result) {
                 super.onScanResult(callbackType, result);
-                Log.d(TAG, "  run: startLeScan  sdk>21  ..."+"UUID=="+result.getDevice().getUuids());
+                Log.d(TAG, "  run: startLeScan  sdk>21  ..." + "UUID==" + result.getDevice().getUuids());
 
                 addScanBloothDevice(result.getDevice(), result.getRssi());
             }
@@ -246,8 +303,12 @@ public class BluetoothApplication {
         return true;
     }
 
-
-
+    /**
+     * 关门
+     */
+    public void closeBluetooth() {
+        mBluetoothAdapter.disable();
+    }
 
     /**
      * 是否可以定位

@@ -59,7 +59,15 @@ public class DoorMILiBean extends BaseEntity implements Serializable{
     private Object terminalPort;
     private long updateAt;
     private Object yunDeviceId;
+    private boolean isFirstChecked=false;
 
+    public boolean isFirstChecked() {
+        return isFirstChecked;
+    }
+
+    public void setFirstChecked(boolean checked) {
+        isFirstChecked = checked;
+    }
     private boolean isFirst=false;//要求第一个对象为一件开门
 
     public boolean isFirst() {

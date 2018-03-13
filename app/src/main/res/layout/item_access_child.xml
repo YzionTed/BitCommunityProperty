@@ -3,18 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
+
     android:id="@+id/ll_item"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
+
     android:background="#ffffff"
     android:orientation="horizontal">
 
     <CheckBox
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:clickable="false"
         android:drawablePadding="10dp"
         android:id="@+id/tv_item"
+        android:paddingTop="10dp"
+        android:background="@color/white"
+        android:paddingBottom="10dp"
         android:textColor="@color/tv_black_33"
         android:textSize="@dimen/common_sp_14"
         android:gravity="center_vertical"
