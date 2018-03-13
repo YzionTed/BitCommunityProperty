@@ -39,13 +39,13 @@ public class LiteOrmUtil {
         return getInstance.instance;
     }
 
-    public CardListBean queryById(String userId,String communityId){
-        QueryBuilder<CardListBean> qb = new QueryBuilder<CardListBean>(CardListBean.class)
+    public CardListBean.RecordsBean queryById(String userId,String communityId){
+        QueryBuilder<CardListBean.RecordsBean> qb = new QueryBuilder<CardListBean.RecordsBean>(CardListBean.RecordsBean.class)
                 .whereEquals(CardListBean.USER_ID, userId)
                 .whereAppendAnd()
                 .whereEquals(CardListBean.COMMUNITY_ID, communityId);
         if (liteOrm.query(qb)!=null&&liteOrm.query(qb).size()>0){
-            CardListBean result = liteOrm.query(qb).get(0);
+            CardListBean.RecordsBean result = liteOrm.query(qb).get(0);
             return result;
         }
         return null;

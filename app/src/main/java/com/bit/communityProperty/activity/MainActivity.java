@@ -160,17 +160,19 @@ public class MainActivity extends BaseActivity {
         Map<String, Object> map = new HashMap<>();
         map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
         map.put("userId", SPUtil.get(this, AppConfig.id, ""));
-        RetrofitManage.getInstance().subscribe(Api.getInstance().getCardList(map), new Observer<BaseEntity<List<CardListBean>>>() {
+        RetrofitManage.getInstance().subscribe(Api.getInstance().getCardList(map), new Observer<BaseEntity<CardListBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(BaseEntity<List<CardListBean>> objectBaseEntity) {
+            public void onNext(BaseEntity<CardListBean> objectBaseEntity) {
                 if (objectBaseEntity.isSuccess()){
 //                    LiteOrmUtil.getInstance().getOrm().delete(CardListBean.class);
-                    LiteOrmUtil.getInstance().getOrm().save(objectBaseEntity.getData());
+                    if (objectBaseEntity.getData()!=null){
+                        LiteOrmUtil.getInstance().getOrm().save(objectBaseEntity.getData().getRecords());
+                    }
                 }
             }
 

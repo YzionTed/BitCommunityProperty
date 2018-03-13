@@ -430,5 +430,5 @@ public interface HttpService {
      * @return
      */
     @POST("/v1/user/card/get/list")
-    Observable<BaseEntity<List<CardListBean>>> getCardList(@Body Map<String, Object> map);
+    Observable<BaseEntity<CardListBean>> getCardList(@Body Map<String, Object> map);
 }

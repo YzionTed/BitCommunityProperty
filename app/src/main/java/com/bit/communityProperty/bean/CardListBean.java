@@ -5,238 +5,309 @@ import com.litesuits.orm.db.annotation.PrimaryKey;
 import com.litesuits.orm.db.annotation.Table;
 import com.litesuits.orm.db.enums.AssignType;
 
+import java.util.List;
+
 /**
  * Created by DELL60 on 2018/3/10.
  */
 
-@Table("card_list")
-public class CardListBean {
 
-    /**
-     * communityId : 5a82adf3b06c97e0cd6c0f3d
-     * controlType : 8
-     * createAt : 1520659123778
-     * createId : 5a9a68960cf2378eab90c4b9
-     * dataStatus : 1
-     * endDate : null
-     * id : 5aa36ab39ce9a7a747688c4b
-     * isProcessed : null
-     * keyId : 5aa36ab25136a3a8634424db
-     * keyNo : 08482E7A3900
-     * keyType : 1
-     * name : 李达
-     * processTime : 3097459123778
-     * relevanceId : null
-     * remark : null
-     * startDate : 1520659123778
-     * updateAt : null
-     * useTimes : 0
-     * userId : 5a9a68960cf2378eab90c4b9
-     */
+public class CardListBean {
 
     public static String USER_ID = "userId";
     public static String COMMUNITY_ID = "communityId";
 
-    @NotNull
-    private String communityId;
-    private int controlType;
-    private String createAt;
-    private String createId;
-    private int dataStatus;
-    private String endDate;
 
-    @PrimaryKey(AssignType.BY_MYSELF)
-    private String id;
-    private int isProcessed;
-    private String keyId;
+    /**
+     * currentPage : 1
+     * records : [{"communityId":"5a82adf3b06c97e0cd6c0f3d","controlType":8,"createAt":1520659123778,"createId":"5a9a68960cf2378eab90c4b9","dataStatus":1,"endDate":"fef","id":"5aa36ab39ce9a7a747688c4b","isProcessed":false,"keyId":"5aa36ab25136a3a8634424db","keyNo":"08482E7A3900","keyType":1,"name":"李达","processTime":3097459123778,"relevanceId":"fefe","remark":"fadsf","roomId":"fadd","roomName":"zxcv","startDate":1520659123778,"updateAt":"qwed","useTimes":0,"userId":"5a9a68960cf2378eab90c4b9"}]
+     * total : 1
+     * totalPage : 1
+     */
 
-    @NotNull
-    private String keyNo;
-    private int keyType;
-    private String name;
-    private String processTime;
-    private String relevanceId;
-    private String remark;
-    private String startDate;
-    private String updateAt;
-    private int useTimes;
-    @NotNull
-    private String userId;
+    private int currentPage;
+    private int total;
+    private int totalPage;
+    private List<RecordsBean> records;
 
-    @Override
-    public String toString() {
-        return "CardListBean{" +
-                "communityId='" + communityId + '\'' +
-                ", controlType=" + controlType +
-                ", createAt='" + createAt + '\'' +
-                ", createId='" + createId + '\'' +
-                ", dataStatus=" + dataStatus +
-                ", endDate='" + endDate + '\'' +
-                ", id='" + id + '\'' +
-                ", isProcessed=" + isProcessed +
-                ", keyId='" + keyId + '\'' +
-                ", keyNo='" + keyNo + '\'' +
-                ", keyType=" + keyType +
-                ", name='" + name + '\'' +
-                ", processTime='" + processTime + '\'' +
-                ", relevanceId='" + relevanceId + '\'' +
-                ", remark='" + remark + '\'' +
-                ", startDate='" + startDate + '\'' +
-                ", updateAt='" + updateAt + '\'' +
-                ", useTimes=" + useTimes +
-                ", userId='" + userId + '\'' +
-                '}';
+    public int getCurrentPage() {
+        return currentPage;
     }
 
-    public String getCommunityId() {
-        return communityId;
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
     }
 
-    public void setCommunityId(String communityId) {
-        this.communityId = communityId;
+    public int getTotal() {
+        return total;
     }
 
-    public int getControlType() {
-        return controlType;
+    public void setTotal(int total) {
+        this.total = total;
     }
 
-    public void setControlType(int controlType) {
-        this.controlType = controlType;
+    public int getTotalPage() {
+        return totalPage;
     }
 
-    public String getCreateAt() {
-        return createAt;
+    public void setTotalPage(int totalPage) {
+        this.totalPage = totalPage;
     }
 
-    public void setCreateAt(String createAt) {
-        this.createAt = createAt;
+    public List<RecordsBean> getRecords() {
+        return records;
     }
 
-    public String getCreateId() {
-        return createId;
+    public void setRecords(List<RecordsBean> records) {
+        this.records = records;
     }
 
-    public void setCreateId(String createId) {
-        this.createId = createId;
-    }
+    @Table("card_list")
+    public static class RecordsBean {
+        /**
+         * communityId : 5a82adf3b06c97e0cd6c0f3d
+         * controlType : 8
+         * createAt : 1520659123778
+         * createId : 5a9a68960cf2378eab90c4b9
+         * dataStatus : 1
+         * endDate : fef
+         * id : 5aa36ab39ce9a7a747688c4b
+         * isProcessed : false
+         * keyId : 5aa36ab25136a3a8634424db
+         * keyNo : 08482E7A3900
+         * keyType : 1
+         * name : 李达
+         * processTime : 3097459123778
+         * relevanceId : fefe
+         * remark : fadsf
+         * roomId : fadd
+         * roomName : zxcv
+         * startDate : 1520659123778
+         * updateAt : qwed
+         * useTimes : 0
+         * userId : 5a9a68960cf2378eab90c4b9
+         */
 
-    public int getDataStatus() {
-        return dataStatus;
-    }
+        @NotNull
+        private String communityId;
+        private int controlType;
+        private String createAt;
+        private String createId;
+        private int dataStatus;
+        private String endDate;
 
-    public void setDataStatus(int dataStatus) {
-        this.dataStatus = dataStatus;
-    }
+        @PrimaryKey(AssignType.BY_MYSELF)
+        private String id;
+        private boolean isProcessed;
+        private String keyId;
+        @NotNull
+        private String keyNo;
+        private int keyType;
+        private String name;
+        private String processTime;
+        private String relevanceId;
+        private String remark;
+        private String roomId;
+        private String roomName;
+        private String startDate;
+        private String updateAt;
+        private int useTimes;
+        @NotNull
+        private String userId;
 
-    public String getEndDate() {
-        return endDate;
-    }
+        @Override
+        public String toString() {
+            return "RecordsBean{" +
+                    "communityId='" + communityId + '\'' +
+                    ", controlType=" + controlType +
+                    ", createAt='" + createAt + '\'' +
+                    ", createId='" + createId + '\'' +
+                    ", dataStatus=" + dataStatus +
+                    ", endDate='" + endDate + '\'' +
+                    ", id='" + id + '\'' +
+                    ", isProcessed=" + isProcessed +
+                    ", keyId='" + keyId + '\'' +
+                    ", keyNo='" + keyNo + '\'' +
+                    ", keyType=" + keyType +
+                    ", name='" + name + '\'' +
+                    ", processTime='" + processTime + '\'' +
+                    ", relevanceId='" + relevanceId + '\'' +
+                    ", remark='" + remark + '\'' +
+                    ", roomId='" + roomId + '\'' +
+                    ", roomName='" + roomName + '\'' +
+                    ", startDate='" + startDate + '\'' +
+                    ", updateAt='" + updateAt + '\'' +
+                    ", useTimes=" + useTimes +
+                    ", userId='" + userId + '\'' +
+                    '}';
+        }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
+        public String getCommunityId() {
+            return communityId;
+        }
 
-    public String getId() {
-        return id;
-    }
+        public void setCommunityId(String communityId) {
+            this.communityId = communityId;
+        }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+        public int getControlType() {
+            return controlType;
+        }
 
-    public int getIsProcessed() {
-        return isProcessed;
-    }
+        public void setControlType(int controlType) {
+            this.controlType = controlType;
+        }
 
-    public void setIsProcessed(int isProcessed) {
-        this.isProcessed = isProcessed;
-    }
+        public String getCreateAt() {
+            return createAt;
+        }
 
-    public String getKeyId() {
-        return keyId;
-    }
+        public void setCreateAt(String createAt) {
+            this.createAt = createAt;
+        }
 
-    public void setKeyId(String keyId) {
-        this.keyId = keyId;
-    }
+        public String getCreateId() {
+            return createId;
+        }
 
-    public String getKeyNo() {
-        return keyNo;
-    }
+        public void setCreateId(String createId) {
+            this.createId = createId;
+        }
 
-    public void setKeyNo(String keyNo) {
-        this.keyNo = keyNo;
-    }
+        public int getDataStatus() {
+            return dataStatus;
+        }
 
-    public int getKeyType() {
-        return keyType;
-    }
+        public void setDataStatus(int dataStatus) {
+            this.dataStatus = dataStatus;
+        }
 
-    public void setKeyType(int keyType) {
-        this.keyType = keyType;
-    }
+        public String getEndDate() {
+            return endDate;
+        }
 
-    public String getName() {
-        return name;
-    }
+        public void setEndDate(String endDate) {
+            this.endDate = endDate;
+        }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+        public String getId() {
+            return id;
+        }
 
-    public String getProcessTime() {
-        return processTime;
-    }
+        public void setId(String id) {
+            this.id = id;
+        }
 
-    public void setProcessTime(String processTime) {
-        this.processTime = processTime;
-    }
+        public boolean isProcessed() {
+            return isProcessed;
+        }
 
-    public String getRelevanceId() {
-        return relevanceId;
-    }
+        public void setProcessed(boolean processed) {
+            isProcessed = processed;
+        }
 
-    public void setRelevanceId(String relevanceId) {
-        this.relevanceId = relevanceId;
-    }
+        public String getKeyId() {
+            return keyId;
+        }
 
-    public String getRemark() {
-        return remark;
-    }
+        public void setKeyId(String keyId) {
+            this.keyId = keyId;
+        }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
+        public String getKeyNo() {
+            return keyNo;
+        }
 
-    public String getStartDate() {
-        return startDate;
-    }
+        public void setKeyNo(String keyNo) {
+            this.keyNo = keyNo;
+        }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
+        public int getKeyType() {
+            return keyType;
+        }
 
-    public String getUpdateAt() {
-        return updateAt;
-    }
+        public void setKeyType(int keyType) {
+            this.keyType = keyType;
+        }
 
-    public void setUpdateAt(String updateAt) {
-        this.updateAt = updateAt;
-    }
+        public String getName() {
+            return name;
+        }
 
-    public int getUseTimes() {
-        return useTimes;
-    }
+        public void setName(String name) {
+            this.name = name;
+        }
 
-    public void setUseTimes(int useTimes) {
-        this.useTimes = useTimes;
-    }
+        public String getProcessTime() {
+            return processTime;
+        }
 
-    public String getUserId() {
-        return userId;
-    }
+        public void setProcessTime(String processTime) {
+            this.processTime = processTime;
+        }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+        public String getRelevanceId() {
+            return relevanceId;
+        }
+
+        public void setRelevanceId(String relevanceId) {
+            this.relevanceId = relevanceId;
+        }
+
+        public String getRemark() {
+            return remark;
+        }
+
+        public void setRemark(String remark) {
+            this.remark = remark;
+        }
+
+        public String getRoomId() {
+            return roomId;
+        }
+
+        public void setRoomId(String roomId) {
+            this.roomId = roomId;
+        }
+
+        public String getRoomName() {
+            return roomName;
+        }
+
+        public void setRoomName(String roomName) {
+            this.roomName = roomName;
+        }
+
+        public String getStartDate() {
+            return startDate;
+        }
+
+        public void setStartDate(String startDate) {
+            this.startDate = startDate;
+        }
+
+        public String getUpdateAt() {
+            return updateAt;
+        }
+
+        public void setUpdateAt(String updateAt) {
+            this.updateAt = updateAt;
+        }
+
+        public int getUseTimes() {
+            return useTimes;
+        }
+
+        public void setUseTimes(int useTimes) {
+            this.useTimes = useTimes;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
     }
 }
