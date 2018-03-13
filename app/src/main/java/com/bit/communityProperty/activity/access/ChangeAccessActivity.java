@@ -78,7 +78,7 @@ public class ChangeAccessActivity extends BaseActivity {
     @Override
     public void initViewData() {
         actionBarTitle.setText("切换门禁");
-        bluetoothNetUtils = new BluetoothNetUtils();
+        bluetoothNetUtils = new BluetoothNetUtils(this);
         doorMiLiBean = (DoorMILiBean) getIntent().getSerializableExtra("doorMILiBean");
         setCustomExpandListview();
 

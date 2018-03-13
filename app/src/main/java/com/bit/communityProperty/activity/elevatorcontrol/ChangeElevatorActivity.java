@@ -81,7 +81,7 @@ public class ChangeElevatorActivity extends BaseActivity {
         doorJinBoBean = (ElevatorListBean) getIntent().getSerializableExtra("doorJinBoBean");
 
         blueAddressIds = getIntent().getStringArrayExtra("ids");
-        bluetoothNetUtils = new BluetoothNetUtils();
+        bluetoothNetUtils = new BluetoothNetUtils(this);
         initListView();
         getCashDate();
         getData();
@@ -121,6 +121,7 @@ public class ChangeElevatorActivity extends BaseActivity {
         }
 
         commonAdapter.setDatas(bletoothElevateDate.getElevatorListBeans());
+        lvElevator.setAdapter(commonAdapter);
     }
 
 

@@ -95,7 +95,7 @@ public class BluetoothDoorFragment extends BaseFragment {
         MyApplication.getInstance().getBlueToothApp().checkLocationEnable(getActivity());
         MyApplication.getInstance().getBlueToothApp().checkLocationEnable(getActivity());
         MyApplication.getInstance().getBlueToothApp().openBluetooth();
-        bluetoothNetUtils = new BluetoothNetUtils();
+        bluetoothNetUtils = new BluetoothNetUtils(getActivity());
         return rootView;
     }
 
