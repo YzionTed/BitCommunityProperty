@@ -13,7 +13,7 @@ import com.bit.communityProperty.MyApplication;
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.elevatorcontrol.ChangeElevatorActivity;
 import com.bit.communityProperty.activity.household.HouseholdManagementActivity;
-import com.bit.communityProperty.activity.newsdetail.NewsDetail;
+import com.bit.communityProperty.activity.newsdetail.NewsDetailActivity;
 import com.bit.communityProperty.activity.safetywarning.SafeWarningListActivity;
 import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.utils.DialogUtil;
@@ -146,7 +146,7 @@ public class JPushReceiver extends BroadcastReceiver {
                         break;
                     case "100101": //社区公告
                         if (MyApplication.getActivitySize() != 0){
-                            Intent i = new Intent(context, NewsDetail.class);
+                            Intent i = new Intent(context, NewsDetailActivity.class);
                             i.putExtra("id",jPushBean.getData().getNotice_id());
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

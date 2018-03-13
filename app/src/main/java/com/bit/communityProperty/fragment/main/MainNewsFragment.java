@@ -10,12 +10,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.sdk.android.oss.OSS;
-import com.alibaba.sdk.android.oss.OSSClient;
-import com.alibaba.sdk.android.oss.common.auth.OSSCredentialProvider;
-import com.alibaba.sdk.android.oss.common.auth.OSSStsTokenCredentialProvider;
 import com.bit.communityProperty.R;
-import com.bit.communityProperty.activity.newsdetail.NewsDetail;
+import com.bit.communityProperty.activity.newsdetail.NewsDetailActivity;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.base.BaseFragment;
 import com.bit.communityProperty.config.AppConfig;
@@ -25,10 +21,8 @@ import com.bit.communityProperty.fragment.main.bean.WeatherInfoBean;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.receiver.RxBus;
-import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.TimeUtils;
-import com.bit.communityProperty.utils.UploadInfo;
 import com.github.jdsjlzx.ItemDecoration.DividerDecoration;
 import com.github.jdsjlzx.interfaces.OnItemClickListener;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
@@ -242,7 +236,7 @@ public class MainNewsFragment extends BaseFragment {
         mLRecyclerViewAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(getActivity(), NewsDetail.class);
+                Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
                 intent.putExtra("id", noticeList.get(position).getId());
                 startActivity(intent);
             }

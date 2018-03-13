@@ -24,7 +24,7 @@ import com.bit.communityProperty.Bluetooth.yunduijiang.YunDuiJIangUtils;
 import com.bit.communityProperty.MyApplication;
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.household.HouseholdManagementActivity;
-import com.bit.communityProperty.activity.newsdetail.NewsDetail;
+import com.bit.communityProperty.activity.newsdetail.NewsDetailActivity;
 import com.bit.communityProperty.activity.safetywarning.SafeWarningListActivity;
 import com.bit.communityProperty.base.BaseActivity;
 import com.bit.communityProperty.base.BaseEntity;
@@ -122,7 +122,7 @@ public class MainActivity extends BaseActivity {
                         startActivity(new Intent(this, SafeWarningListActivity.class).putExtra("jpushbean", jPushBean));
                         break;
                     case "100101"://社区公告
-                        startActivity(new Intent(this, NewsDetail.class).putExtra("id", jPushBean.getData().getNotice_id()));
+                        startActivity(new Intent(this, NewsDetailActivity.class).putExtra("id", jPushBean.getData().getNotice_id()));
                         break;
                     case "100401"://房屋认证
                         startActivity(new Intent(this, HouseholdManagementActivity.class).putExtra("id", jPushBean.getData().getCommunityId()));

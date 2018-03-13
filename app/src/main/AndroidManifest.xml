@@ -865,7 +865,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.newsdetail.NewsDetail"/>
+        <activity android:name=".activity.newsdetail.NewsDetailActivity"/>
         <activity android:name=".activity.company.CompanyInfo"/>
         <activity android:name=".activity.userinfo.PersonInfoActivity"/>
         <activity android:name=".activity.userinfo.PersonCenterActivity"/>
