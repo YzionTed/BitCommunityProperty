@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.classic.common.MultipleStatusView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/multiple_status_view"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/appbg"
-    android:layout_height="match_parent">
+    app:emptyView="@layout/layout_common_empty">
+
     <com.github.jdsjlzx.recyclerview.LRecyclerView
-        android:clipToPadding="false"
-        android:paddingTop="10dp"
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:listSelector="@android:color/transparent"
         android:overScrollMode="never"
-        android:listSelector="@android:color/transparent" />
-</android.support.constraint.ConstraintLayout>
+        android:paddingTop="10dp" />
+</com.classic.common.MultipleStatusView>

@@ -74,6 +74,7 @@ public class DeviceManagementActivity extends BaseActivity {
         list.add(new ElevatorFragment());
         list.add(new CarFragmet());
         FragmentAdapter adapter = new FragmentAdapter(this.getSupportFragmentManager(), list, tabTitles);
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(mViewPager);
     }

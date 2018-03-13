@@ -106,7 +106,7 @@ public class PersonalWorkActivity extends BaseActivity {
 
     private void getList() {
         Map<String, Object> map = new HashMap<>();
-        map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        map.put("communityId", AppConfig.COMMUNITYID);
         map.put("userId", SPUtil.get(this, AppConfig.id, ""));
         RetrofitManage.getInstance().subscribe(Api.getInstance().getWorkList(map), new Observer<BaseEntity<List<PersonalWorkListBean>>>() {
             @Override

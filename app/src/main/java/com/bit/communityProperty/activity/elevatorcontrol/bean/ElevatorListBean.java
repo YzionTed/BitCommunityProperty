@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by DELL60 on 2018/2/23.
  */
 
-public class ElevatorListBean implements Serializable{
+public class ElevatorListBean implements Serializable {
 
 
     /**
@@ -28,6 +28,15 @@ public class ElevatorListBean implements Serializable{
     private boolean temporary;
     private boolean isFirst;
     private boolean isCheck;
+    private boolean isFirstChecked = false;
+
+    public boolean isFirstChecked() {
+        return isFirstChecked;
+    }
+
+    public void setFirstChecked(boolean checked) {
+        isFirstChecked = checked;
+    }
 
     public boolean isCheck() {
         return isCheck;

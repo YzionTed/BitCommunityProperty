@@ -10,19 +10,18 @@ import android.view.ViewGroup;
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.deviceManagement.DeviceInfoActivity;
 import com.bit.communityProperty.activity.deviceManagement.adapter.DeviceAdapter;
-import com.bit.communityProperty.activity.deviceManagement.bean.CameraBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.CarBrakeBean;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.base.BaseFragment;
 import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
+import com.classic.common.MultipleStatusView;
 import com.github.jdsjlzx.interfaces.OnItemClickListener;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
 import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
-import com.github.jdsjlzx.recyclerview.ProgressStyle;
 
 import java.util.List;
 
@@ -42,6 +41,8 @@ public class CarFragmet extends BaseFragment {
     @BindView(R.id.recyclerview)
     LRecyclerView mRecyclerView;
     Unbinder unbinder;
+    @BindView(R.id.multiple_status_view)
+    MultipleStatusView multipleStatusView;
 
     private DeviceAdapter adapter;
     private LRecyclerViewAdapter mLRecyclerViewAdapter;
@@ -49,6 +50,7 @@ public class CarFragmet extends BaseFragment {
     private CarBrakeBean carBrakeBean;
     private int page = 1;
     private boolean isRefresh = true;
+
     @Override
     protected int getLayoutId() {
         return R.layout.layout_recyclerview_refresh;
@@ -56,6 +58,7 @@ public class CarFragmet extends BaseFragment {
 
     @Override
     protected void initViewAndData() {
+        multipleStatusView.showLoading();
         adapter = new DeviceAdapter(mContext);
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
         mRecyclerView.setAdapter(mLRecyclerViewAdapter);
@@ -76,10 +79,10 @@ public class CarFragmet extends BaseFragment {
         mRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                if (carBrakeBean!=null&&carBrakeBean.getCurrentPage()<carBrakeBean.getTotalPage()){
+                if (carBrakeBean != null && carBrakeBean.getCurrentPage() < carBrakeBean.getTotalPage()) {
                     isRefresh = false;
                     getData();
-                }else{
+                } else {
                     mRecyclerView.setNoMore(true);
                 }
             }
@@ -94,15 +97,24 @@ public class CarFragmet extends BaseFragment {
             }
         });
         getData();
+
+        multipleStatusView.setOnRetryClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                multipleStatusView.showLoading();
+                isRefresh = true;
+                getData();
+            }
+        });
     }
 
-    private void getData(){
-        if (isRefresh){
+    private void getData() {
+        if (isRefresh) {
             page = 1;
-        }else{
+        } else {
             page++;
         }
-        RetrofitManage.getInstance().subscribe(Api.getInstance().getCarGateList(page,AppConfig.pageSize), new Observer<BaseEntity<CarBrakeBean>>() {
+        RetrofitManage.getInstance().subscribe(Api.getInstance().getCarGateList(page, AppConfig.pageSize), new Observer<BaseEntity<CarBrakeBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -111,12 +123,17 @@ public class CarFragmet extends BaseFragment {
             @Override
             public void onNext(BaseEntity<CarBrakeBean> listBaseEntity) {
                 mRecyclerView.refreshComplete(AppConfig.pageSize);
-                if (listBaseEntity.isSuccess()){
+                if (listBaseEntity.isSuccess()) {
                     carBrakeBean = listBaseEntity.getData();
                     carBrakeBeanList = listBaseEntity.getData().getRecords();
-                    if (isRefresh){
+                    if (isRefresh) {
+                        if (carBrakeBeanList==null||carBrakeBeanList.size()==0){
+                            multipleStatusView.showEmpty();
+                        }else{
+                            multipleStatusView.showContent();
+                        }
                         adapter.setDataList(carBrakeBeanList);
-                    }else{
+                    } else {
                         adapter.addAll(carBrakeBeanList);
                     }
                 }

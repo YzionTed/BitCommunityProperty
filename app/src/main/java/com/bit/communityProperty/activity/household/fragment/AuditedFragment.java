@@ -16,6 +16,7 @@ import com.bit.communityProperty.activity.household.bean.AuditedBean;
 import com.bit.communityProperty.activity.household.bean.AuditedUserBean;
 import com.bit.communityProperty.activity.household.bean.AuditingBean;
 import com.bit.communityProperty.base.BaseEntity;
+import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.receiver.RxBus;
@@ -48,7 +49,7 @@ public class AuditedFragment extends Fragment {
     public List<List<AuditedUserBean.RecordsBean>> childList = new ArrayList();
     private ArrayList<Boolean> isGetOverData = new ArrayList<>();//是否获取过展开的数据
 
-    private String communityId = "5a82adf3b06c97e0cd6c0f3d";
+    private String communityId = AppConfig.COMMUNITYID;
 
     //    public String[] groupStrings= {"Group1", "Group2", "Group3", "Group4", "Group5", "Group6", "Group7",
 //            "Group8","Group9", "Group10", "Group11", "Group12"};
@@ -94,7 +95,7 @@ public class AuditedFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_audited, container, false);
         mExpandableListView = rootView.findViewById(R.id.expandableListView);
 //        mExpandableListView.setGroupIndicator(null);
-        communityId = getArguments().getString("id", "communityId");
+        communityId = getArguments().getString("id", AppConfig.COMMUNITYID);
         getHouseholdNum(communityId);
 //        adapter = new AuditedExpandableListAdapter(mContext,groupList,childList);
 //        mExpandableListView.setAdapter(adapter);

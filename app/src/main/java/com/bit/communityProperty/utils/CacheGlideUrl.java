@@ -23,7 +23,7 @@ public class CacheGlideUrl extends GlideUrl {
 
     private String getGCacheKey() {
         String cacheKey = null;
-        int index = mUrl.indexOf("?");
+        int index = mUrl.indexOf("&");
         if (index != -1) {
             cacheKey = mUrl.substring(0, index);
         }
