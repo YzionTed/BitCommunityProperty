@@ -136,6 +136,8 @@ public class CarFragmet extends BaseFragment {
                     } else {
                         adapter.addAll(carBrakeBeanList);
                     }
+                }else{
+                    multipleStatusView.showEmpty();
                 }
             }
 

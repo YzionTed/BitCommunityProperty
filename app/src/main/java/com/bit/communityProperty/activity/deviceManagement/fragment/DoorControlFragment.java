@@ -164,6 +164,8 @@ public class DoorControlFragment extends BaseFragment {
                     } else {
                         adapter.addAll(recordsBeans);
                     }
+                }else{
+                    multipleStatusView.showEmpty();
                 }
             }
 

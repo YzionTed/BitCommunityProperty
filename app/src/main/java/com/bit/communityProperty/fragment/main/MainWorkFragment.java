@@ -91,19 +91,18 @@ public class MainWorkFragment extends BaseFragment {
      * "小区门禁", "智能梯控", "工作排班","设备管理", "住户管理", "安防警报"
      */
     private String[] managerTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator, AppConfig.Work_Schedule,
-            AppConfig.Device_Management, AppConfig.Household_Management, AppConfig.Security_Alarm,
-            AppConfig.Fault_Management, AppConfig.Online_Consultation};
+            AppConfig.Device_Management, AppConfig.Household_Management, AppConfig.Security_Alarm};
     private int[] managerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb,
-            R.mipmap.ic_work_sbgl, R.mipmap.ic_work_zhgl, R.mipmap.ic_work_afjb, R.mipmap.ic_work_gzgl, R.mipmap.ic_work_zxzx};
+            R.mipmap.ic_work_sbgl, R.mipmap.ic_work_zhgl, R.mipmap.ic_work_afjb};
 
     /**
      * 保安门卫
      * "小区门禁", "智能梯控", "工作排班", "视频监控", "安防警报", "扫码放行", "巡逻打卡", "故障申报"
      */
     private String[] securityTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator, AppConfig.Work_Schedule
-            , AppConfig.Video_Surveillance, AppConfig.Security_Alarm, AppConfig.Scanning_Release, AppConfig.Patrol_Punch, AppConfig.Fault_Reporting};
-    private int[] securityImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_spjk,
-            R.mipmap.ic_work_afjb, R.mipmap.ic_work_smfx, R.mipmap.ic_work_xldk, R.mipmap.ic_work_gzsb};
+            , AppConfig.Security_Alarm, AppConfig.Scanning_Release, AppConfig.Patrol_Punch};
+    private int[] securityImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb,
+            R.mipmap.ic_work_afjb, R.mipmap.ic_work_smfx, R.mipmap.ic_work_xldk};
 
     /**
      * 保洁人员
@@ -118,8 +117,8 @@ public class MainWorkFragment extends BaseFragment {
      * "小区门禁", "智能梯控", "工作排班", "维修工单"
      */
     private String[] repairmanTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator,
-            AppConfig.Work_Schedule, AppConfig.Repair_Orders};
-    private int[] repairmanImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_wxgd};
+            AppConfig.Work_Schedule};
+    private int[] repairmanImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb};
 
     private String ROLE_TYPE;
     private boolean isIMLogin;

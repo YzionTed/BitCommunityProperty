@@ -154,6 +154,8 @@ public class CameraFragment extends BaseFragment {
                     } else {
                         adapter.addAll(cameraBean.getRecords());
                     }
+                }else{
+                    multipleStatusView.showEmpty();
                 }
             }
 

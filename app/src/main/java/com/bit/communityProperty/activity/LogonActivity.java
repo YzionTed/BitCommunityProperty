@@ -165,7 +165,6 @@ public class LogonActivity extends BaseActivity {
                         }
                     }
                     RxBus.get().post("update_card_list");
-                    startActivity(intent);
                     finish();
                 } else {
                     Toast.makeText(LogonActivity.this, logindata.getErrorMsg(), Toast.LENGTH_LONG).show();

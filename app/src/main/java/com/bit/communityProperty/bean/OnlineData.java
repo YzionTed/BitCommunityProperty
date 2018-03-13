@@ -29,6 +29,15 @@ public class OnlineData {
     private String propertyName;
     private String userId;
     private String userName;
+    private String accid;
+
+    public String getAccid() {
+        return accid;
+    }
+
+    public void setAccid(String accid) {
+        this.accid = accid;
+    }
 
     public int getDataStatus() {
         return dataStatus;

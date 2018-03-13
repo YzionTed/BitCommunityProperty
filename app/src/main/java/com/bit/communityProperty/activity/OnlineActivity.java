@@ -13,6 +13,7 @@ import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.GsonUtils;
 import com.bit.communityProperty.utils.LogManager;
+import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.view.TitleBarView;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.zhy.adapter.abslistview.CommonAdapter;
@@ -57,7 +58,11 @@ public class OnlineActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (NimUIKit.getAccount() != null) {
-                    NimUIKit.startP2PSession(OnlineActivity.this, onlineDataList.get(i).getId());
+                    if (onlineDataList.get(i).getAccid()!=null){
+                        NimUIKit.startP2PSession(OnlineActivity.this, onlineDataList.get(i).getAccid());
+                    }else{
+                        ToastUtil.showShort("客服忙，请稍后重试");
+                    }
                 }
             }
         });
@@ -86,15 +91,14 @@ public class OnlineActivity extends BaseActivity {
                                 if (position == onlineDataList.size() - 1){
                                     viewHolder.getView(R.id.divider).setVisibility(View.GONE);
                                 }
-                                viewHolder.setText(R.id.tv_name, item.getCommunityName() + item.getPropertyName());
+//                                viewHolder.setText(R.id.tv_name, item.getCommunityName() + item.getPropertyName());
+                                viewHolder.setText(R.id.tv_name, item.getUserName());
 
 
                             }
                         });
                     }
                 }
-                LogManager.printErrorLog("online", GsonUtils.getInstance().toJson(stringBaseEntity));
-
             }
 
             @Override

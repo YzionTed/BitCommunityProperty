@@ -140,6 +140,8 @@ public class ElevatorFragment extends BaseFragment {
                     } else {
                         adapter.addAll(recordsBean);
                     }
+                }else{
+                    multipleStatusView.showEmpty();
                 }
             }
 
