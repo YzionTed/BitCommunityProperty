@@ -271,7 +271,7 @@ public class SecurityClockListActivity extends BaseActivity {
 
     private void addClock() {
         map.clear();
-//        map.put("userId", SPUtil.get(this, AppConfig.id, ""));
+        map.put("userId", SPUtil.get(this, AppConfig.id, ""));
 //        map.put("username", SPUtil.get(this, AppConfig.name, ""));
         map.put("communityId", AppConfig.COMMUNITYID);
         map.put("taskType", 1);

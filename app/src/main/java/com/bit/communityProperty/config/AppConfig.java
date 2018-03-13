@@ -50,6 +50,6 @@ public class AppConfig {
 
 
     public static final String UPLOAD_INFO = "UPLOAD_INFO";  //OSSTOKEN
-    public static final String BUCKET_NAME = "bit-app";
+    public static final String BUCKET_NAME = "bit-smcm-img";
 
 }

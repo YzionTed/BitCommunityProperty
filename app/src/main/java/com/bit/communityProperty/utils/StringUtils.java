@@ -50,6 +50,6 @@ public class StringUtils {
         }catch (Exception e){
 
         }
-        return "bit-app";
+        return "bit-smcm-img";
     }
 }
