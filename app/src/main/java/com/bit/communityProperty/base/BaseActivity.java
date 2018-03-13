@@ -14,6 +14,7 @@ import android.view.WindowManager;
 
 import com.bit.communityProperty.MyApplication;
 import com.bit.communityProperty.R;
+import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.SystemStatusManager;
 
 import butterknife.ButterKnife;
@@ -38,6 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mContext = this;
         MyApplication.getInstance().addActivity(this);
+        OssManager.getInstance().refreshToken();
         this.initViewData();
         mContext = this;
     }

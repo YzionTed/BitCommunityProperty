@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.Zxing.CaptureActivity;
+import com.bit.communityProperty.activity.OnlineActivity;
 import com.bit.communityProperty.activity.access.DoorControlActivity;
 import com.bit.communityProperty.activity.cleanclock.CleanClockListActivity;
 import com.bit.communityProperty.activity.deviceManagement.DeviceManagementActivity;
@@ -20,30 +21,41 @@ import com.bit.communityProperty.activity.faultDeclare.FaultDeclareActivity;
 import com.bit.communityProperty.activity.faultManager.FaultManagementActivity;
 import com.bit.communityProperty.activity.household.HouseholdManagementActivity;
 import com.bit.communityProperty.activity.propertyFee.PropertyFeeActivity;
+import com.bit.communityProperty.activity.propertyFee.fragment.PropertyFeeFragment;
+import com.bit.communityProperty.activity.repairwork.RepairWorkListActivity;
 import com.bit.communityProperty.activity.safetywarning.SafeWarningListActivity;
+import com.bit.communityProperty.activity.securityclock.SecurityClockListActivity;
 import com.bit.communityProperty.activity.videomonitor.MonitorListActivity;
 import com.bit.communityProperty.activity.workplan.PersonalWorkActivity;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.base.BaseFragment;
+import com.bit.communityProperty.bean.LoginData;
 import com.bit.communityProperty.config.AppConfig;
+import com.bit.communityProperty.fragment.main.bean.BannerBean;
 import com.bit.communityProperty.fragment.main.bean.MainWorkBean;
 import com.bit.communityProperty.fragment.main.bean.OwnerApplyNumBean;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.receiver.RxBus;
 import com.bit.communityProperty.utils.CommonAdapter;
+import com.bit.communityProperty.utils.GlideUtils;
 import com.bit.communityProperty.utils.GsonUtils;
 import com.bit.communityProperty.utils.LogManager;
+import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.SPUtil;
+import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.utils.ViewHolder;
 import com.bit.communityProperty.widget.NoScrollGridView;
+import com.bumptech.glide.Glide;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,9 +92,9 @@ public class MainWorkFragment extends BaseFragment {
      */
     private String[] managerTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator, AppConfig.Work_Schedule,
             AppConfig.Device_Management, AppConfig.Household_Management, AppConfig.Security_Alarm,
-            AppConfig.Fault_Management};
+            AppConfig.Fault_Management,AppConfig.Online_Consultation};
     private int[] managerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb,
-            R.mipmap.ic_work_sbgl, R.mipmap.ic_work_zhgl, R.mipmap.ic_work_afjb, R.mipmap.ic_work_gzgl};
+            R.mipmap.ic_work_sbgl, R.mipmap.ic_work_zhgl, R.mipmap.ic_work_afjb, R.mipmap.ic_work_gzgl,R.mipmap.ic_work_zxzx};
 
     /**
      * 保安门卫
@@ -98,9 +110,8 @@ public class MainWorkFragment extends BaseFragment {
      * "小区门禁", "智能梯控", "工作排班", "保洁打卡"
      */
     private String[] cleanerTitles = new String[]{AppConfig.Community_Access, AppConfig.Intelligent_Elevator,
-            AppConfig.Work_Schedule, AppConfig.Punch_Cleaning, AppConfig.Online_Consultation};
-    private int[] cleanerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_bjdk, R.mipmap
-            .ic_work_zxzx};
+            AppConfig.Work_Schedule, AppConfig.Punch_Cleaning};
+    private int[] cleanerImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_bjdk};
 
     /**
      * 维修人员
@@ -110,6 +121,15 @@ public class MainWorkFragment extends BaseFragment {
             AppConfig.Work_Schedule, AppConfig.Repair_Orders};
     private int[] repairmanImgs = new int[]{R.mipmap.ic_work_xqmj, R.mipmap.ic_work_zntk, R.mipmap.ic_work_gzpb, R.mipmap.ic_work_wxgd};
 
+    private String ROLE_TYPE;
+
+    public static MainWorkFragment newInstance(String type) {
+        MainWorkFragment fragment = new MainWorkFragment();
+        Bundle args = new Bundle();
+        args.putString(AppConfig.ROLE_TYPE,type);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     protected int getLayoutId() {
@@ -118,6 +138,13 @@ public class MainWorkFragment extends BaseFragment {
 
     @Override
     protected void initViewAndData() {
+        Bundle bundle = getArguments();
+        if (bundle!=null){
+            ROLE_TYPE = bundle.getString(AppConfig.ROLE_TYPE);
+        }else{
+            ROLE_TYPE = (String) SPUtil.get(mContext, AppConfig.ROLE_TYPE, AppConfig.ROLE_MANAGER);
+        }
+
         initBanner();
         initGridView();
         goHouseholdManagement.setOnClickListener(new View.OnClickListener() {
@@ -143,24 +170,59 @@ public class MainWorkFragment extends BaseFragment {
                             tvLocal.setText((String) SPUtil.get(mContext, AppConfig.CITY, "包头市"));
                         }
                     }
+                }else if (o instanceof LoginData){
+                    ROLE_TYPE = ((LoginData) o).getRoles().get(0);
+                    initTabData();
                 }
             }
         });
     }
 
     private void initBanner() {
-        List<Integer> s = new ArrayList<>();
-        s.add(R.mipmap.banner_1);
-        s.add(R.mipmap.banner_2);
-        s.add(R.mipmap.banner_3);
-        banner.setIndicatorVisible(false);
-        banner.setPages(s, new MZHolderCreator<BannerViewHolder>() {
+        Map<String, Object> map = new HashMap<>();
+        RetrofitManage.getInstance().subscribe(Api.getInstance().getBanner(map), new Observer<BaseEntity<List<BannerBean>>>() {
             @Override
-            public BannerViewHolder createViewHolder() {
-                return new BannerViewHolder();
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseEntity<List<BannerBean>> bannerBeanBaseEntity) {
+                if (bannerBeanBaseEntity.isSuccess()){
+                    List<BannerBean> list = bannerBeanBaseEntity.getData();
+                    banner.setPages(list, new MZHolderCreator<BannerViewHolder>() {
+                        @Override
+                        public BannerViewHolder createViewHolder() {
+                            return new BannerViewHolder();
+                        }
+                    });
+                    banner.start();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         });
-        banner.start();
+
+//        List<Integer> s = new ArrayList<>();
+//        s.add(R.mipmap.banner_1);
+//        s.add(R.mipmap.banner_2);
+//        s.add(R.mipmap.banner_3);
+        banner.setIndicatorVisible(false);
+//        banner.setPages(s, new MZHolderCreator<BannerViewHolder>() {
+//            @Override
+//            public BannerViewHolder createViewHolder() {
+//                return new BannerViewHolder();
+//            }
+//        });
+//        banner.start();
     }
 
     private void initGridView() {
@@ -204,16 +266,19 @@ public class MainWorkFragment extends BaseFragment {
 //                                startActivity(new Intent(mContext, IntelligentElevatorActivity.class));
                                 break;
                             case AppConfig.Statistics://数据统计
+                                ToastUtil.showShort("该功能暂未开放");
 //                                startActivity(new Intent(mContext, PoliceClockActivity.class));
 //                                startActivity(new Intent(mContext, HouseholdManagementActivity.class));//暂时在这调试住户管理
                                 break;
                             case AppConfig.Online_Consultation://在线咨询
-                                if (NimUIKit.getAccount() != null) {
-//                                NimUIKit.startP2PSession(getContext(), (String) SPUtil.get(mContext, AppConfig.phone, ""));
-                                    NimUIKit.startP2PSession(getContext(), "15900020005");
-                                }
+//                                if (NimUIKit.getAccount() != null) {
+////                                NimUIKit.startP2PSession(getContext(), (String) SPUtil.get(mContext, AppConfig.phone, ""));
+//                                    NimUIKit.startP2PSession(getContext(), "15900020005");
+//                                }
+                                startActivity(new Intent(mContext, OnlineActivity.class));
                                 break;
                             case AppConfig.Patrol_Punch://巡逻打卡
+                                startActivity(new Intent(mContext, SecurityClockListActivity.class));
                                 break;
                             case AppConfig.Fault_Reporting://故障申报
                                 startActivity(new Intent(mContext, FaultDeclareActivity.class));
@@ -225,6 +290,7 @@ public class MainWorkFragment extends BaseFragment {
                                 startActivity(new Intent(mContext, CleanClockListActivity.class));
                                 break;
                             case AppConfig.Repair_Orders://维修工单
+                                startActivity(new Intent(mContext, RepairWorkListActivity.class));
                                 break;
                         }
                     }
@@ -237,7 +303,7 @@ public class MainWorkFragment extends BaseFragment {
 
     private void initTabData() {
         List<MainWorkBean> mainWorkBeanList = new ArrayList<>();
-        switch ((String) SPUtil.get(mContext, AppConfig.ROLE_TYPE, AppConfig.ROLE_MANAGER)) {
+        switch (ROLE_TYPE) {
             case AppConfig.ROLE_MANAGER:
                 for (int i = 0; i < managerTitles.length; i++) {
                     MainWorkBean bean = new MainWorkBean();
@@ -290,7 +356,7 @@ public class MainWorkFragment extends BaseFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                getOwnerApplyNum("5a82adf3b06c97e0cd6c0f3d");
+                getOwnerApplyNum(AppConfig.COMMUNITYID);
             }
         }).start();
     }
@@ -298,7 +364,7 @@ public class MainWorkFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getOwnerApplyNum("5a82adf3b06c97e0cd6c0f3d");
+        getOwnerApplyNum(AppConfig.COMMUNITYID);
     }
 
     /**
@@ -357,7 +423,7 @@ public class MainWorkFragment extends BaseFragment {
     }
 
 
-    public static class BannerViewHolder implements MZViewHolder<Integer> {
+    public static class BannerViewHolder implements MZViewHolder<BannerBean> {
         private ImageView mImageView;
 
         @Override
@@ -369,9 +435,10 @@ public class MainWorkFragment extends BaseFragment {
         }
 
         @Override
-        public void onBind(Context context, int position, Integer data) {
+        public void onBind(Context context, int position, BannerBean data) {
             // 数据绑定
-            mImageView.setImageResource(data);
+//            mImageView.setImageResource(data);
+            GlideUtils.loadImage(context,OssManager.getInstance().getUrl(data.getMaterialUrl()),mImageView);
         }
     }
 }

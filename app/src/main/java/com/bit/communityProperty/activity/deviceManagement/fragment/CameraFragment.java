@@ -1,22 +1,18 @@
 package com.bit.communityProperty.activity.deviceManagement.fragment;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bit.communityProperty.R;
-import com.bit.communityProperty.activity.deviceManagement.DeviceInfoActivity;
 import com.bit.communityProperty.activity.deviceManagement.adapter.DeviceAdapter;
 import com.bit.communityProperty.activity.deviceManagement.bean.CameraBean;
-import com.bit.communityProperty.activity.deviceManagement.bean.DeviceBean;
-import com.bit.communityProperty.activity.deviceManagement.bean.DeviceBeanPar;
 import com.bit.communityProperty.base.BaseEntity;
+import com.bit.communityProperty.base.BaseFragment;
+import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.GsonUtils;
@@ -33,6 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import me.leefeng.promptlibrary.PromptDialog;
@@ -42,12 +41,13 @@ import me.leefeng.promptlibrary.PromptDialog;
  * Created by kezhangzhao on 2018/2/10.
  */
 
-public class CameraFragment extends Fragment {
+public class CameraFragment extends BaseFragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
+    @BindView(R.id.recyclerview)
+    LRecyclerView mRecyclerView;
+    Unbinder unbinder;
     private int pageIndex;//当前列表数据的页数
     private List<CameraBean.RecordsBean> mRecordsBeanList = new ArrayList<>();//数据列表
-    private Context mContext;
-    private LRecyclerView mRecyclerView;
     private DeviceAdapter adapter;//设备管理的adapter
     private LRecyclerViewAdapter mLRecyclerViewAdapter;//上下拉的recyclerView的adapter
     private PromptDialog sinInLogin;
@@ -66,39 +66,14 @@ public class CameraFragment extends Fragment {
      */
     private static int mCurrentCounter = 0;
 
-    public CameraFragment() {
+    @Override
+    protected int getLayoutId() {
+        return R.layout.layout_recyclerview_refresh;
     }
 
     @Override
-    public Context getContext() {
-        return mContext;
-    }
-
-    public void setContext(Context context) {
-        this.mContext = context;
-    }
-
-    private void initView(Context context) {
-        this.mContext = context;
+    protected void initViewAndData() {
         sinInLogin = new PromptDialog((Activity) mContext);
-    }
-
-
-    public static CameraFragment newInstance(int sectionNumber, Context context) {
-        CameraFragment fragment = new CameraFragment();
-//        fragment.setContext(context);
-        fragment.initView(context);
-        Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.layout_recyclerview_refresh, container, false);
-        mRecyclerView = rootView.findViewById(R.id.recyclerview);
         adapter = new DeviceAdapter(mContext);
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
         mRecyclerView.setAdapter(mLRecyclerViewAdapter);
@@ -117,7 +92,7 @@ public class CameraFragment extends Fragment {
                 adapter.clear();
                 mLRecyclerViewAdapter.notifyDataSetChanged();
                 //网络请求获取列表数据
-                    getDataList("5a82adf3b06c97e0cd6c0f3d",pageIndex,REQUEST_COUNT);
+                getDataList(AppConfig.COMMUNITYID, pageIndex, REQUEST_COUNT);
                 mRecordsBeanList.clear();
             }
         });
@@ -133,7 +108,7 @@ public class CameraFragment extends Fragment {
                 if (mCurrentCounter < TOTAL_COUNTER) {
                     pageIndex++;
                     //网络请求获取列表数据
-                    getDataList("5a82adf3b06c97e0cd6c0f3d",pageIndex,REQUEST_COUNT);
+                    getDataList(AppConfig.COMMUNITYID, pageIndex, REQUEST_COUNT);
                 } else {
                     mRecyclerView.setNoMore(true);
                 }
@@ -160,21 +135,20 @@ public class CameraFragment extends Fragment {
 //                startActivity(intent);
             }
         });
-//            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-        return rootView;
     }
 
     /**
      * 获取摄像头数据列表
+     *
      * @param communityId 社区ID  5a82adf3b06c97e0cd6c0f3d
      * @param page
      * @param size
      */
-    private void getDataList(String communityId,int page,int size){
-        Map<String,Object> map = new HashMap();
-        map.put("communityId",communityId);
-        map.put("page",page);
-        map.put("size",size);
+    private void getDataList(String communityId, int page, int size) {
+        Map<String, Object> map = new HashMap();
+        map.put("communityId", communityId);
+        map.put("page", page);
+        map.put("size", size);
         RetrofitManage.getInstance().subscribe(Api.getInstance().getMonitorList(map), new Observer<BaseEntity<CameraBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -184,9 +158,9 @@ public class CameraFragment extends Fragment {
             @Override
             public void onNext(BaseEntity<CameraBean> baseEntity) {
                 LogManager.printErrorLog("backinfo", GsonUtils.getInstance().toJson(baseEntity));
-                if (baseEntity.getData()!=null){
+                if (baseEntity.getData() != null) {
                     TOTAL_COUNTER = baseEntity.getData().getTotal();//服务器上的总数据条数
-                    if (baseEntity.getData().getRecords()!=null){
+                    if (baseEntity.getData().getRecords() != null) {
                         addItems(baseEntity.getData().getRecords());
                     }
                 }
@@ -221,5 +195,18 @@ public class CameraFragment extends Fragment {
      */
     private void notifyDataSetChanged() {
         mLRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+//        unbinder.unbind();
     }
 }

@@ -15,6 +15,7 @@ import com.bit.communityProperty.activity.household.adapter.AuditingAdapter;
 import com.bit.communityProperty.activity.household.bean.AuditingBean;
 import com.bit.communityProperty.activity.releasePass.bean.ReleasePassDetailsBean;
 import com.bit.communityProperty.base.BaseEntity;
+import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.receiver.RxBus;
@@ -50,7 +51,7 @@ public class AuditingFragment extends Fragment {
     private LRecyclerView mRecyclerView;
     private AuditingAdapter adapter;//待审核的adapter
     private LRecyclerViewAdapter mLRecyclerViewAdapter;//上下拉的recyclerView的adapter
-    private String communityId = "5a82adf3b06c97e0cd6c0f3d";
+    private String communityId = AppConfig.COMMUNITYID;
     /**
      * 服务器端一共多少条数据
      */
@@ -164,7 +165,7 @@ public class AuditingFragment extends Fragment {
         });
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
-        communityId = getArguments().getString("id", "5a82adf3b06c97e0cd6c0f3d");
+        communityId = getArguments().getString("id", AppConfig.COMMUNITYID);
 
         RxBus.get().toObservable().subscribe(new Consumer<Object>() {
 

@@ -25,6 +25,7 @@ import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.net.ThrowableUtils;
 import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.SPUtil;
+import com.bit.communityProperty.utils.TimeUtils;
 import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.utils.UploadInfo;
 import com.classic.common.MultipleStatusView;
@@ -94,7 +95,7 @@ public class SecurityClockListActivity extends BaseActivity {
         uploadDialog = new PromptDialog(this);
         initDate();
         uploadInfo = (UploadInfo) SPUtil.getObject(this, AppConfig.UPLOAD_INFO);
-        if (uploadInfo == null) {
+        if (uploadInfo == null || TimeUtils.isExpiration(uploadInfo.getExpiration())) {
             initOssToken();
         }
     }
@@ -152,7 +153,7 @@ public class SecurityClockListActivity extends BaseActivity {
         listMap.clear();
 //        listMap.put("userId", SPUtil.get(this, AppConfig.id, ""));
 //        listMap.put("username", SPUtil.get(this, AppConfig.name, ""));
-        listMap.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        listMap.put("communityId", AppConfig.COMMUNITYID);
         listMap.put("taskType", 1);
         if (isRefresh)
             page = 1;
@@ -168,24 +169,24 @@ public class SecurityClockListActivity extends BaseActivity {
 
             @Override
             public void onNext(BaseEntity<CleanClockListBean> cleanClockListBeanBaseEntity) {
-                if (cleanClockListBeanBaseEntity.isSuccess()){
+                if (cleanClockListBeanBaseEntity.isSuccess()) {
                     lvSecurity.refreshComplete(AppConfig.pageSize);
                     cleanClockListBean = cleanClockListBeanBaseEntity.getData();
-                    if (cleanClockListBean != null&&cleanClockListBean.getRecords()!=null) {
-                        if (isRefresh){
-                            if (cleanClockListBean.getRecords().size()>0){
+                    if (cleanClockListBean != null && cleanClockListBean.getRecords() != null) {
+                        if (isRefresh) {
+                            if (cleanClockListBean.getRecords().size() > 0) {
                                 multipleStatusView.showContent();
                                 adapter.setDataList(cleanClockListBean.getRecords());
-                            }else{
+                            } else {
                                 multipleStatusView.showEmpty();
                             }
-                        }else{
+                        } else {
                             adapter.addAll(cleanClockListBean.getRecords());
                         }
-                    }else{
+                    } else {
                         multipleStatusView.showEmpty();
                     }
-                }else{
+                } else {
                     multipleStatusView.showError();
                 }
             }
@@ -218,7 +219,7 @@ public class SecurityClockListActivity extends BaseActivity {
                     // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
                     if (uploadInfo != null) {
                         uploadDialog.showLoading("上传图片中...");
-                        uploadInfo.setBucket("bit-test");
+                        uploadInfo.setBucket(AppConfig.BUCKET_NAME);
                         imgUrl = OssManager.getInstance().uploadFileToAliYun(uploadInfo, selectList.get(0).getPath(), new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
                             @Override
                             public void onSuccess(PutObjectRequest ossRequest, PutObjectResult ossResult) {
@@ -272,9 +273,9 @@ public class SecurityClockListActivity extends BaseActivity {
         map.clear();
 //        map.put("userId", SPUtil.get(this, AppConfig.id, ""));
 //        map.put("username", SPUtil.get(this, AppConfig.name, ""));
-        map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        map.put("communityId", AppConfig.COMMUNITYID);
         map.put("taskType", 2);
-        map.put("url", uploadInfo.getName());
+        map.put("url", imgUrl);
 //        map.put("creatorId", SPUtil.get(this, AppConfig.id, ""));
 //        map.put("createAt", TimeUtils.getCurrentTimeWithT());
 //        map.put("dataStatus", "1");

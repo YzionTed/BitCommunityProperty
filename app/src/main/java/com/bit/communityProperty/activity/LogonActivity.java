@@ -19,6 +19,7 @@ import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.net.ThrowableUtils;
+import com.bit.communityProperty.receiver.RxBus;
 import com.bit.communityProperty.utils.GsonUtils;
 import com.bit.communityProperty.utils.LogManager;
 import com.bit.communityProperty.utils.OssManager;
@@ -33,6 +34,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observer;
@@ -148,6 +150,16 @@ public class LogonActivity extends BaseActivity {
                     if(getIntent().getBundleExtra(AppConfig.EXTRA_BUNDLE) != null){
                         intent.putExtra(AppConfig.EXTRA_BUNDLE, getIntent().getBundleExtra(AppConfig.EXTRA_BUNDLE));
                     }
+                    if (logindata.getData()!=null){
+                        List<String> roleTypes = logindata.getData().getRoles();
+                        if (roleTypes!=null&&roleTypes.size()>0){
+                            String roleType = roleTypes.get(0);
+                            SPUtil.put(mContext, AppConfig.ROLE_TYPE, roleType);//用户角色
+                            intent.putExtra(AppConfig.ROLE_TYPE, roleType);//用户角色
+                            RxBus.get().post(logindata.getData());
+                        }
+                    }
+                    RxBus.get().post("update_card_list");
                     startActivity(intent);
                     finish();
                 } else {

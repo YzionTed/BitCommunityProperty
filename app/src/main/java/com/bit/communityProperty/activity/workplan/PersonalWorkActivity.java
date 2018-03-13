@@ -16,11 +16,15 @@ import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.CommonAdapter;
+import com.bit.communityProperty.utils.LiteOrmUtil;
+import com.bit.communityProperty.utils.LogManager;
+import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.TimeUtils;
 import com.bit.communityProperty.utils.ViewHolder;
 import com.classic.common.MultipleStatusView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,7 +106,7 @@ public class PersonalWorkActivity extends BaseActivity {
 
     private void getList() {
         Map<String, Object> map = new HashMap<>();
-        map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        map.put("communityId", AppConfig.COMMUNITYID);
         map.put("userId", SPUtil.get(this, AppConfig.id, ""));
         RetrofitManage.getInstance().subscribe(Api.getInstance().getWorkList(map), new Observer<BaseEntity<List<PersonalWorkListBean>>>() {
             @Override

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.text.Spanned;
@@ -169,6 +170,12 @@ public class ViewHolder {
     public ViewHolder setImageResource(int viewId, int resId) {
         ImageView view = getView(viewId);
         view.setImageResource(resId);
+        return this;
+    }
+    public ViewHolder setImageResource(int viewId, Uri imageUri) {
+        ImageView view = getView(viewId);
+//        view.setImageResource(resId);
+        view.setImageURI(imageUri);
         return this;
     }
 

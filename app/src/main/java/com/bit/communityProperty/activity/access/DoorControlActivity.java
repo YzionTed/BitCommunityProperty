@@ -14,6 +14,10 @@ import com.bit.communityProperty.R;
 import com.bit.communityProperty.base.BaseActivity;
 import com.bit.communityProperty.activity.access.fragment.BluetoothDoorFragment;
 import com.bit.communityProperty.activity.access.fragment.RemoteDoorFragment;
+import com.bit.communityProperty.config.AppConfig;
+import com.bit.communityProperty.utils.LiteOrmUtil;
+import com.bit.communityProperty.utils.LogManager;
+import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.ViewUtils;
 import com.bit.communityProperty.view.TitleBarView;
 import com.ddclient.configuration.DongConfiguration;
@@ -72,7 +76,6 @@ public class DoorControlActivity extends BaseActivity {
         if (!initIntercomAccount) {
             IntercomSDKProxy.initIntercomAccount(mIntercomAccountProxy);
         }
-
     }
 
     private ListActivityIntercomAccountProxy mIntercomAccountProxy = new ListActivityIntercomAccountProxy();

@@ -45,7 +45,11 @@ public class MainNewsAdapter extends ListBaseAdapter<MainNewsBean.RecordsBean> {
         viewHolder.tvDate.setText(TimeUtils.stampToDateWithHm(mDataList.get(position).getPublishAt()));
         viewHolder.tvContent.setText(mDataList.get(position).getBody());
         String url = OssManager.getInstance().getUrl(mDataList.get(position).getThumbnail());
-        GlideUtils.loadImage(mContext,url,viewHolder.ivImg);
+        if(url!=null){
+            if(url.length()>0){
+                GlideUtils.loadImage(mContext,url,viewHolder.ivImg);
+            }
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

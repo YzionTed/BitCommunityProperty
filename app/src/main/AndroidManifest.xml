@@ -279,6 +279,8 @@
             android:taskAffinity="com.igexin.sdk.PushActivityTask"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
+        <activity android:name=".activity.OnlineActivity"/>
+
         <service
             android:name="com.igexin.download.DownloadService"
             android:process=":pushservice"/>
@@ -820,7 +822,7 @@
             android:theme="@style/AppTheme"/>
         <!-- 故障新增主页面 -->
         <activity
-            android:name=".activity.faultManager.FaultAddActivity"
+            android:name=".activity.faultDeclare.FaultAddActivity"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -863,7 +865,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.newsdetail.NewsDetail"/>
+        <activity android:name=".activity.newsdetail.NewsDetailActivity"/>
         <activity android:name=".activity.company.CompanyInfo"/>
         <activity android:name=".activity.userinfo.PersonInfoActivity"/>
         <activity android:name=".activity.userinfo.PersonCenterActivity"/>

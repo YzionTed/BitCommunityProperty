@@ -49,7 +49,6 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="水电煤气故障"
                     android:textColor="@color/tv_gray_66"
                     android:textSize="14sp" />
 
@@ -57,7 +56,6 @@
                     android:id="@+id/tv_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="待确认"
                     android:textColor="@color/tv_blue_status"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -81,13 +79,13 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:gravity="right"
                     android:singleLine="true"
-                    android:text="啊的日本"
                     android:textColor="@color/tv_black_33"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -111,13 +109,13 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tv_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:gravity="right"
                     android:singleLine="true"
-                    android:text="12678908796"
                     android:textColor="@color/tv_black_33"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -141,13 +139,13 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:gravity="right"
                     android:singleLine="true"
-                    android:text="2018/02/07"
                     android:textColor="@color/tv_black_33"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -171,13 +169,13 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tv_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:gravity="right"
                     android:singleLine="true"
-                    android:text="A区2栋A879"
                     android:textColor="@color/tv_black_33"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -203,14 +201,13 @@
                     android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/fault_describe"
+                    android:id="@+id/tv_fault_describe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
                     android:layout_marginBottom="15dp"
                     android:paddingTop="5dp"
-                    android:text="电梯等一闪一闪的，还没亮，不行！"
                     android:textColor="@color/tv_black_33"
                     android:textSize="15sp" />
 
@@ -229,12 +226,14 @@
 
             <!--驳回理由布局：只有被驳回的申报才显示这个布局-->
             <LinearLayout
+                android:id="@+id/layout_reject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:padding="15dp">
 
                 <TextView
@@ -246,24 +245,26 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tv_reject_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:gravity="right"
                     android:singleLine="true"
-                    android:text="这种问题不要找我们，自己搞定"
                     android:textColor="@color/tv_black_33"
                     android:textSize="14sp" />
             </LinearLayout>
 
             <!--维修人员布局：看情况是否显示这个布局-->
             <LinearLayout
+                android:id="@+id/layout_repair"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -282,13 +283,13 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tv_repair_user"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:singleLine="true"
-                        android:text="就是我"
                         android:textColor="@color/tv_black_33"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -313,13 +314,13 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tv_repair_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:gravity="right"
                         android:singleLine="true"
-                        android:text="12345678901"
                         android:textColor="@color/tv_blue_status"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -329,6 +330,7 @@
 
             <!--评价布局：看情况是否显示这个布局-->
             <LinearLayout
+                android:id="@+id/layout_evaluate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -383,17 +385,18 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tv_evaluate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="55dp"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
-                    android:text="比上次好了很多，超级赞！早设计费楼上的加福禄寿放假了"
                     android:textColor="@color/tv_black_33"
                     android:textSize="15sp" />
             </LinearLayout>
 
             <Button
+                android:id="@+id/bt_cancel"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_gravity="center_horizontal"
@@ -402,9 +405,38 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="55dp"
                 android:background="@color/white"
-                android:text="取消故障申报"
+                android:text="驳回申报"
                 android:textColor="@color/tv_blue_status"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/bt_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@color/white"
+                android:text="确认受理"
+                android:textColor="@color/tv_blue_status"
+                android:textSize="17sp"
+                android:visibility="gone"/>
+            <Button
+                android:id="@+id/bt_assign"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="55dp"
+                android:background="@color/white"
+                android:text="确认分派"
+                android:textColor="@color/tv_blue_status"
+                android:textSize="17sp"
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

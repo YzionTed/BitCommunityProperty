@@ -106,6 +106,7 @@ public class DoorControlBean {
         private long updateAt;
         private Object yunDeviceId;
 
+
         public String getBuildingId() {
             return buildingId;
         }

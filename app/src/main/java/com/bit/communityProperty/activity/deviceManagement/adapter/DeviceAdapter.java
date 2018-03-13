@@ -1,6 +1,7 @@
 package com.bit.communityProperty.activity.deviceManagement.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,10 @@ import android.widget.TextView;
 
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.deviceManagement.bean.CameraBean;
+import com.bit.communityProperty.activity.deviceManagement.bean.CarBrakeBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.DeviceBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.DoorControlBean;
+import com.bit.communityProperty.activity.deviceManagement.bean.ElevatorListBean;
 import com.bit.communityProperty.adapter.ListBaseAdapter;
 import com.bit.communityProperty.view.CircleImageView;
 
@@ -21,19 +24,17 @@ import com.bit.communityProperty.view.CircleImageView;
 
 public class DeviceAdapter<T> extends ListBaseAdapter<T> {
     private Context mContext;
-    private LayoutInflater inflater = null;
     private ViewHolder viewHolder = null;
     private CameraBean.RecordsBean camerBean;//摄像头bean类
     private DoorControlBean.RecordsBean doorBean;//门禁bean类
 
     public DeviceAdapter(Context context) {
         this.mContext = context;
-        this.inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(inflater.inflate(R.layout.fragment_device_item, parent, false));
+        return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.fragment_device_item, parent, false));
     }
 
     @Override
@@ -46,25 +47,54 @@ public class DeviceAdapter<T> extends ListBaseAdapter<T> {
 
         ViewHolder viewHolder = (ViewHolder) holder;
 
-        if (mDataList.get(position)instanceof CameraBean.RecordsBean){//摄像头
+        if (mDataList.get(position) instanceof CameraBean.RecordsBean) {//摄像头
             camerBean = (CameraBean.RecordsBean) mDataList.get(position);
-            if (camerBean.getCameraStatus()==1){
+            if (camerBean.getCameraStatus() == 1) {
                 viewHolder.tvStatus.setText("运行正常");
-            }else {
+                viewHolder.tvStatus.setBackground(ContextCompat.getDrawable(mContext,R.drawable.shape_rad22_blue));
+            } else {
                 viewHolder.tvStatus.setText("运行故障");
+                viewHolder.tvStatus.setBackground(ContextCompat.getDrawable(mContext,R.drawable.shape_rad22_yellow));
             }
             viewHolder.tvName.setText(camerBean.getName());
             viewHolder.tvId.setText(camerBean.getCameraCode());
-        }
-        if (mDataList.get(position)instanceof DoorControlBean.RecordsBean){//门禁
+            viewHolder.ivIcon.setImageResource(R.mipmap.ic_sbgl_sxt);
+        }else if (mDataList.get(position) instanceof DoorControlBean.RecordsBean) {//门禁
             doorBean = (DoorControlBean.RecordsBean) mDataList.get(position);
-            if (doorBean.getDoorStatus()==1){
+            if (doorBean.getDoorStatus() == 1) {
                 viewHolder.tvStatus.setText("运行正常");
-            }else {
+                viewHolder.tvStatus.setBackground(ContextCompat.getDrawable(mContext,R.drawable.shape_rad22_blue));
+            } else {
                 viewHolder.tvStatus.setText("运行故障");
+                viewHolder.tvStatus.setBackground(ContextCompat.getDrawable(mContext,R.drawable.shape_rad22_yellow));
             }
             viewHolder.tvName.setText(doorBean.getName());
-            viewHolder.tvId.setText(doorBean.getDeviceCode());
+            viewHolder.tvId.setText(doorBean.getSerialNo());
+            viewHolder.ivIcon.setImageResource(R.mipmap.ic_sbgl_mj);
+        }else if (mDataList.get(position) instanceof CarBrakeBean.RecordsBean){//车闸
+            CarBrakeBean.RecordsBean carBrakeBean = (CarBrakeBean.RecordsBean) mDataList.get(position);
+            if (carBrakeBean.getGateStatus() == 1) {
+                viewHolder.tvStatus.setText("运行正常");
+                viewHolder.tvStatus.setBackground(ContextCompat.getDrawable(mContext,R.drawable.shape_rad22_blue));
+            } else {
+                viewHolder.tvStatus.setText("运行故障");
+                viewHolder.tvStatus.setBackground(ContextCompat.getDrawable(mContext,R.drawable.shape_rad22_yellow));
+            }
+            viewHolder.tvName.setText(carBrakeBean.getGateName());
+            viewHolder.tvId.setText(carBrakeBean.getGateNO());
+            viewHolder.ivIcon.setImageResource(R.mipmap.ic_sbgl_cz);
+        }else if (mDataList.get(position) instanceof ElevatorListBean.RecordsBean){//电梯
+            ElevatorListBean.RecordsBean carBrakeBean = (ElevatorListBean.RecordsBean) mDataList.get(position);
+            if (carBrakeBean.getElevatorStatus() == 0) {
+                viewHolder.tvStatus.setText("运行正常");
+                viewHolder.tvStatus.setBackground(ContextCompat.getDrawable(mContext,R.drawable.shape_rad22_blue));
+            } else {
+                viewHolder.tvStatus.setText("运行故障");
+                viewHolder.tvStatus.setBackground(ContextCompat.getDrawable(mContext,R.drawable.shape_rad22_yellow));
+            }
+            viewHolder.tvName.setText(carBrakeBean.getName());
+            viewHolder.tvId.setText(carBrakeBean.getElevatorTypeName());
+            viewHolder.ivIcon.setImageResource(R.mipmap.ic_sbgl_dt);
         }
     }
 

@@ -32,7 +32,7 @@ public class JiBoUtils {
     private static Context mContext;
     private BluetoothClientManger mBluetoothClientManger;
     private JiBoBean jiBoBean;
-   private String Tag="JiBoUtils";
+    private String Tag="JiBoUtils";
     private JiBoUtils(Context context) {
         init(context);
     }
@@ -76,8 +76,9 @@ public class JiBoUtils {
     /**
      * 蓝牙开梯
      */
-    public void openDevice(final ElevatorListBean  deviceDateBean, final List<Register> registerList, final OnOpenLiftCallBackListenter onOpenLiftCallBackListenter) {
+    public void openDevice(final String  macAddress, final List<Register> registerList, final OnOpenLiftCallBackListenter onOpenLiftCallBackListenter) {
 
+        Log.e(Tag,"macAddress=="+macAddress +" registerList="+registerList.get(0).getPhoneMac());
         if (jiBoBean.isBluetoothSupporse()) {
             jiBoBean.setBluetoothOpen(mBluetoothClientManger.isBluetoothOpened());
             //蓝牙是否打开
@@ -105,7 +106,7 @@ public class JiBoUtils {
                     if(onOpenLiftCallBackListenter!=null){
                         onOpenLiftCallBackListenter.OpenLiftCallBackListenter(2,"连接失败");
                     }
-                   // Toast.makeText(mContext, "连接失败", Toast.LENGTH_LONG).show();
+                    // Toast.makeText(mContext, "连接失败", Toast.LENGTH_LONG).show();
                     Log.e("=====", " connectedResult==连接失败");
                 }
             }
@@ -114,10 +115,10 @@ public class JiBoUtils {
         mBluetoothClientManger.setBleNotifyLister(new BluetoothClientManger.BleNotifyLister() {
             @Override
             public void onNotifyResult(Register register) {
-               if(onOpenLiftCallBackListenter!=null){
-                   onOpenLiftCallBackListenter.OpenLiftCallBackListenter(1,"开梯成功");
-               }
-               // Toast.makeText(mContext, "开梯成功", Toast.LENGTH_LONG).show();
+                if(onOpenLiftCallBackListenter!=null){
+                    onOpenLiftCallBackListenter.OpenLiftCallBackListenter(1,"开梯成功");
+                }
+                // Toast.makeText(mContext, "开梯成功", Toast.LENGTH_LONG).show();
                 Log.e("=====", "开梯成功： register.type=" + register.type + ",register.type=" + register.PhoneMac + ",register.register=" + register.register);
             }
 
@@ -135,15 +136,15 @@ public class JiBoUtils {
             public void onResponse(boolean isNoticeOk) {
                 Log.e("====", "isNoticeOk=通知 =" + isNoticeOk);
                 if (isNoticeOk) {
-                  //  Toast.makeText(mContext, "通知成功", Toast.LENGTH_LONG).show();
-                    if(deviceDateBean.getMacAddress().contains("#")){
-                        String macAddress = deviceDateBean.getMacAddress();
+                    //  Toast.makeText(mContext, "通知成功", Toast.LENGTH_LONG).show();
+                    if(macAddress.contains("#")){
+
                         String[] split = macAddress.split("#");
                         Log.e(Tag,"split[1]="+split[1]);
                         mBluetoothClientManger.connect(split[1]);
                         mBluetoothClientManger.write(split[1], registerList);
                     }else {
-                        mBluetoothClientManger.write(deviceDateBean.getMacAddress(), registerList);
+                        mBluetoothClientManger.write(macAddress, registerList);
                     }
                     if(onOpenLiftCallBackListenter!=null){
                         onOpenLiftCallBackListenter.OpenLiftCallBackListenter(2,"连接设备成功");
@@ -152,7 +153,7 @@ public class JiBoUtils {
                     if(onOpenLiftCallBackListenter!=null){
                         onOpenLiftCallBackListenter.OpenLiftCallBackListenter(2,"连接设备失败");
                     }
-                  //  Toast.makeText(mContext, "通知失败", Toast.LENGTH_LONG).show();
+                    //  Toast.makeText(mContext, "通知失败", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -167,14 +168,13 @@ public class JiBoUtils {
 
             }
         });
-      if(deviceDateBean.getMacAddress().contains("#")){
-          String macAddress = deviceDateBean.getMacAddress();
-          String[] split = macAddress.split("#");
-          Log.e(Tag,"split[1]="+split[1]);
-          mBluetoothClientManger.connect(split[1]);
-      }else {
-          mBluetoothClientManger.connect(deviceDateBean.getMacAddress());
-      }
+        if(macAddress.contains("#")){
+            String[] split = macAddress.split("#");
+            Log.e(Tag,"split[1]="+split[1]);
+            mBluetoothClientManger.connect(split[1]);
+        }else {
+            mBluetoothClientManger.connect(macAddress);
+        }
 
     }
 
@@ -231,7 +231,4 @@ public class JiBoUtils {
         //1:成功 2：失败
         void OpenLiftCallBackListenter(int backState,String msg);
     }
-
-
-
 }

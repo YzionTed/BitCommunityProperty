@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.alibaba.sdk.android.oss.ClientException;
 import com.alibaba.sdk.android.oss.ServiceException;
 import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
+import com.alibaba.sdk.android.oss.model.OSSRequest;
+import com.alibaba.sdk.android.oss.model.OSSResult;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.bit.communityProperty.R;
@@ -23,8 +25,11 @@ import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.net.ThrowableUtils;
+import com.bit.communityProperty.receiver.RxBus;
+import com.bit.communityProperty.utils.LogManager;
 import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.SPUtil;
+import com.bit.communityProperty.utils.TimeUtils;
 import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.utils.UploadInfo;
 import com.classic.common.MultipleStatusView;
@@ -39,6 +44,7 @@ import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +54,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import me.leefeng.promptlibrary.PromptDialog;
 
 public class CleanClockListActivity extends BaseActivity {
@@ -92,6 +99,10 @@ public class CleanClockListActivity extends BaseActivity {
         btnRightActionBar.setVisibility(View.VISIBLE);
         uploadDialog = new PromptDialog(this);
         multipleStatusView.showLoading();
+        uploadInfo = (UploadInfo) SPUtil.getObject(this, AppConfig.UPLOAD_INFO);
+        if (uploadInfo == null || TimeUtils.isExpiration(uploadInfo.getExpiration())) {
+            initOssToken();
+        }
         initDate();
         multipleStatusView.setOnRetryClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +158,7 @@ public class CleanClockListActivity extends BaseActivity {
         listMap.clear();
 //        listMap.put("userId", SPUtil.get(this, AppConfig.id, ""));
 //        listMap.put("username", SPUtil.get(this, AppConfig.name, ""));
-        listMap.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        listMap.put("communityId", AppConfig.COMMUNITYID);
         listMap.put("taskType", 2);
         if (isRefresh)
             page = 1;
@@ -220,19 +231,17 @@ public class CleanClockListActivity extends BaseActivity {
                 case PictureConfig.CHOOSE_REQUEST:
                     // 图片选择结果回调
                     List<LocalMedia> selectList = PictureSelector.obtainMultipleResult(data);
-                    // 例如 LocalMedia 里面返回三种path
-                    // 1.media.getPath(); 为原图path
-                    // 2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
-                    // 3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
-                    // 如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
+//                     例如 LocalMedia 里面返回三种path
+//                     1.media.getPath(); 为原图path
+//                     2.media.getCutPath();为裁剪后path，需判断media.isCut();是否为true
+//                     3.media.getCompressPath();为压缩后path，需判断media.isCompressed();是否为true
+//                     如果裁剪并压缩了，以取压缩路径为准，因为是先裁剪后压缩的
                     if (uploadInfo != null) {
                         uploadDialog.showLoading("上传图片中...");
-                        uploadInfo.setBucket("bit-test");
+                        uploadInfo.setBucket(AppConfig.BUCKET_NAME);
                         imgUrl = OssManager.getInstance().uploadFileToAliYun(uploadInfo, selectList.get(0).getPath(), new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
                             @Override
                             public void onSuccess(PutObjectRequest ossRequest, PutObjectResult ossResult) {
-//                                uploadDialog.showSuccess("上传成功");
-//                                uploadDialog.dismiss();
                                 addClock();
                             }
 
@@ -252,9 +261,9 @@ public class CleanClockListActivity extends BaseActivity {
         map.clear();
 //        map.put("userId", SPUtil.get(this, AppConfig.id, ""));
 //        map.put("username", SPUtil.get(this, AppConfig.name, ""));
-        map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        map.put("communityId", AppConfig.COMMUNITYID);
         map.put("taskType", 2);
-        map.put("url", uploadInfo.getName());
+        map.put("url", imgUrl);
 //        map.put("creatorId", SPUtil.get(this, AppConfig.id, ""));
 //        map.put("createAt", TimeUtils.getCurrentTimeWithT());
 //        map.put("dataStatus", "1");
@@ -283,6 +292,35 @@ public class CleanClockListActivity extends BaseActivity {
             @Override
             public void onComplete() {
                 uploadDialog.dismiss();
+            }
+        });
+    }
+
+    private void initOssToken() {
+        RetrofitManage.getInstance().subscribe(Api.getInstance().ossToken(), new Observer<BaseEntity<UploadInfo>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseEntity<UploadInfo> uploadInfoBaseEntity) {
+                if (uploadInfoBaseEntity.isSuccess()) {
+                    uploadInfo = uploadInfoBaseEntity.getData();
+                    SPUtil.saveObject(mContext, AppConfig.UPLOAD_INFO, uploadInfo);
+                    if (uploadInfo != null) {
+                        OssManager.getInstance().init(mContext, uploadInfo);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
             }
         });
     }

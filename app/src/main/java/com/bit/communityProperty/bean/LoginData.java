@@ -1,12 +1,13 @@
 package com.bit.communityProperty.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by 23 on 2018/2/8.
  */
 
-public class LoginData {
+public class LoginData implements Serializable{
     /**
      * email : 511782881@qq.com
      * iDCard : 452730199110130512

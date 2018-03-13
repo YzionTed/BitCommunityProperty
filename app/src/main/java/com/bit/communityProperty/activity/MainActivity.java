@@ -20,41 +20,61 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.bit.communityProperty.Bluetooth.util.BluetoothNetUtils;
 import com.bit.communityProperty.Bluetooth.yunduijiang.YunDuiJIangUtils;
 import com.bit.communityProperty.MyApplication;
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.household.HouseholdManagementActivity;
-import com.bit.communityProperty.activity.newsdetail.NewsDetail;
+import com.bit.communityProperty.activity.newsdetail.NewsDetailActivity;
 import com.bit.communityProperty.activity.safetywarning.SafeWarningListActivity;
 import com.bit.communityProperty.base.BaseActivity;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.bean.AppVersionInfo;
+import com.bit.communityProperty.bean.CardListBean;
+import com.bit.communityProperty.bean.IMToken;
+import com.bit.communityProperty.bean.StoreDoorMILiBeanList;
+import com.bit.communityProperty.bean.StoreElevatorListBeans;
 import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.fragment.main.MainMineFragment;
 import com.bit.communityProperty.fragment.main.MainNewsFragment;
 import com.bit.communityProperty.fragment.main.MainWorkFragment;
 import com.bit.communityProperty.net.Api;
+import com.bit.communityProperty.net.ApiRequester;
+import com.bit.communityProperty.net.ResponseCallBack;
 import com.bit.communityProperty.net.RetrofitManage;
+import com.bit.communityProperty.net.ServiceException;
 import com.bit.communityProperty.receiver.JPushBean;
 import com.bit.communityProperty.receiver.RxBus;
 import com.bit.communityProperty.utils.AppUtil;
+import com.bit.communityProperty.utils.CheckSumBuilder;
 import com.bit.communityProperty.utils.DialogUtil;
 import com.bit.communityProperty.utils.DownloadUtils;
+import com.bit.communityProperty.utils.LiteOrmUtil;
 import com.bit.communityProperty.utils.LogManager;
+import com.bit.communityProperty.utils.LogUtil;
 import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.PermissionUtils;
 import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.utils.UploadInfo;
 import com.bit.communityProperty.view.TabItem;
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.LoginInfo;
+
+import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 
 public class MainActivity extends BaseActivity {
@@ -83,6 +103,9 @@ public class MainActivity extends BaseActivity {
 
     private String downloadUrl;
 
+    private String ROLE_TYPE;
+    private BluetoothNetUtils bluetoothNetUtils;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
@@ -94,7 +117,6 @@ public class MainActivity extends BaseActivity {
         initTabHost();
 //        initOssToken();
         MyApplication.getInstance().getBlueToothApp().openBluetooth();
-
         //从通知点击启动
         Bundle bundle = getIntent().getBundleExtra(AppConfig.EXTRA_BUNDLE);
         if (bundle != null) {
@@ -105,7 +127,7 @@ public class MainActivity extends BaseActivity {
                         startActivity(new Intent(this, SafeWarningListActivity.class).putExtra("jpushbean", jPushBean));
                         break;
                     case "100101"://社区公告
-                        startActivity(new Intent(this, NewsDetail.class).putExtra("id", jPushBean.getData().getNotice_id()));
+                        startActivity(new Intent(this, NewsDetailActivity.class).putExtra("id", jPushBean.getData().getNotice_id()));
                         break;
                     case "100401"://房屋认证
                         startActivity(new Intent(this, HouseholdManagementActivity.class).putExtra("id", jPushBean.getData().getCommunityId()));
@@ -123,59 +145,163 @@ public class MainActivity extends BaseActivity {
         }
         getVersion();
 
-//        createAccountId();//测试云信
+        getCardList();//获取虚拟卡
+        RxBus.get().toObservable().subscribe(new Consumer<Object>() {
+
+            @Override
+            public void accept(Object o) throws Exception {
+                if (o instanceof String){
+                    if (o.equals("update_card_list")){
+                        getCardList();
+                    }
+                }
+            }
+        });
+
+        createAccountId();//测试云信
+        upBlueToothDate();
     }
 
-//    private void createAccountId() {
-//        RequestParams requestParams = new RequestParams();
-//        requestParams.addHeader("AppKey", "c7d64ed61462dfac25c0089ab171eaa4");
-//        requestParams.addHeader("Nonce", "123456");
-//        String curTime = String.valueOf((new Date()).getTime() / 1000L);
-//        requestParams.addHeader("CurTime", curTime);
-//        requestParams.addHeader("CheckSum", CheckSumBuilder.getCheckSum("744182fbc16c", "123456", curTime));
-//        requestParams.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
-//
-//        requestParams.addBodyParameter("accid", (String) SPUtil.get(mContext, AppConfig.phone, ""));
-////        requestParams.addBodyParameter("accid", "15900020005");
-//
-////        String url = "https://api.netease.im/nimserver/user/create.action";//{"desc":"already register","code":414}
-//        String url = "https://api.netease.im/nimserver/user/refreshToken.action";
-////        ApiRequester.sendRequest(url0, requestParams, mResponseCallBack);
-//        ApiRequester.sendRequest(url, requestParams, mResponseCallBack);
-//    }
-//
-//
-//    //{"code":200,"info":{"token":"338fdb41436631cd5ced4d73950154d1","accid":"15900010001"}}
-//    ResponseCallBack mResponseCallBack = new ResponseCallBack<IMToken>(false) {
-//
-//        @Override
-//        public void onSuccess(IMToken data) {
+    /**
+     * 更新蓝牙数据
+     */
+    public void upBlueToothDate(){
+        miLiUpDate();
+        upElevatorDate();
+    }
+    /**
+     * 米粒的数据更新缓存
+     */
+    private void miLiUpDate() {
+        if (bluetoothNetUtils == null) {
+            bluetoothNetUtils = new BluetoothNetUtils();
+        }
+        StoreDoorMILiBeanList doorMILiBeans = bluetoothNetUtils.getBletoothDoorDate();
+        if (doorMILiBeans != null) {
+            if (doorMILiBeans.isTimeOutNow()) {
+                bluetoothNetUtils.getMiLiNetDate(null, 2, null);
+            }
+        } else {
+            bluetoothNetUtils.getMiLiNetDate(null, 2, null);
+        }
+    }
+
+    /**
+     * 电梯蓝牙的数据更新缓存
+     */
+    private void upElevatorDate() {
+        if (bluetoothNetUtils == null) {
+            bluetoothNetUtils = new BluetoothNetUtils();
+        }
+        StoreElevatorListBeans bletoothElevateDate = bluetoothNetUtils.getBletoothElevateDate();
+        if (bletoothElevateDate != null) {
+            if (bletoothElevateDate.isTimeOutNow()) {
+                bluetoothNetUtils.getBluetoothElevatorDate(2, null);
+            }
+        } else {
+            bluetoothNetUtils.getBluetoothElevatorDate( 2, null);
+        }
+    }
+
+    private void getCardList(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("communityId", AppConfig.COMMUNITYID);
+        map.put("userId", SPUtil.get(this, AppConfig.id, ""));
+        RetrofitManage.getInstance().subscribe(Api.getInstance().getCardList(map), new Observer<BaseEntity<CardListBean>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(BaseEntity<CardListBean> objectBaseEntity) {
+                if (objectBaseEntity.isSuccess()){
+//                    LiteOrmUtil.getInstance().getOrm().delete(CardListBean.class);
+                    if (objectBaseEntity.getData()!=null){
+                        LiteOrmUtil.getInstance().getOrm().save(objectBaseEntity.getData().getRecords());
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    private void createAccountId() {
+        RequestParams requestParams = new RequestParams();
+        requestParams.addHeader("AppKey", "c7d64ed61462dfac25c0089ab171eaa4");
+        requestParams.addHeader("Nonce", "123456");
+        String curTime = String.valueOf((new Date()).getTime() / 1000L);
+        requestParams.addHeader("CurTime", curTime);
+        requestParams.addHeader("CheckSum", CheckSumBuilder.getCheckSum("744182fbc16c", "123456", curTime));
+        requestParams.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        requestParams.addBodyParameter("accid", (String) SPUtil.get(mContext, AppConfig.phone, ""));
+//        requestParams.addBodyParameter("accid", "15900020005");
+
+//        String url = "https://api.netease.im/nimserver/user/create.action";//{"desc":"already register","code":414}
+        String url = "https://api.netease.im/nimserver/user/refreshToken.action";
+//        ApiRequester.sendRequest(url0, requestParams, mResponseCallBack);
+        ApiRequester.sendRequest(url, requestParams, mResponseCallBack);
+    }
+
+
+    //{"code":200,"info":{"token":"338fdb41436631cd5ced4d73950154d1","accid":"15900010001"}}
+    ResponseCallBack mResponseCallBack = new ResponseCallBack<IMToken>(false) {
+
+        @Override
+        public void onSuccess(IMToken data) {
 //            Toast.makeText(mContext, "onSuccess", Toast.LENGTH_SHORT).show();
-//            NimUIKit.login(new LoginInfo(data.getInfo().getAccid(), data.getInfo().getToken()), new RequestCallback<LoginInfo>() {
-//                @Override
-//                public void onSuccess(LoginInfo param) {
+            NimUIKit.login(new LoginInfo(data.getInfo().getAccid(), data.getInfo().getToken()), new RequestCallback<LoginInfo>() {
+                @Override
+                public void onSuccess(LoginInfo param) {
 //                    Toast.makeText(mContext, "login im onSuccess", Toast.LENGTH_SHORT).show();
-//                    LogUtil.d(TAG, "login im onSuccess");
-//                }
+                    LogUtil.d(TAG, "login im onSuccess");
+                }
+
+                @Override
+                public void onFailed(int code) {
+                    LogUtil.d(TAG, "onFailed:" + code);
+                }
+
+                @Override
+                public void onException(Throwable exception) {
+                    LogUtil.d(TAG, "onException:" + exception.getMessage());
+                }
+            });
+
+//            NIMClient.getService(AuthService.class).login(new LoginInfo(data.getInfo().getAccid(), data.getInfo().getToken()))
+//                    .setCallback(new RequestCallback<LoginInfo>() {
+//                        @Override
+//                        public void onSuccess(LoginInfo o) {
+//                            showToast("login onSuccess");
+//                        }
 //
-//                @Override
-//                public void onFailed(int code) {
-//                    LogUtil.d(TAG, "onFailed:" + code);
-//                }
+//                        @Override
+//                        public void onFailed(int i) {
+//                            showToast("login onFailed");
+//                        }
 //
-//                @Override
-//                public void onException(Throwable exception) {
-//                    LogUtil.d(TAG, "onException:" + exception.getMessage());
-//                }
-//            });
-//
-//        }
-//
-//        @Override
-//        public void onFailure(ServiceException e) {
-//            LogUtil.d(TAG, e.getMsg());
-//        }
-//    };
+//                        @Override
+//                        public void onException(Throwable throwable) {
+//                            showToast(throwable.getMessage());
+//                        }
+//                    });
+        }
+
+        @Override
+        public void onFailure(ServiceException e) {
+            LogUtil.d(TAG, e.getMsg());
+        }
+    };
 
     private void showToast(String message) {
         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
@@ -277,13 +403,20 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initTabHost() {
+        if (getIntent().getStringExtra(AppConfig.ROLE_TYPE)==null){
+            ROLE_TYPE = (String) SPUtil.get(mContext, AppConfig.ROLE_TYPE, AppConfig.ROLE_MANAGER);
+        }else{
+            ROLE_TYPE = getIntent().getStringExtra(AppConfig.ROLE_TYPE);
+        }
         mainTabhost.setup(this, getSupportFragmentManager(), R.id.main_tab_contents);
         mainTabhost.getTabWidget().setDividerDrawable(null);
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConfig.ROLE_TYPE,ROLE_TYPE);
         for (int i = 0; i < mTabItemList.size(); i++) {
             TabItem tabItem = mTabItemList.get(i);
             //实例化一个TabSpec,设置tab的名称和视图
             TabHost.TabSpec tabSpec = mainTabhost.newTabSpec(tabItem.getTitleString()).setIndicator(tabItem.getView(i));
-            mainTabhost.addTab(tabSpec, tabItem.getFragmentClass(), null);
+            mainTabhost.addTab(tabSpec, tabItem.getFragmentClass(), bundle);
 
             //默认选中第一个tab
             if (i == 1) {
@@ -304,6 +437,7 @@ public class MainActivity extends BaseActivity {
                         tabitem.setChecked(false);
                     }
                 }
+                upBlueToothDate();
             }
         });
     }
@@ -316,6 +450,7 @@ public class MainActivity extends BaseActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (mIsExit) {
                 toast.cancel();
+              //  MyApplication.getInstance().getBlueToothApp().closeBluetooth();
                 MyApplication.getInstance().exitApp();
             } else {
                 if (toast == null) {
