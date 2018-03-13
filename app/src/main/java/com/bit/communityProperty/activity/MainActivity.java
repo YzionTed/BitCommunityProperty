@@ -31,7 +31,6 @@ import com.bit.communityProperty.base.BaseActivity;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.bean.AppVersionInfo;
 import com.bit.communityProperty.bean.CardListBean;
-import com.bit.communityProperty.bean.IMToken;
 import com.bit.communityProperty.bean.StoreDoorMILiBeanList;
 import com.bit.communityProperty.bean.StoreElevatorListBeans;
 import com.bit.communityProperty.config.AppConfig;
@@ -39,33 +38,22 @@ import com.bit.communityProperty.fragment.main.MainMineFragment;
 import com.bit.communityProperty.fragment.main.MainNewsFragment;
 import com.bit.communityProperty.fragment.main.MainWorkFragment;
 import com.bit.communityProperty.net.Api;
-import com.bit.communityProperty.net.ApiRequester;
-import com.bit.communityProperty.net.ResponseCallBack;
 import com.bit.communityProperty.net.RetrofitManage;
-import com.bit.communityProperty.net.ServiceException;
 import com.bit.communityProperty.receiver.JPushBean;
 import com.bit.communityProperty.receiver.RxBus;
 import com.bit.communityProperty.utils.AppUtil;
-import com.bit.communityProperty.utils.CheckSumBuilder;
 import com.bit.communityProperty.utils.DialogUtil;
 import com.bit.communityProperty.utils.DownloadUtils;
 import com.bit.communityProperty.utils.LiteOrmUtil;
 import com.bit.communityProperty.utils.LogManager;
-import com.bit.communityProperty.utils.LogUtil;
 import com.bit.communityProperty.utils.OssManager;
 import com.bit.communityProperty.utils.PermissionUtils;
 import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.utils.UploadInfo;
 import com.bit.communityProperty.view.TabItem;
-import com.netease.nim.uikit.api.NimUIKit;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.auth.LoginInfo;
-
-import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -158,7 +146,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        createAccountId();//测试云信
+//        createAccountId();//测试云信
         upBlueToothDate();
     }
 
@@ -235,48 +223,48 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void createAccountId() {
-        RequestParams requestParams = new RequestParams();
-        requestParams.addHeader("AppKey", "c7d64ed61462dfac25c0089ab171eaa4");
-        requestParams.addHeader("Nonce", "123456");
-        String curTime = String.valueOf((new Date()).getTime() / 1000L);
-        requestParams.addHeader("CurTime", curTime);
-        requestParams.addHeader("CheckSum", CheckSumBuilder.getCheckSum("744182fbc16c", "123456", curTime));
-        requestParams.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        requestParams.addBodyParameter("accid", (String) SPUtil.get(mContext, AppConfig.phone, ""));
-//        requestParams.addBodyParameter("accid", "15900020005");
-
-//        String url = "https://api.netease.im/nimserver/user/create.action";//{"desc":"already register","code":414}
-        String url = "https://api.netease.im/nimserver/user/refreshToken.action";
-//        ApiRequester.sendRequest(url0, requestParams, mResponseCallBack);
-        ApiRequester.sendRequest(url, requestParams, mResponseCallBack);
-    }
-
-
-    //{"code":200,"info":{"token":"338fdb41436631cd5ced4d73950154d1","accid":"15900010001"}}
-    ResponseCallBack mResponseCallBack = new ResponseCallBack<IMToken>(false) {
-
-        @Override
-        public void onSuccess(IMToken data) {
-//            Toast.makeText(mContext, "onSuccess", Toast.LENGTH_SHORT).show();
-            NimUIKit.login(new LoginInfo(data.getInfo().getAccid(), data.getInfo().getToken()), new RequestCallback<LoginInfo>() {
-                @Override
-                public void onSuccess(LoginInfo param) {
-//                    Toast.makeText(mContext, "login im onSuccess", Toast.LENGTH_SHORT).show();
-                    LogUtil.d(TAG, "login im onSuccess");
-                }
-
-                @Override
-                public void onFailed(int code) {
-                    LogUtil.d(TAG, "onFailed:" + code);
-                }
-
-                @Override
-                public void onException(Throwable exception) {
-                    LogUtil.d(TAG, "onException:" + exception.getMessage());
-                }
-            });
+//    private void createAccountId() {
+//        RequestParams requestParams = new RequestParams();
+//        requestParams.addHeader("AppKey", "c7d64ed61462dfac25c0089ab171eaa4");
+//        requestParams.addHeader("Nonce", "123456");
+//        String curTime = String.valueOf((new Date()).getTime() / 1000L);
+//        requestParams.addHeader("CurTime", curTime);
+//        requestParams.addHeader("CheckSum", CheckSumBuilder.getCheckSum("744182fbc16c", "123456", curTime));
+//        requestParams.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+//
+//        requestParams.addBodyParameter("accid", (String) SPUtil.get(mContext, AppConfig.phone, ""));
+////        requestParams.addBodyParameter("accid", "15900020005");
+//
+////        String url = "https://api.netease.im/nimserver/user/create.action";//{"desc":"already register","code":414}
+//        String url = "https://api.netease.im/nimserver/user/refreshToken.action";
+////        ApiRequester.sendRequest(url0, requestParams, mResponseCallBack);
+//        ApiRequester.sendRequest(url, requestParams, mResponseCallBack);
+//    }
+//
+//
+//    //{"code":200,"info":{"token":"338fdb41436631cd5ced4d73950154d1","accid":"15900010001"}}
+//    ResponseCallBack mResponseCallBack = new ResponseCallBack<IMToken>(false) {
+//
+//        @Override
+//        public void onSuccess(IMToken data) {
+////            Toast.makeText(mContext, "onSuccess", Toast.LENGTH_SHORT).show();
+//            NimUIKit.login(new LoginInfo(data.getInfo().getAccid(), data.getInfo().getToken()), new RequestCallback<LoginInfo>() {
+//                @Override
+//                public void onSuccess(LoginInfo param) {
+////                    Toast.makeText(mContext, "login im onSuccess", Toast.LENGTH_SHORT).show();
+//                    LogUtil.d(TAG, "login im onSuccess");
+//                }
+//
+//                @Override
+//                public void onFailed(int code) {
+//                    LogUtil.d(TAG, "onFailed:" + code);
+//                }
+//
+//                @Override
+//                public void onException(Throwable exception) {
+//                    LogUtil.d(TAG, "onException:" + exception.getMessage());
+//                }
+//            });
 
 //            NIMClient.getService(AuthService.class).login(new LoginInfo(data.getInfo().getAccid(), data.getInfo().getToken()))
 //                    .setCallback(new RequestCallback<LoginInfo>() {
@@ -295,13 +283,13 @@ public class MainActivity extends BaseActivity {
 //                            showToast(throwable.getMessage());
 //                        }
 //                    });
-        }
-
-        @Override
-        public void onFailure(ServiceException e) {
-            LogUtil.d(TAG, e.getMsg());
-        }
-    };
+//        }
+//
+//        @Override
+//        public void onFailure(ServiceException e) {
+//            LogUtil.d(TAG, e.getMsg());
+//        }
+//    };
 
     private void showToast(String message) {
         Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
