@@ -179,50 +179,52 @@ public class MainWorkFragment extends BaseFragment {
     }
 
     private void initBanner() {
-        Map<String, Object> map = new HashMap<>();
-        RetrofitManage.getInstance().subscribe(Api.getInstance().getBanner(map), new Observer<BaseEntity<List<BannerBean>>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(BaseEntity<List<BannerBean>> bannerBeanBaseEntity) {
-                if (bannerBeanBaseEntity.isSuccess()) {
-                    List<BannerBean> list = bannerBeanBaseEntity.getData();
-                    banner.setPages(list, new MZHolderCreator<BannerViewHolder>() {
-                        @Override
-                        public BannerViewHolder createViewHolder() {
-                            return new BannerViewHolder();
-                        }
-                    });
-                    banner.start();
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-
-//        List<Integer> s = new ArrayList<>();
-//        s.add(R.mipmap.banner_1);
-//        s.add(R.mipmap.banner_2);
-//        s.add(R.mipmap.banner_3);
-        banner.setIndicatorVisible(false);
-//        banner.setPages(s, new MZHolderCreator<BannerViewHolder>() {
+//        Map<String, Object> map = new HashMap<>();
+//        RetrofitManage.getInstance().subscribe(Api.getInstance().getBanner(map), new Observer<BaseEntity<List<BannerBean>>>() {
 //            @Override
-//            public BannerViewHolder createViewHolder() {
-//                return new BannerViewHolder();
+//            public void onSubscribe(Disposable d) {
+//
+//            }
+//
+//            @Override
+//            public void onNext(BaseEntity<List<BannerBean>> bannerBeanBaseEntity) {
+//                if (bannerBeanBaseEntity.isSuccess()) {
+//                    List<BannerBean> list = bannerBeanBaseEntity.getData();
+//                    if (list!=null&&list.size()>0){
+//                        banner.setPages(list, new MZHolderCreator<BannerViewHolder>() {
+//                            @Override
+//                            public BannerViewHolder createViewHolder() {
+//                                return new BannerViewHolder();
+//                            }
+//                        });
+//                        banner.start();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//
+//            }
+//
+//            @Override
+//            public void onComplete() {
+//
 //            }
 //        });
-//        banner.start();
+
+        List<Integer> s = new ArrayList<>();
+        s.add(R.mipmap.banner_1);
+        s.add(R.mipmap.banner_2);
+        s.add(R.mipmap.banner_3);
+        banner.setIndicatorVisible(false);
+        banner.setPages(s, new MZHolderCreator<BannerViewHolder>() {
+            @Override
+            public BannerViewHolder createViewHolder() {
+                return new BannerViewHolder();
+            }
+        });
+        banner.start();
     }
 
     private void initGridView() {
@@ -454,7 +456,7 @@ public class MainWorkFragment extends BaseFragment {
     }
 
 
-    public static class BannerViewHolder implements MZViewHolder<BannerBean> {
+    public static class BannerViewHolder implements MZViewHolder<Integer> {
         private ImageView mImageView;
 
         @Override
@@ -466,10 +468,10 @@ public class MainWorkFragment extends BaseFragment {
         }
 
         @Override
-        public void onBind(Context context, int position, BannerBean data) {
+        public void onBind(Context context, int position, Integer data) {
             // 数据绑定
-//            mImageView.setImageResource(data);
-            GlideUtils.loadImage(context, OssManager.getInstance().getUrl(data.getMaterialUrl()), mImageView);
+            mImageView.setImageResource(data);
+//            GlideUtils.loadImage(context, OssManager.getInstance().getUrl(data.getMaterialUrl()), mImageView);
         }
     }
 }

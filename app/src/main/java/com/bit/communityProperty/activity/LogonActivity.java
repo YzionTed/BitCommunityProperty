@@ -164,6 +164,7 @@ public class LogonActivity extends BaseActivity {
                             intent.putExtra(AppConfig.ROLE_TYPE, AppConfig.ROLE_MANAGER);//用户角色
                         }
                     }
+                    startActivity(intent);
                     RxBus.get().post("update_card_list");
                     finish();
                 } else {
