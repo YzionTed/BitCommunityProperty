@@ -179,6 +179,8 @@ public class DeviceInfoActivity extends BaseActivity {
                     }else{
                         adapter.addAll(objectBaseEntity.getData().getRecords());
                     }
+                }else{
+                    multipleStatusView.showEmpty();
                 }
             }
 
@@ -226,6 +228,8 @@ public class DeviceInfoActivity extends BaseActivity {
                     }else{
                         adapter.addAll(carBrakeDetailBeanBaseEntity.getData().getRecords());
                     }
+                }else{
+                    multipleStatusView.showEmpty();
                 }
             }
 
@@ -272,6 +276,8 @@ public class DeviceInfoActivity extends BaseActivity {
                     }else{
                         adapter.addAll(objectBaseEntity.getData().getRecords());
                     }
+                }else{
+                    multipleStatusView.showEmpty();
                 }
             }
 

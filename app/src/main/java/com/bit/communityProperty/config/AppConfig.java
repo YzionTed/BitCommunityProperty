@@ -50,6 +50,6 @@ public class AppConfig {
 
 
     public static final String UPLOAD_INFO = "UPLOAD_INFO";  //OSSTOKEN
-    public static final String BUCKET_NAME = "bit-test";
+    public static final String BUCKET_NAME = "bit-app";
 
 }
