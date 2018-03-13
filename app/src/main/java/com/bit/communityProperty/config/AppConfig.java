@@ -6,6 +6,8 @@ package com.bit.communityProperty.config;
  */
 
 public class AppConfig {
+    public static final String accid = "accid";
+    public static final String imToken = "imToken";
     public static final String IMG = "http://imgnew.e-gatenet.cn/";
     public static final String BIT_TOKEN="BIT-TOKEN";
     public static final String token="token";

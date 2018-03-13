@@ -280,8 +280,8 @@ public class MainWorkFragment extends BaseFragment {
                                 if (isIMLogin) {
                                     startActivity(new Intent(mContext, OnlineActivity.class));
                                 } else {
-                                    String uid = (String) SPUtil.get(mContext, AppConfig.id, "");
-                                    String token = (String) SPUtil.get(mContext, AppConfig.token, "");
+                                    String uid = (String) SPUtil.get(mContext, AppConfig.accid, "");
+                                    String token = (String) SPUtil.get(mContext, AppConfig.imToken, "");
                                     NimUIKit.login(new LoginInfo(uid, token), new RequestCallback<LoginInfo>() {
                                         @Override
                                         public void onSuccess(LoginInfo param) {
@@ -291,6 +291,7 @@ public class MainWorkFragment extends BaseFragment {
 
                                         @Override
                                         public void onFailed(int code) {
+                                            ToastUtil.showShort("登录失败:"+code);
                                         }
 
                                         @Override
