@@ -18,6 +18,7 @@ import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.view.TitleBarView;
+import com.classic.common.MultipleStatusView;
 import com.github.jdsjlzx.interfaces.OnItemClickListener;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
 import com.github.jdsjlzx.interfaces.OnRefreshListener;
@@ -44,6 +45,7 @@ public class DeviceInfoActivity extends BaseActivity {
     private LRecyclerView mRecyclerView;
     private LRecyclerViewAdapter mLRecyclerViewAdapter;//上下拉的recyclerView的adapter
     private DeviceInfoAdapter adapter;
+    private MultipleStatusView multipleStatusView;
 
     private int page = 1;
     private boolean isRefresh = true;
@@ -77,6 +79,16 @@ public class DeviceInfoActivity extends BaseActivity {
             }
         });
         mRecyclerView = findViewById(R.id.recyclerview);
+        multipleStatusView = findViewById(R.id.multiple_status_view);
+        multipleStatusView.showLoading();
+        multipleStatusView.setOnRetryClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                multipleStatusView.showLoading();
+                isRefresh = true;
+                getData(type);
+            }
+        });
     }
 
     /**
@@ -91,17 +103,7 @@ public class DeviceInfoActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 isRefresh = true;
-                switch (type){
-                    case 1:
-                        getCarDataInfo();
-                        break;
-                    case 2:
-                        getElevatorInfo();
-                        break;
-                    case 3:
-                        getDoorControlInfo();
-                        break;
-                }
+                getData(type);
             }
         });
         mRecyclerView.setLoadMoreEnabled(true);
@@ -109,17 +111,7 @@ public class DeviceInfoActivity extends BaseActivity {
             @Override
             public void onLoadMore() {
                 isRefresh = false;
-                switch (type){
-                    case 1:
-                        getCarDataInfo();
-                        break;
-                    case 2:
-                        getElevatorInfo();
-                        break;
-                    case 3:
-                        getDoorControlInfo();
-                        break;
-                }
+                getData(type);
             }
         });
         if (getIntent().getSerializableExtra("bean") != null) {
@@ -139,6 +131,20 @@ public class DeviceInfoActivity extends BaseActivity {
                 type = 3;
                 getDoorControlInfo();
             }
+        }
+    }
+
+    private void getData(int type){
+        switch (type){
+            case 1:
+                getCarDataInfo();
+                break;
+            case 2:
+                getElevatorInfo();
+                break;
+            case 3:
+                getDoorControlInfo();
+                break;
         }
     }
 
@@ -164,6 +170,11 @@ public class DeviceInfoActivity extends BaseActivity {
                 mRecyclerView.refreshComplete(AppConfig.pageSize);
                 if (objectBaseEntity.isSuccess()) {
                     if (isRefresh){
+                        if (objectBaseEntity.getData().getRecords()==null||objectBaseEntity.getData().getRecords().size()==0){
+                            multipleStatusView.showEmpty();
+                        }else{
+                            multipleStatusView.showContent();
+                        }
                         adapter.setDataList(objectBaseEntity.getData().getRecords());
                     }else{
                         adapter.addAll(objectBaseEntity.getData().getRecords());
@@ -206,6 +217,11 @@ public class DeviceInfoActivity extends BaseActivity {
                 mRecyclerView.refreshComplete(AppConfig.pageSize);
                 if (carBrakeDetailBeanBaseEntity.isSuccess()) {
                     if (isRefresh){
+                        if (carBrakeDetailBeanBaseEntity.getData().getRecords()==null||carBrakeDetailBeanBaseEntity.getData().getRecords().size()==0){
+                            multipleStatusView.showEmpty();
+                        }else{
+                            multipleStatusView.showContent();
+                        }
                         adapter.setDataList(carBrakeDetailBeanBaseEntity.getData().getRecords());
                     }else{
                         adapter.addAll(carBrakeDetailBeanBaseEntity.getData().getRecords());
@@ -247,6 +263,11 @@ public class DeviceInfoActivity extends BaseActivity {
                 mRecyclerView.refreshComplete(AppConfig.pageSize);
                 if (objectBaseEntity.isSuccess()) {
                     if (isRefresh){
+                        if (objectBaseEntity.getData().getRecords()==null||objectBaseEntity.getData().getRecords().size()==0){
+                            multipleStatusView.showEmpty();
+                        }else{
+                            multipleStatusView.showContent();
+                        }
                         adapter.setDataList(objectBaseEntity.getData().getRecords());
                     }else{
                         adapter.addAll(objectBaseEntity.getData().getRecords());

@@ -1,7 +1,6 @@
 package com.bit.communityProperty.activity.deviceManagement.fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,24 +11,19 @@ import android.view.ViewGroup;
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.deviceManagement.DeviceInfoActivity;
 import com.bit.communityProperty.activity.deviceManagement.adapter.DeviceAdapter;
-import com.bit.communityProperty.activity.deviceManagement.bean.DeviceBean;
-import com.bit.communityProperty.activity.deviceManagement.bean.DeviceBeanPar;
 import com.bit.communityProperty.activity.deviceManagement.bean.ElevatorListBean;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.base.BaseFragment;
 import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
-import com.bit.communityProperty.utils.GsonUtils;
-import com.bit.communityProperty.utils.LogManager;
+import com.classic.common.MultipleStatusView;
 import com.github.jdsjlzx.interfaces.OnItemClickListener;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
 import com.github.jdsjlzx.interfaces.OnRefreshListener;
 import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
-import com.github.jdsjlzx.recyclerview.ProgressStyle;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +45,8 @@ public class ElevatorFragment extends BaseFragment {
     @BindView(R.id.recyclerview)
     LRecyclerView mRecyclerView;
     Unbinder unbinder;
+    @BindView(R.id.multiple_status_view)
+    MultipleStatusView multipleStatusView;
     private DeviceAdapter adapter;//设备管理的adapter
     private LRecyclerViewAdapter mLRecyclerViewAdapter;//上下拉的recyclerView的adapter
     private PromptDialog sinInLogin;
@@ -59,6 +55,7 @@ public class ElevatorFragment extends BaseFragment {
 
     private int page = 1;
     private boolean isRefresh = true;
+
     @Override
     protected int getLayoutId() {
         return R.layout.layout_recyclerview_refresh;
@@ -66,6 +63,7 @@ public class ElevatorFragment extends BaseFragment {
 
     @Override
     protected void initViewAndData() {
+        multipleStatusView.showLoading();
         sinInLogin = new PromptDialog((Activity) mContext);
         adapter = new DeviceAdapter(mContext);
         mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
@@ -82,10 +80,10 @@ public class ElevatorFragment extends BaseFragment {
         mRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                if (elevatorListBean.getCurrentPage()<elevatorListBean.getTotalPage()){
+                if (elevatorListBean.getCurrentPage() < elevatorListBean.getTotalPage()) {
                     isRefresh = false;
                     getData();
-                }else{
+                } else {
                     mRecyclerView.setNoMore(true);
                 }
             }
@@ -100,14 +98,22 @@ public class ElevatorFragment extends BaseFragment {
             }
         });
         getData();
+        multipleStatusView.setOnRetryClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                multipleStatusView.showLoading();
+                isRefresh = true;
+                getData();
+            }
+        });
     }
 
-    private void getData(){
+    private void getData() {
         Map<String, Object> map = new HashMap<>();
         map.put("communityId", AppConfig.COMMUNITYID);
-        if (isRefresh){
-            page=1;
-        }else{
+        if (isRefresh) {
+            page = 1;
+        } else {
             page++;
         }
         map.put("page", page);
@@ -121,12 +127,17 @@ public class ElevatorFragment extends BaseFragment {
             @Override
             public void onNext(BaseEntity<ElevatorListBean> objectBaseEntity) {
                 mRecyclerView.refreshComplete(AppConfig.pageSize);
-                if (objectBaseEntity.isSuccess()){
+                if (objectBaseEntity.isSuccess()) {
                     elevatorListBean = objectBaseEntity.getData();
                     recordsBean = objectBaseEntity.getData().getRecords();
-                    if (isRefresh){
+                    if (isRefresh) {
+                        if (recordsBean==null||recordsBean.size()==0){
+                            multipleStatusView.showEmpty();
+                        }else{
+                            multipleStatusView.showContent();
+                        }
                         adapter.setDataList(recordsBean);
-                    }else{
+                    } else {
                         adapter.addAll(recordsBean);
                     }
                 }
