@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bit.communityProperty.R;
+import com.bit.communityProperty.activity.faultDeclare.FaultDetailsSBActivity;
 import com.bit.communityProperty.activity.faultManager.FaultDetailsActivity;
 import com.bit.communityProperty.activity.faultManager.adapter.FaultManagerCommonAdapter;
 import com.bit.communityProperty.activity.faultManager.bean.FaultManagementBean;
@@ -21,6 +22,7 @@ import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.GsonUtils;
 import com.bit.communityProperty.utils.LogManager;
+import com.bit.communityProperty.utils.SPUtil;
 import com.github.jdsjlzx.interfaces.OnItemClickListener;
 import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
 import com.github.jdsjlzx.interfaces.OnRefreshListener;
@@ -50,6 +52,7 @@ public class WaitFaultFragment extends Fragment {
     private LRecyclerView mRecyclerView;
     private FaultManagerCommonAdapter adapter;//普通物业人员的adapter
     private LRecyclerViewAdapter mLRecyclerViewAdapter;//上下拉的recyclerView的adapter
+    private int TYPE;//(0：故障申报进来的，1：是故障管理进来的)
     /**
      * 服务器端一共多少条数据
      */
@@ -77,17 +80,18 @@ public class WaitFaultFragment extends Fragment {
         this.mContext = context;
     }
 
-    private void initView(Context context) {
+    private void initView(Context context, int type) {
         this.mContext = context;
+        this.TYPE = type;
 //        adapter = new FaultManagerCommonAdapter(context);
 //        mLRecyclerViewAdapter = new LRecyclerViewAdapter(adapter);
     }
 
 
-    public static WaitFaultFragment newInstance(int sectionNumber, Context context) {
+    public static WaitFaultFragment newInstance(int type, int sectionNumber, Context context) {
         WaitFaultFragment fragment = new WaitFaultFragment();
 //        fragment.setContext(context);
-        fragment.initView(context);
+        fragment.initView(context, type);
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
@@ -120,7 +124,7 @@ public class WaitFaultFragment extends Fragment {
                 mLRecyclerViewAdapter.notifyDataSetChanged();
                 FaultManagementBeanList.clear();
                 //网络请求获取列表数据
-                getFaultList(AppConfig.COMMUNITYID,null,null,"1",pageIndex,REQUEST_COUNT);
+                getFaultList("5a82adf3b06c97e0cd6c0f3d", null, null, "1", pageIndex, REQUEST_COUNT);
             }
         });
 
@@ -135,7 +139,7 @@ public class WaitFaultFragment extends Fragment {
                 if (mCurrentCounter < TOTAL_COUNTER) {
                     pageIndex++;
                     //网络请求获取列表数据
-                    getFaultList(AppConfig.COMMUNITYID,null,null,"1",pageIndex,REQUEST_COUNT);
+                    getFaultList("5a82adf3b06c97e0cd6c0f3d", null, null, "1", pageIndex, REQUEST_COUNT);
                 } else {
                     mRecyclerView.setNoMore(true);
                 }
@@ -157,8 +161,13 @@ public class WaitFaultFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {//跳转到故障的详情页面
                 FaultManagementBean.RecordsBean bean = FaultManagementBeanList.get(position);
-                Intent intent = new Intent(mContext, FaultDetailsActivity.class);
-                if (bean!=null)
+                Intent intent;
+                if (TYPE == 0) {//故障申报详情页面
+                    intent = new Intent(mContext, FaultDetailsSBActivity.class);
+                } else {//故障管理详情页面
+                    intent = new Intent(mContext, FaultDetailsActivity.class);
+                }
+                if (bean != null)
                     intent.putExtra("FaultID", bean.getId());
                 startActivity(intent);
             }
@@ -169,17 +178,20 @@ public class WaitFaultFragment extends Fragment {
 
     /**
      * 获取故障列表
+     *
      * @param communityId 社区ID 5a82adf3b06c97e0cd6c0f3d （必传参数）
-     * @param faultType 故障类型 1：住户；2：公共；
-     * @param faultItem 故障种类 1：水电煤气；2：房屋结构；3：消防安防；9：其它；10：电梯；11：门禁；99：其它；
-     * @param faultStatus 故障状态 0：已取消；1：待接受；2：待分派；3：待检修；4：已完成；-1：已驳回；
+     * @param faultType   故障类型 1：住户；2：公共；
+     * @param faultItem   故障种类 1：水电煤气；2：房屋结构；3：消防安防；9：其它；10：电梯；11：门禁；99：其它；
+     * @param faultStatus 故障状态 （0：已取消；1：已提交；2：已受理；3：已指派；4：已完成；-1：已驳回；）
      * @param page
      * @param size
      */
-    private void getFaultList(String communityId,String faultType,
-                              String faultItem,String faultStatus,int page,int size) {
+    private void getFaultList(String communityId, String faultType,
+                              String faultItem, String faultStatus, int page, int size) {
         Map<String, Object> map = new HashMap();
         map.put("communityId", communityId);
+        if (TYPE==0)
+            map.put("userId", SPUtil.get(mContext, AppConfig.id, ""));//故障申报需要添加这个参数用户ID，因为只能看自己的申报单
         if (!TextUtils.isEmpty(faultType))
             map.put("faultType", faultType);
         if (!TextUtils.isEmpty(faultItem))

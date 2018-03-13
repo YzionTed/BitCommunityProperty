@@ -10,6 +10,7 @@ import com.bit.communityProperty.activity.deviceManagement.bean.DoorControlBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.DoorControlDetailBean;
 import com.bit.communityProperty.activity.deviceManagement.bean.ElevatorDetailBean;
 import com.bit.communityProperty.activity.elevatorcontrol.bean.ElevatorListBean;
+import com.bit.communityProperty.activity.faultManager.bean.AssignPersonBean;
 import com.bit.communityProperty.activity.faultManager.bean.FaultDetailBean;
 import com.bit.communityProperty.activity.faultManager.bean.FaultManagementBean;
 import com.bit.communityProperty.activity.household.bean.AuditedBean;
@@ -433,6 +434,56 @@ public interface HttpService {
      */
     @GET("v1/property/fault/{id}/detail")
     Observable<BaseEntity<FaultDetailBean>> getFaultDetail(@Path("id") String id);
+
+    /**
+     * 添加故障申请
+     *
+     * @param map
+     * @return
+     */
+    @Headers("DEVICE_TYPE:Android")
+    @POST("v1/property/fault/addFault")
+    Observable<BaseEntity<FaultDetailBean>> addFault(@Body Map<String, Object> map);
+
+    /**
+     * 删除故障申报单
+     *
+     * @param id
+     * @return
+     */
+    @GET("v1/property/fault/{id}/delete")
+    Observable<BaseEntity<String>> deleteFault(@Path("id") String id);
+
+    /**
+     * 住户评论故障申请
+     *
+     * @param map
+     * @return
+     */
+    @Headers("DEVICE_TYPE:Android")
+    @POST("v1/property/fault/comment")
+    Observable<BaseEntity<String>> evaluateFault(@Body Map<String, Object> map);
+
+
+    /**
+     * 物业根据岗位获取人员列表
+     * @param communityId
+     * @param map
+     * @return
+     */
+    @GET("v1/user/property/{communityId}/user-list")
+    Observable<BaseEntity<ArrayList<AssignPersonBean>>> getPersonnelList(@Path("communityId") String communityId,
+                                                              @QueryMap Map<String, Object> map);
+
+    /**
+     * 为故障单分配维修人员
+     * @param map
+     * @return
+     */
+    @Headers("DEVICE_TYPE:Android")
+    @POST("v1/property/fault/allocation")
+    Observable<BaseEntity<FaultDetailBean>> submitAssign(@Body Map<String, Object> map);
+
 
     /**
      * 处理故障报修单

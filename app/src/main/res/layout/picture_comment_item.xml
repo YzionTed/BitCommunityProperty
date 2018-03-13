@@ -13,7 +13,7 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:scaleType="fitXY"/>
-    <View
+    <!--<View
         android:id="@+id/view_bg"
         android:layout_width="75dp"
         android:layout_height="75dp"
@@ -28,5 +28,5 @@
         android:layout_height="25dp"
         android:layout_gravity="right"
         android:padding="3dp"
-        android:src="@mipmap/delete"/>
+        android:src="@mipmap/delete"/>-->
 </FrameLayout>

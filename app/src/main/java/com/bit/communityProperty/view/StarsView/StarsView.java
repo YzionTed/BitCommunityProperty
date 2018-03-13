@@ -23,6 +23,7 @@ public class StarsView extends LinearLayout {
     private Context mContext;
     private RecyclerView mStarsList;//星星列表
     private StarsAdapter mStrasAdapter;//星星的adapter
+    private StarsAdapter.OnMyItemClickListener listener;//item点击事件监听
 
     public StarsView(Context context) {
         super(context);
@@ -55,6 +56,14 @@ public class StarsView extends LinearLayout {
 //                Toast.makeText(mContext,pos+"",Toast.LENGTH_SHORT).show();
 //            }
 //        });
+    }
+
+    /**
+     * 设置item点击事件
+     * @param listener
+     */
+    public void setOnMyItemClickListener(StarsAdapter.OnMyItemClickListener listener){
+        mStrasAdapter.setOnMyItemClickListener(listener);
     }
 
 

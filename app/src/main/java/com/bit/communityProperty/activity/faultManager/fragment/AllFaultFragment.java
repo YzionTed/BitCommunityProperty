@@ -48,6 +48,7 @@ public class AllFaultFragment extends Fragment {
     private LRecyclerView mRecyclerView;
     private FaultManagerCommonAdapter adapter;//普通物业人员的adapter
     private LRecyclerViewAdapter mLRecyclerViewAdapter;//上下拉的recyclerView的adapter
+    private int TYPE;//(0：故障申报进来的，1：是故障管理进来的)
     /**
      * 服务器端一共多少条数据
      */
@@ -75,14 +76,15 @@ public class AllFaultFragment extends Fragment {
         this.mContext = context;
     }
 
-    private void initView(Context context) {
+    private void initView(Context context,int type) {
         this.mContext = context;
+        this.TYPE = type;
     }
 
 
-    public static AllFaultFragment newInstance(int sectionNumber, Context context) {
+    public static AllFaultFragment newInstance(int type,int sectionNumber, Context context) {
         AllFaultFragment fragment = new AllFaultFragment();
-        fragment.initView(context);
+        fragment.initView(context,type);
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
@@ -154,6 +156,7 @@ public class AllFaultFragment extends Fragment {
                 Intent intent = new Intent(mContext, FaultDetailsActivity.class);
                 if (bean!=null)
                 intent.putExtra("FaultID", bean.getId());
+                intent.putExtra("TYPE",TYPE);
                 startActivity(intent);
             }
         });
@@ -166,7 +169,7 @@ public class AllFaultFragment extends Fragment {
      * @param communityId 社区ID 5a82adf3b06c97e0cd6c0f3d （必传参数）
      * @param faultType 故障类型 1：住户；2：公共；
      * @param faultItem 故障种类 1：水电煤气；2：房屋结构；3：消防安防；9：其它；10：电梯；11：门禁；99：其它；
-     * @param faultStatus 故障状态 0：已取消；1：待接受；2：待分派；3：待检修；4：已完成；-1：已驳回；
+     * @param faultStatus 故障状态 （0：已取消；1：已提交；2：已受理；3：已指派；4：已完成；-1：已驳回；）
      * @param page
      * @param size
      */
