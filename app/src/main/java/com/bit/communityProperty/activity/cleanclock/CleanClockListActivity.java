@@ -158,7 +158,7 @@ public class CleanClockListActivity extends BaseActivity {
         listMap.clear();
 //        listMap.put("userId", SPUtil.get(this, AppConfig.id, ""));
 //        listMap.put("username", SPUtil.get(this, AppConfig.name, ""));
-        listMap.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        listMap.put("communityId", AppConfig.COMMUNITYID);
         listMap.put("taskType", 2);
         if (isRefresh)
             page = 1;
@@ -261,7 +261,7 @@ public class CleanClockListActivity extends BaseActivity {
         map.clear();
 //        map.put("userId", SPUtil.get(this, AppConfig.id, ""));
 //        map.put("username", SPUtil.get(this, AppConfig.name, ""));
-        map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        map.put("communityId", AppConfig.COMMUNITYID);
         map.put("taskType", 2);
         map.put("url", imgUrl);
 //        map.put("creatorId", SPUtil.get(this, AppConfig.id, ""));

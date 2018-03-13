@@ -12,6 +12,7 @@ import com.bit.communityProperty.activity.deviceManagement.adapter.DeviceAdapter
 import com.bit.communityProperty.activity.deviceManagement.bean.CameraBean;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.base.BaseFragment;
+import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.GsonUtils;
@@ -91,7 +92,7 @@ public class CameraFragment extends BaseFragment {
                 adapter.clear();
                 mLRecyclerViewAdapter.notifyDataSetChanged();
                 //网络请求获取列表数据
-                getDataList("5a82adf3b06c97e0cd6c0f3d", pageIndex, REQUEST_COUNT);
+                getDataList(AppConfig.COMMUNITYID, pageIndex, REQUEST_COUNT);
                 mRecordsBeanList.clear();
             }
         });
@@ -107,7 +108,7 @@ public class CameraFragment extends BaseFragment {
                 if (mCurrentCounter < TOTAL_COUNTER) {
                     pageIndex++;
                     //网络请求获取列表数据
-                    getDataList("5a82adf3b06c97e0cd6c0f3d", pageIndex, REQUEST_COUNT);
+                    getDataList(AppConfig.COMMUNITYID, pageIndex, REQUEST_COUNT);
                 } else {
                     mRecyclerView.setNoMore(true);
                 }

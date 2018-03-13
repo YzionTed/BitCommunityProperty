@@ -15,6 +15,7 @@ import com.bit.communityProperty.activity.faultManager.FaultDetailsActivity;
 import com.bit.communityProperty.activity.faultManager.adapter.FaultManagerCommonAdapter;
 import com.bit.communityProperty.activity.faultManager.bean.FaultManagementBean;
 import com.bit.communityProperty.base.BaseEntity;
+import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.GsonUtils;
@@ -117,7 +118,7 @@ public class EvaluateFaultActivity extends Fragment {
                 //网络请求获取列表数据
                 FaultManagementBeanList.clear();
                 //网络请求获取列表数据
-                getFaultList("5a82adf3b06c97e0cd6c0f3d",null,null,"3",pageIndex,REQUEST_COUNT);
+                getFaultList(AppConfig.COMMUNITYID,null,null,"3",pageIndex,REQUEST_COUNT);
             }
         });
 
@@ -132,7 +133,7 @@ public class EvaluateFaultActivity extends Fragment {
                 if (mCurrentCounter < TOTAL_COUNTER) {
                     pageIndex++;
                     //网络请求获取列表数据
-                    getFaultList("5a82adf3b06c97e0cd6c0f3d",null,null,"3",pageIndex,REQUEST_COUNT);
+                    getFaultList(AppConfig.COMMUNITYID,null,null,"3",pageIndex,REQUEST_COUNT);
                 } else {
                     mRecyclerView.setNoMore(true);
                 }

@@ -356,7 +356,7 @@ public class MainWorkFragment extends BaseFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                getOwnerApplyNum("5a82adf3b06c97e0cd6c0f3d");
+                getOwnerApplyNum(AppConfig.COMMUNITYID);
             }
         }).start();
     }
@@ -364,7 +364,7 @@ public class MainWorkFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getOwnerApplyNum("5a82adf3b06c97e0cd6c0f3d");
+        getOwnerApplyNum(AppConfig.COMMUNITYID);
     }
 
     /**

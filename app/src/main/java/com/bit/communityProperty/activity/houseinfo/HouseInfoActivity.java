@@ -9,6 +9,7 @@ import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.houseinfo.bean.HouseInfoBean;
 import com.bit.communityProperty.base.BaseActivity;
 import com.bit.communityProperty.base.BaseEntity;
+import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.GlideUtils;
@@ -71,7 +72,7 @@ public class HouseInfoActivity extends BaseActivity {
     }
 
     private void GetResidential_quarters_Detail() {
-        RetrofitManage.getInstance().subscribe(Api.getInstance().Detail("5a82adf3b06c97e0cd6c0f3d"), new Observer<BaseEntity<HouseInfoBean>>() {
+        RetrofitManage.getInstance().subscribe(Api.getInstance().Detail(AppConfig.COMMUNITYID), new Observer<BaseEntity<HouseInfoBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
 

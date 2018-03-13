@@ -19,6 +19,7 @@ import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.elevatorcontrol.bean.ElevatorListBean;
 import com.bit.communityProperty.base.BaseActivity;
 import com.bit.communityProperty.base.BaseEntity;
+import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.receiver.RxBus;
@@ -191,7 +192,7 @@ public class ElevatorControlActivity extends BaseActivity {
 
         Map<String, Object> map = new HashMap<>();
         map.put("macAddress", doorMacArr);
-        map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        map.put("communityId", AppConfig.COMMUNITYID);
         RetrofitManage.getInstance().subscribe(Api.getInstance().elevatorList(map), new Observer<BaseEntity<List<ElevatorListBean>>>() {
             @Override
             public void onSubscribe(Disposable d) {

@@ -144,7 +144,7 @@ public class DeviceInfoActivity extends BaseActivity {
 
     private void getDoorControlInfo(){
         Map<String, Object> map = new HashMap<>();
-        map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        map.put("communityId", AppConfig.COMMUNITYID);
         map.put("deviceId", doorBean.getDeviceId());
         if (isRefresh){
             page=1;
@@ -234,7 +234,7 @@ public class DeviceInfoActivity extends BaseActivity {
         }
         map.put("page", page);
         map.put("size", AppConfig.pageSize);
-        map.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        map.put("communityId", AppConfig.COMMUNITYID);
         map.put("deviceId", elevatorBean.getId());
         RetrofitManage.getInstance().subscribe(Api.getInstance().getElevatorUseList(map), new Observer<BaseEntity<ElevatorDetailBean>>() {
             @Override

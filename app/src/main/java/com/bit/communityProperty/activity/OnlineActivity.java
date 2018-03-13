@@ -8,6 +8,7 @@ import com.bit.communityProperty.R;
 import com.bit.communityProperty.base.BaseActivity;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.bean.OnlineData;
+import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.GsonUtils;
@@ -64,7 +65,7 @@ public class OnlineActivity extends BaseActivity {
     }
 
     public void requestOnlineData() {
-        String url = "/v1/user/property/" + "5a82adf3b06c97e0cd6c0f3d" + "/user-list";
+        String url = "/v1/user/property/" + AppConfig.COMMUNITYID + "/user-list";
         Map<String, Object> map = new HashMap<>();
         map.put("postCode", "SUPPORTSTAFF");
         RetrofitManage.getInstance().subscribe(Api.getInstance().online(url, map), new Observer<BaseEntity<ArrayList<OnlineData>>>() {

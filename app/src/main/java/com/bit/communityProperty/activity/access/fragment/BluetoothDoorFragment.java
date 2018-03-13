@@ -20,6 +20,7 @@ import com.bit.communityProperty.activity.access.ChangeAccessActivity;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.base.BaseFragment;
 import com.bit.communityProperty.bean.DoorMILiBean;
+import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.CustomDialog;
@@ -182,7 +183,7 @@ public class BluetoothDoorFragment extends BaseFragment {
             doorMacArr[i] = sb.toString();
             Log.e(Tag, " doorMacArr[i]=" + doorMacArr[i]);
         }
-        getDoorAuth.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        getDoorAuth.put("communityId", AppConfig.COMMUNITYID);
         getDoorAuth.put("mac", doorMacArr);
 
         RetrofitManage.getInstance().subscribe(Api.getInstance().getDoorAuthList(getDoorAuth), new Observer<BaseEntity<List<DoorMILiBean>>>() {

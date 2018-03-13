@@ -15,6 +15,7 @@ import com.bit.communityProperty.activity.deviceManagement.adapter.DeviceAdapter
 import com.bit.communityProperty.activity.deviceManagement.bean.DoorControlBean;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.base.BaseFragment;
+import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.GsonUtils;
@@ -93,7 +94,7 @@ public class DoorControlFragment extends BaseFragment {
 //                getMessageInfoList(pageIndex,REQUEST_COUNT,category);
                 mDeviceBeanList.clear();
 //                setDate(doSomeDate());//假数据
-                getDataList("5a82adf3b06c97e0cd6c0f3d", null, null, null, pageIndex, REQUEST_COUNT);
+                getDataList(AppConfig.COMMUNITYID, null, null, null, pageIndex, REQUEST_COUNT);
             }
         });
 
@@ -108,7 +109,7 @@ public class DoorControlFragment extends BaseFragment {
                 if (mCurrentCounter < TOTAL_COUNTER) {
                     pageIndex++;
                     //网络请求获取列表数据
-                    getDataList("5a82adf3b06c97e0cd6c0f3d", null, null, null, pageIndex, REQUEST_COUNT);
+                    getDataList(AppConfig.COMMUNITYID, null, null, null, pageIndex, REQUEST_COUNT);
                 } else {
                     mRecyclerView.setNoMore(true);
                 }

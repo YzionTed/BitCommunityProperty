@@ -18,6 +18,7 @@ import com.bit.communityProperty.base.BaseActivity;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.bean.DoorMILiBean;
 import com.bit.communityProperty.bean.DoorMILiBeanList;
+import com.bit.communityProperty.config.AppConfig;
 import com.bit.communityProperty.data.PreferenceConst;
 import com.bit.communityProperty.net.Api;
 import com.bit.communityProperty.net.RetrofitManage;
@@ -215,7 +216,7 @@ public class ChangeAccessActivity extends BaseActivity {
         //  BluetoothUtils.getMiliBluetooth(searchBlueDeviceBeanList);
 
         Map<String, Object> getDoorAuth = new HashMap<>();
-        getDoorAuth.put("communityId", "5a82adf3b06c97e0cd6c0f3d");
+        getDoorAuth.put("communityId", AppConfig.COMMUNITYID);
         RetrofitManage.getInstance().subscribe(Api.getInstance().getDoorAuthList(getDoorAuth), new Observer<BaseEntity<List<DoorMILiBean>>>() {
             @Override
             public void onSubscribe(Disposable d) {
