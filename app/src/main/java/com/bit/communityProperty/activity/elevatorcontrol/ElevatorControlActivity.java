@@ -90,6 +90,8 @@ public class ElevatorControlActivity extends BaseActivity implements BlueToothUt
         BlueToothUtil.getInstance().setBTUtilListener(this);
         BlueToothUtil.getInstance().setOnCharacteristicListener(this);
 
+        MyApplication.getInstance().getBlueToothApp().checkLocationEnable(this);
+        MyApplication.getInstance().getBlueToothApp().openBluetooth();
 
         promptDialog = new PromptDialog(this);
         doorJinBoBean = null;
