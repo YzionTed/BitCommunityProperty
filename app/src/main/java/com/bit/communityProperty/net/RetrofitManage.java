@@ -1,10 +1,12 @@
 package com.bit.communityProperty.net;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.bit.communityProperty.MyApplication;
+import com.bit.communityProperty.activity.LogonActivity;
 import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.bean.MessageEvent;
 import com.bit.communityProperty.config.AppConfig;
@@ -296,6 +298,8 @@ public enum RetrofitManage {
                     MessageEvent event = new MessageEvent();
                     event.setLoginSuccess(false);
                     EventBus.getDefault().post(event);
+                    MyApplication.getInstance().startActivity(new Intent(MyApplication.getInstance(), LogonActivity.class));
+                    ToastUtil.showShort("token失效，请重新登录");
                 } else {
                 }
                 observer.onNext(baseEntity);

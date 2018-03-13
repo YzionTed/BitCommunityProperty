@@ -160,7 +160,7 @@ public class SecurityClockListActivity extends BaseActivity {
         else
             page++;
         listMap.put("page", page);
-        listMap.put("pageSize", AppConfig.pageSize);
+        listMap.put("size", AppConfig.pageSize);
         RetrofitManage.getInstance().subscribe(Api.getInstance().getCleanClockList(listMap), new Observer<BaseEntity<CleanClockListBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -274,7 +274,7 @@ public class SecurityClockListActivity extends BaseActivity {
 //        map.put("userId", SPUtil.get(this, AppConfig.id, ""));
 //        map.put("username", SPUtil.get(this, AppConfig.name, ""));
         map.put("communityId", AppConfig.COMMUNITYID);
-        map.put("taskType", 2);
+        map.put("taskType", 1);
         map.put("url", imgUrl);
 //        map.put("creatorId", SPUtil.get(this, AppConfig.id, ""));
 //        map.put("createAt", TimeUtils.getCurrentTimeWithT());

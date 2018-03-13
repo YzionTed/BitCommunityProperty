@@ -457,12 +457,15 @@ public class ToastUtil {
     /**
      * 吐司文本内容
      * 非单例模式,吐司时间短
-     *
+     * 多次点击只弹框一次
      * @param content 吐司内容
      */
     public static void showShort(String content) {
-        toast = Toast.makeText(MyApplication.getInstance(), "", Toast.LENGTH_SHORT);
-        toast.setText(content);
+        if (toast==null){
+            toast = Toast.makeText(MyApplication.getInstance(), content, Toast.LENGTH_SHORT);
+        }else{
+            toast.setText(content);
+        }
         toast.show();
     }
 }

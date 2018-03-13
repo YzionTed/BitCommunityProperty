@@ -225,6 +225,8 @@ public class MainMineFragment extends BaseFragment {
                     event.setLoginSuccess(false);
                     EventBus.getDefault().post(event);
                     SPUtil.clear(getActivity());
+
+                    startActivity(new Intent(mContext, LogonActivity.class));
                 } else {
                     ToastUtil.showSingletonText(getActivity(), s.getErrorMsg(), 3000);
                 }

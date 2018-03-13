@@ -291,38 +291,6 @@ public class MainActivity extends BaseActivity {
 //        }
 //    };
 
-    private void showToast(String message) {
-        Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-    }
-
-    private void initOssToken() {
-        RetrofitManage.getInstance().subscribe(Api.getInstance().ossToken(), new Observer<BaseEntity<UploadInfo>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(BaseEntity<UploadInfo> uploadInfoBaseEntity) {
-                if (uploadInfoBaseEntity.isSuccess()) {
-                    UploadInfo uploadInfo = uploadInfoBaseEntity.getData();
-                    if (uploadInfo != null) {
-                        OssManager.getInstance().init(mContext, uploadInfo);
-                    }
-                }
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        });
-    }
-
     //检测版本更新
     private void getVersion() {
         RetrofitManage.getInstance().subscribe(Api.getInstance().getVersion("5a961fc80cf2c1914073ded2", AppUtil.getVersionName(this)), new

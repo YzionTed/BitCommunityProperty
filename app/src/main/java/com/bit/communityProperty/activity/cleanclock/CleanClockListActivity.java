@@ -165,7 +165,7 @@ public class CleanClockListActivity extends BaseActivity {
         else
             page++;
         listMap.put("page", page);
-        listMap.put("pageSize", AppConfig.pageSize);
+        listMap.put("size", AppConfig.pageSize);
         RetrofitManage.getInstance().subscribe(Api.getInstance().getCleanClockList(listMap), new Observer<BaseEntity<CleanClockListBean>>() {
             @Override
             public void onSubscribe(Disposable d) {
