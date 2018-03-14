@@ -55,9 +55,9 @@ public enum RetrofitManage {
     INSTANCE;
 
     //    public static String BASE_URL = "http://39.106.249.8:9000"; // 测试环境API环境
-   // public static String BASE_URL = "https://apismcm.test.bitiot.com.cn"; // 测试环境API环境
+    public static String BASE_URL = "https://apismcm.test.bitiot.com.cn"; // 测试环境API环境
     //    public static String BASE_URL = "http://192.168.10.151:9000"; // 测试小宇电脑id
-    public static String BASE_URL = "https://api.smcm.bitiot.com.cn"; // 生产环境API环境 api.smcm.bitiot.com.cn
+//    public static String BASE_URL = "https://api.smcm.bitiot.com.cn"; // 生产环境API环境 api.smcm.bitiot.com.cn
     private static Retrofit mRetrofit;
     private static HttpService mHttpService;
 
@@ -297,7 +297,9 @@ public enum RetrofitManage {
                     MessageEvent event = new MessageEvent();
                     event.setLoginSuccess(false);
                     EventBus.getDefault().post(event);
-                    MyApplication.getInstance().startActivity(new Intent(MyApplication.getInstance(), LogonActivity.class));
+                    Intent intent = new Intent(MyApplication.getInstance().getContext(), LogonActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    MyApplication.getInstance().startActivity(intent);
                     ToastUtil.showShort("token失效，请重新登录");
                 } else {
                 }
