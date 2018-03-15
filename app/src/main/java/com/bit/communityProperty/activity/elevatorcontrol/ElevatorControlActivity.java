@@ -1,8 +1,6 @@
 package com.bit.communityProperty.activity.elevatorcontrol;
 
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
@@ -12,19 +10,17 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bit.communityProperty.Bluetooth.BluetoothApplication;
 import com.bit.communityProperty.Bluetooth.bean.SearchBlueDeviceBean;
 import com.bit.communityProperty.Bluetooth.jinbo.JiBoUtils;
+import com.bit.communityProperty.Bluetooth.util.BleUtil;
+import com.bit.communityProperty.Bluetooth.util.BlueUtils;
 import com.bit.communityProperty.Bluetooth.util.BluetoothNetUtils;
-import com.bit.communityProperty.Bluetooth.util.BluetoothUtils;
 import com.bit.communityProperty.MyApplication;
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.elevatorcontrol.bean.ElevatorListBean;
 import com.bit.communityProperty.base.BaseActivity;
 import com.bit.communityProperty.bean.CardListBean;
 import com.bit.communityProperty.bean.StoreElevatorListBeans;
-import com.bit.communityProperty.receiver.RxBus;
-import com.bit.communityProperty.utils.BlueToothUtil;
 import com.bit.communityProperty.utils.CustomDialog;
 import com.bit.communityProperty.utils.DialogUtil;
 import com.bit.communityProperty.utils.LiteOrmUtil;
@@ -40,10 +36,9 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.functions.Consumer;
 import me.leefeng.promptlibrary.PromptDialog;
 
-public class ElevatorControlActivity extends BaseActivity implements BlueToothUtil.OnCharacteristicListener, BlueToothUtil.BTUtilListener {
+public class ElevatorControlActivity extends BaseActivity {
 
     @BindView(R.id.action_bar_title)
     TextView actionBarTitle;
@@ -66,9 +61,6 @@ public class ElevatorControlActivity extends BaseActivity implements BlueToothUt
     @BindView(R.id.loading_view)
     CircleProgressBar loadingView;
 
-    private String[] blueAddressIds;
-    private String haiKangOpenKeyNo;//自己公司电梯的开梯mac
-
     private PromptDialog promptDialog;
     private String Tag = "ElevatorControlActivity";
     ElevatorListBean doorJinBoBean;
@@ -86,44 +78,30 @@ public class ElevatorControlActivity extends BaseActivity implements BlueToothUt
     public void initViewData() {
         actionBarTitle.setText("蓝牙梯禁");
 
-        BlueToothUtil.getInstance().setContext(this);
-        BlueToothUtil.getInstance().setBTUtilListener(this);
-        BlueToothUtil.getInstance().setOnCharacteristicListener(this);
-
         MyApplication.getInstance().getBlueToothApp().checkLocationEnable(this);
         MyApplication.getInstance().getBlueToothApp().openBluetooth();
 
         promptDialog = new PromptDialog(this);
         doorJinBoBean = null;
-        RxBus.get().toObservable().subscribe(new Consumer<Object>() {
-
-            @Override
-            public void accept(Object o) throws Exception {
-                if (o instanceof ElevatorListBean) {
-                    doorJinBoBean = ((ElevatorListBean) o);
-                    tv_name.setText(doorJinBoBean.getName());
-                }
-            }
-        });
 
         if (bluetoothNetUtils == null) {
             bluetoothNetUtils = new BluetoothNetUtils(this);
         }
-
+        BleUtil.getInstance().setContext(this);
         initListener();
     }
 
-    private void initListener() {
 
-        BlueToothUtil.getInstance().setOnBluetoothStateCallBack(new BlueToothUtil.OnBluetoothStateCallBack() {
+    public void setTvName(final String state, final boolean isStopLoading){
+        runOnUiThread(new Runnable() {
             @Override
-            public void OnBluetoothState(final String state) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tv_name.setText(state);
-                    }
-                });
+            public void run() {
+                tv_name.setText(state);
+                if(isStopLoading){
+                     loadingView.stop();
+                }else {
+
+                }
             }
         });
     }
@@ -150,7 +128,7 @@ public class ElevatorControlActivity extends BaseActivity implements BlueToothUt
                     public void run() {
                         super.run();
                         if (doorJinBoBean == null || doorJinBoBean.isFirst()) {
-                            MyApplication.getInstance().getBlueToothApp().scanBluetoothDevice(2000, new BluetoothApplication.CallBack() {
+                            BleUtil.getInstance().scanLeDevice(true, 1500, new BleUtil.OnSearchCallBack() {
                                 @Override
                                 public void onCall(ArrayList<SearchBlueDeviceBean> searchBlueDeviceBeanList) {
                                     getDevice(searchBlueDeviceBeanList, 1);
@@ -205,7 +183,7 @@ public class ElevatorControlActivity extends BaseActivity implements BlueToothUt
         if (bletoothElevateDate != null) {
             if (bletoothElevateDate.getElevatorListBeans() != null) {
                 if (bletoothElevateDate.getElevatorListBeans().size() > 0) {//缓存不为空时
-                    final ElevatorListBean doorJinBoBean = BluetoothUtils.getMaxElevatorRsic(searchBlueDeviceBeanList, bletoothElevateDate.getElevatorListBeans());
+                    final ElevatorListBean doorJinBoBean = BlueUtils.getMaxElevatorRsic(searchBlueDeviceBeanList, bletoothElevateDate.getElevatorListBeans());
                     if (doorJinBoBean != null) {//匹配最强信号
                         openDoorBean = doorJinBoBean;
                         openElevator(doorJinBoBean.getMacAddress(), fromType);
@@ -250,7 +228,7 @@ public class ElevatorControlActivity extends BaseActivity implements BlueToothUt
             @Override
             public void OnCallBack(int state, StoreElevatorListBeans storeDoorMILiBeanList) {
                 if (state == 1) {
-                    final ElevatorListBean doorJinBoBean = BluetoothUtils.getMaxElevatorRsic(searchBlueDeviceBeanList, storeDoorMILiBeanList.getElevatorListBeans());
+                    final ElevatorListBean doorJinBoBean = BlueUtils.getMaxElevatorRsic(searchBlueDeviceBeanList, storeDoorMILiBeanList.getElevatorListBeans());
                     if (doorJinBoBean != null) {
                         openDoorBean = doorJinBoBean;
                         openElevator(doorJinBoBean.getMacAddress(), fromType);
@@ -318,8 +296,9 @@ public class ElevatorControlActivity extends BaseActivity implements BlueToothUt
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        haiKangOpenKeyNo = openDoorBean.getKeyNo();
-                        BlueToothUtil.getInstance().connectLeDevice(openDoorBean.getMacAddress());
+
+                        BleUtil.getInstance().connectLeDevice(macAddress, openDoorBean.getMacAddress());
+                      //  BlueToothUtil.getInstance().connectLeDevice(openDoorBean.getMacAddress());
                     }
                 });
             } else {
@@ -396,8 +375,8 @@ public class ElevatorControlActivity extends BaseActivity implements BlueToothUt
                     ;
                 CardListBean.RecordsBean cardListBean = LiteOrmUtil.getInstance().queryById(bluetoothNetUtils.user_id, bluetoothNetUtils.communityId);
                 if (cardListBean != null) {
-                    haiKangOpenKeyNo = cardListBean.getKeyNo();
-                    BlueToothUtil.getInstance().connectLeDevice(macAddress);
+
+                    BleUtil.getInstance().connectLeDevice(macAddress, cardListBean.getKeyNo());
                 } else {
                     loadingView.stop();
                     tv_name.setText("没找您可以开的电梯");
@@ -485,7 +464,6 @@ public class ElevatorControlActivity extends BaseActivity implements BlueToothUt
 
     public void succssAnimation() {
         Log.e(Tag, "开梯成功");
-        tv_name.setText("开梯成功！");
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -496,107 +474,62 @@ public class ElevatorControlActivity extends BaseActivity implements BlueToothUt
                         if (customDialog != null && customDialog.isShowing()) {
                             customDialog.dismiss();
                             loadingView.stop();
+                            tv_name.setText("开梯成功！");
                         }
                     }
                 }, 3000);
-
             }
         });
     }
 
-    @Override
-    public void onLeScanStart() {
 
-    }
+    private void initListener() {
 
-    @Override
-    public void onLeScanStop() {
-
-    }
-
-    @Override
-    public void onLeScanDevice(BluetoothDevice device) {
-
-    }
-
-    private boolean connected = false;
-
-    @Override
-    public void onLeScanDevices(List<BluetoothDevice> listDevice) {
-
-    }
-
-    @Override
-    public void onConnected(BluetoothDevice mCurDevice) {
-        connected = true;
-    }
-
-    @Override
-    public void onDisConnected(BluetoothDevice mCurDevice) {
-        runOnUiThread(new Runnable() {
+        BleUtil.getInstance().setBTUtilListener(new BleUtil.BTUtilListener() {
             @Override
-            public void run() {
-                isYaoyiYao = true;
-                loadingView.stop();
-                connected = false;
+            public void onLeScanStart() {
+                setTvName("搜索设备",false);
             }
-        });
 
-    }
-
-    @Override
-    public void onServicesDiscovered() {
-        isYaoyiYao = true;
-        loadingView.stop();
-    }
-
-
-    @Override
-    public void onNotificationSetted() {
-        BlueToothUtil.getInstance().sendOpen(haiKangOpenKeyNo);
-    }
-
-    @Override
-    public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-
-    }
-
-    @Override
-    public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-        BlueToothUtil.getInstance().handleResultCallBack(characteristic, new BlueToothUtil.OnCallBackListener() {
             @Override
-            public void OnCallBack(final int state) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadingView.stop();
-                        isYaoyiYao = true;
-                        if (state == 1) {
-                            isSuccess = true;
-                            tv_name.setText("开梯成功");
-                            succssAnimation();
-                        } else {
-                            ToastUtil.showShort("开梯失败");
-                        }
-                    }
-                });
+            public void onLeScanStop() {
 
             }
-        });
-    }
 
+            @Override
+            public void onLeScanDevices(ArrayList<SearchBlueDeviceBean> listDevice) {
 
-    @Override
-    public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-        if (status == BluetoothGatt.GATT_SUCCESS) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            }
+
+            @Override
+            public void onConnected(BluetoothDevice mCurDevice) {
+                setTvName("连接设备成功",false);
+            }
+
+            @Override
+            public void onDisConnected(BluetoothDevice mCurDevice) {
+                setTvName("设备断开连接",true);
+            }
+
+            @Override
+            public void onConnecting(BluetoothDevice mCurDevice) {
+                setTvName("设备连接中...",false);
+            }
+
+            @Override
+            public void onDisConnecting(BluetoothDevice mCurDevice) {
+                setTvName("设备连接失败",true);
+            }
+            @Override
+            public void onIsSuccess(boolean isSuccess) {
+                if(isSuccess){
                     succssAnimation();
+                    setTvName("开梯成功！", true);
+                }else {
+                    setTvName("开梯失败，重新开启！", true);
                 }
-            });
-            //  Log.e(Tag,"写入数据成功");
-        }
-    }
+            }
+        });
 
+    }
 }

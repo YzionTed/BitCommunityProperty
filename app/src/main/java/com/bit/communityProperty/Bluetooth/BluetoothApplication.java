@@ -28,6 +28,7 @@ import com.bit.communityProperty.MyApplication;
 import com.inuker.bluetooth.library.BluetoothClientManger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -212,8 +213,9 @@ public class BluetoothApplication {
             SearchBlueDeviceBean searchBlueDeviceBean = new SearchBlueDeviceBean();
             searchBlueDeviceBean.setBluetoothDevice(device);
             searchBlueDeviceBean.setRssi(rssi);
-            searchBlueDeviceBeanList.add(searchBlueDeviceBean);
 
+            searchBlueDeviceBeanList.add(searchBlueDeviceBean);
+            Collections.sort(searchBlueDeviceBeanList);
             if (searchBlueDeviceListener != null) {
                 searchBlueDeviceListener.OnSearchAllDeviceCallBack(searchBlueDeviceBeanList);
                 searchBlueDeviceListener.OnSearchBludeDeviceCallBack(searchBlueDeviceBean);
@@ -221,6 +223,7 @@ public class BluetoothApplication {
         }
         Log.d(TAG, "searchBlueDeviceBeanList.size()==" + searchBlueDeviceBeanList.size());
     }
+
 
     /**
      * 打开蓝牙设备 如果检测到蓝牙没有开启，尝试开启蓝牙

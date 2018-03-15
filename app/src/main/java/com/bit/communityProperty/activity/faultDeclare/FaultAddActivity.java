@@ -416,7 +416,7 @@ public class FaultAddActivity extends BaseActivity {
 //                        uploadInfo.setBucket("bit-test");
 //                        imgUrl = OssManager.getInstance().uploadFileToAliYun(uploadInfo, selectList.get(0).getPath(), new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
 //                            @Override
-//                            public void onSuccess(PutObjectRequest ossRequest, PutObjectResult ossResult) {
+//                            public void onIsSuccess(PutObjectRequest ossRequest, PutObjectResult ossResult) {
 ////                                uploadDialog.showSuccess("上传成功");
 ////                                uploadDialog.dismiss();
 //                                addClock();
