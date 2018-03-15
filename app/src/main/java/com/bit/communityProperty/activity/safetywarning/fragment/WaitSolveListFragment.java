@@ -120,7 +120,7 @@ public class WaitSolveListFragment extends BaseFragment implements SafeWarningAd
             @Override
             public void accept(Object s) throws Exception {
                 if (s instanceof String) {
-                    if (s.equals("update") || s.equals("finish")) {
+                    if (s.equals("update") ) {
                         isRefresh = true;
                         getList();
                     }

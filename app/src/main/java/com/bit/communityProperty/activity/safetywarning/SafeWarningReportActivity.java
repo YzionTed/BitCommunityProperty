@@ -115,6 +115,7 @@ public class SafeWarningReportActivity extends BaseActivity {
                 if (baseEntity.isSuccess()){
                     ToastUtil.showShort("提交成功");
                     RxBus.get().post("finish");
+                    RxBus.get().post("update");
                     finish();
                 }else{
                     ToastUtil.showShort(baseEntity.getErrorMsg());

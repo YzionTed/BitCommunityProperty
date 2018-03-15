@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.safetywarning.bean.AlarmListBean;
 import com.bit.communityProperty.adapter.ListBaseAdapter;
+import com.bit.communityProperty.config.AppConfig;
+import com.bit.communityProperty.utils.SPUtil;
 import com.bit.communityProperty.utils.TimeUtils;
 
 /**
@@ -39,6 +41,7 @@ public class SafeWarningAdapter extends ListBaseAdapter{
         final AlarmListBean.RecordsBean recordsBean = (AlarmListBean.RecordsBean) mDataList.get(position);
         viewHolder.tvTitle.setText(recordsBean.getCommunityName()+recordsBean.getBuildingName()+recordsBean.getRoomName());
         viewHolder.tvTime.setText(TimeUtils.stampToDateWithHm(recordsBean.getCallTime()));
+        viewHolder.btnGo.setVisibility(View.VISIBLE);
         switch (recordsBean.getReceiveStatus()){
             case 1:
                 viewHolder.llBaoan.setVisibility(View.GONE);
@@ -59,6 +62,11 @@ public class SafeWarningAdapter extends ListBaseAdapter{
                 viewHolder.tvStatus.setTextColor(ContextCompat.getColor(context,R.color.text_status_red));
                 viewHolder.tvBaoan.setText(recordsBean.getReceiverName());
                 viewHolder.tvAcceptTime.setText(TimeUtils.stampToDateWithHm(recordsBean.getReceiveTime()));
+                if (recordsBean.getReceiverId().equals(SPUtil.get(context, AppConfig.id,""))){
+                    viewHolder.btnGo.setVisibility(View.VISIBLE);
+                }else{
+                    viewHolder.btnGo.setVisibility(View.GONE);
+                }
                 break;
             case 3:
                 viewHolder.llBaoan.setVisibility(View.VISIBLE);

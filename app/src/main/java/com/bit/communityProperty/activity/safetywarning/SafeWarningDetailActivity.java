@@ -135,7 +135,7 @@ public class SafeWarningDetailActivity extends BaseActivity {
             public void accept(Object o) throws Exception {
                 if (o instanceof String){
                     if (o.equals("finish")){
-                        RxBus.get().post("update");
+//                        RxBus.get().post("update");
                         finish();
                     }
                 }

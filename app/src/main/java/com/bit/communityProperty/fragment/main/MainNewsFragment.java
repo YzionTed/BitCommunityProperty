@@ -148,11 +148,11 @@ public class MainNewsFragment extends BaseFragment {
                     mainNewsBean = listBaseEntity.getData();
                     noticeList = listBaseEntity.getData().getRecords();
                     if (isRefresh) {
-                        if (mainNewsBean.getCurrentPage() < mainNewsBean.getTotalPage()) {
-                            rlvNews.setLoadMoreEnabled(true);
-                        } else {
-                            rlvNews.setLoadMoreEnabled(false);
-                        }
+//                        if (mainNewsBean.getCurrentPage() < mainNewsBean.getTotalPage()) {
+//                            rlvNews.setLoadMoreEnabled(true);
+//                        } else {
+//                            rlvNews.setLoadMoreEnabled(false);
+//                        }
                         if (noticeList != null && noticeList.size() > 0) {
                             llEmpty.setVisibility(View.GONE);
                             newsAdapter.setDataList(noticeList);
@@ -213,6 +213,7 @@ public class MainNewsFragment extends BaseFragment {
         rlvNews.addItemDecoration(divider);
         rlvNews.setAdapter(mLRecyclerViewAdapter);
         rlvNews.setLayoutManager(new LinearLayoutManager(mActivity));
+        rlvNews.setLoadMoreEnabled(false);
         rlvNews.setPullRefreshEnabled(true);
         rlvNews.setOnRefreshListener(new OnRefreshListener() {
             @Override
