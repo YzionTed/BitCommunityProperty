@@ -297,7 +297,9 @@ public enum RetrofitManage {
                     MessageEvent event = new MessageEvent();
                     event.setLoginSuccess(false);
                     EventBus.getDefault().post(event);
-                    MyApplication.getInstance().startActivity(new Intent(MyApplication.getInstance(), LogonActivity.class));
+                    Intent intent = new Intent(MyApplication.getInstance().getContext(), LogonActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    MyApplication.getInstance().startActivity(intent);
                     ToastUtil.showShort("token失效，请重新登录");
                 } else {
                 }

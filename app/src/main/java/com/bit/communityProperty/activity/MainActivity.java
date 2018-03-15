@@ -246,13 +246,13 @@ public class MainActivity extends BaseActivity {
 //    ResponseCallBack mResponseCallBack = new ResponseCallBack<IMToken>(false) {
 //
 //        @Override
-//        public void onSuccess(IMToken data) {
-////            Toast.makeText(mContext, "onSuccess", Toast.LENGTH_SHORT).show();
+//        public void onIsSuccess(IMToken data) {
+////            Toast.makeText(mContext, "onIsSuccess", Toast.LENGTH_SHORT).show();
 //            NimUIKit.login(new LoginInfo(data.getInfo().getAccid(), data.getInfo().getToken()), new RequestCallback<LoginInfo>() {
 //                @Override
-//                public void onSuccess(LoginInfo param) {
-////                    Toast.makeText(mContext, "login im onSuccess", Toast.LENGTH_SHORT).show();
-//                    LogUtil.d(TAG, "login im onSuccess");
+//                public void onIsSuccess(LoginInfo param) {
+////                    Toast.makeText(mContext, "login im onIsSuccess", Toast.LENGTH_SHORT).show();
+//                    LogUtil.d(TAG, "login im onIsSuccess");
 //                }
 //
 //                @Override
@@ -269,8 +269,8 @@ public class MainActivity extends BaseActivity {
 //            NIMClient.getService(AuthService.class).login(new LoginInfo(data.getInfo().getAccid(), data.getInfo().getToken()))
 //                    .setCallback(new RequestCallback<LoginInfo>() {
 //                        @Override
-//                        public void onSuccess(LoginInfo o) {
-//                            showToast("login onSuccess");
+//                        public void onIsSuccess(LoginInfo o) {
+//                            showToast("login onIsSuccess");
 //                        }
 //
 //                        @Override

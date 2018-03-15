@@ -15,35 +15,26 @@ import com.bit.communityProperty.Bluetooth.BluetoothApplication;
 import com.bit.communityProperty.Bluetooth.bean.SearchBlueDeviceBean;
 import com.bit.communityProperty.Bluetooth.mili.MiLiState;
 import com.bit.communityProperty.Bluetooth.util.BluetoothNetUtils;
-import com.bit.communityProperty.Bluetooth.util.BluetoothUtils;
+import com.bit.communityProperty.Bluetooth.util.BlueUtils;
 import com.bit.communityProperty.MyApplication;
 import com.bit.communityProperty.R;
 import com.bit.communityProperty.activity.access.ChangeAccessActivity;
-import com.bit.communityProperty.base.BaseEntity;
 import com.bit.communityProperty.base.BaseFragment;
 import com.bit.communityProperty.bean.DoorMILiBean;
 import com.bit.communityProperty.bean.StoreDoorMILiBeanList;
-import com.bit.communityProperty.net.Api;
-import com.bit.communityProperty.net.RetrofitManage;
 import com.bit.communityProperty.utils.CustomDialog;
 import com.bit.communityProperty.utils.DialogUtil;
-import com.bit.communityProperty.utils.LogManager;
 import com.bit.communityProperty.utils.ToastUtil;
 import com.bit.communityProperty.view.CircleProgressBar;
 import com.smarthome.bleself.sdk.BluetoothApiAction;
 import com.smarthome.bleself.sdk.IBluetoothApiInterface;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 import me.leefeng.promptlibrary.PromptDialog;
 
 /**
@@ -207,7 +198,7 @@ public class BluetoothDoorFragment extends BaseFragment {
         if (bletoothDoorDate != null) {
             if (bletoothDoorDate.getDoorMILiBeans() != null) {
                 if (bletoothDoorDate.getDoorMILiBeans().size() > 0) {
-                    DoorMILiBean doorMILiBean = BluetoothUtils.getMaxRsic(searchBlueDeviceBeanList, bletoothDoorDate.getDoorMILiBeans());
+                    DoorMILiBean doorMILiBean = BlueUtils.getMaxRsic(searchBlueDeviceBeanList, bletoothDoorDate.getDoorMILiBeans());
                     if (doorMILiBean != null) {
                         clickBlueMiLi(doorMILiBean.getMac(), doorMILiBean.getPin(), type);
                     } else {
@@ -251,7 +242,7 @@ public class BluetoothDoorFragment extends BaseFragment {
                 if (state == 1) {
                     if (storeDoorMILiBeanList != null) {
                         if (storeDoorMILiBeanList.getDoorMILiBeans().size() > 0) {
-                            DoorMILiBean doorMILiBean = BluetoothUtils.getMaxRsic(searchBlueDeviceBeanList, storeDoorMILiBeanList.getDoorMILiBeans());
+                            DoorMILiBean doorMILiBean = BlueUtils.getMaxRsic(searchBlueDeviceBeanList, storeDoorMILiBeanList.getDoorMILiBeans());
                             if (doorMILiBean != null) {
                                 clickBlueMiLi(doorMILiBean.getMac(), doorMILiBean.getPin(), type);
                             } else {
