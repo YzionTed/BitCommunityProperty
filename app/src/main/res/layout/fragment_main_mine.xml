@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appbg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/personinfo"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="16dp">
+        <ImageView
+            android:id="@+id/iv_head"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/ic_default_head_man" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="8dp">
+
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="---"
+                android:textColor="@color/bs_grary4" />
+
+            <TextView
+                android:id="@+id/nickName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="---"
+                android:textColor="@color/bs_grary2"
+                android:textSize="12sp" />
+        </LinearLayout>
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:src="@mipmap/icon_next"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_dp_20"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <LinearLayout
+            android:visibility="gone"
+            android:layout_marginBottom="10dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/shape_allround_while_base_stroke"
+            android:id="@+id/ll_update"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/common_dp_52"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/companyinfo"
+                android:gravity="center_vertical"
+                android:drawablePadding="5dp"
+                android:drawableLeft="@mipmap/icon_company"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/common_dp_10"
+                android:layout_toRightOf="@+id/iv5"
+                android:layout_weight="1"
+                android:text="公司"
+                android:textColor="@color/bs_grary2"
+                android:textSize="@dimen/common_sp_14" />
+
+            <TextView
+                android:drawablePadding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@mipmap/icon_next"
+                android:gravity="center_vertical"
+                android:text="府兴物业" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/houseinfo"
+            android:paddingRight="10dp"
+            android:background="@drawable/shape_allround_while_base_stroke"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/common_dp_52"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:gravity="center_vertical"
+                android:drawablePadding="5dp"
+                android:drawableLeft="@mipmap/icon_quarters"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/common_dp_10"
+                android:layout_toRightOf="@+id/iv5"
+                android:layout_weight="1"
+                android:text="小区信息"
+                android:textColor="@color/bs_grary2"
+                android:textSize="@dimen/common_sp_14" />
+
+            <TextView
+                android:drawablePadding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@mipmap/icon_next"
+                android:gravity="center_vertical"
+                tools:text="和谐警苑" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/maillist"
+            android:paddingRight="10dp"
+            android:background="@drawable/shape_allround_while_base_stroke"
+            android:layout_marginTop="10dp"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/common_dp_52"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:gravity="center_vertical"
+                android:drawablePadding="5dp"
+                android:drawableLeft="@mipmap/icon_maillist"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/common_dp_10"
+                android:layout_toRightOf="@+id/iv5"
+                android:layout_weight="1"
+                android:text="通讯录"
+                android:textColor="@color/bs_grary2"
+                android:textSize="@dimen/common_sp_14" />
+
+            <TextView
+                android:drawablePadding="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@mipmap/icon_next"
+                android:gravity="center_vertical"
+                 />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/shape_allround_while_base_stroke"
+            android:id="@+id/ll_feedback"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/common_dp_52"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:gravity="center_vertical"
+                android:drawablePadding="5dp"
+                android:drawableLeft="@mipmap/icon_feedback"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/common_dp_10"
+                android:layout_toRightOf="@+id/iv4"
+                android:layout_weight="1"
+                android:drawableRight="@mipmap/icon_next"
+                android:text="意见反馈"
+                android:textColor="@color/bs_grary2"
+                android:textSize="@dimen/common_sp_14" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/shape_allround_while_base_stroke"
+            android:id="@+id/ll_about"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/common_dp_52"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:gravity="center_vertical"
+                android:drawablePadding="5dp"
+                android:drawableLeft="@mipmap/icon_about"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/common_dp_10"
+                android:layout_toRightOf="@+id/iv6"
+                android:layout_weight="1"
+                android:drawableRight="@mipmap/icon_next"
+                android:text="关于我们"
+                android:textColor="@color/bs_grary2"
+                android:textSize="@dimen/common_sp_14" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="@dimen/common_dp_10"
+        android:layout_marginRight="10dp"
+        android:minHeight="50dp"
+        android:background="@drawable/shape_allround_while_base_stroke"
+        android:text="登录"
+        android:padding="@dimen/common_dp_10"
+        android:drawableLeft="@mipmap/icon_outlogin"
+        android:drawablePadding="5dp"
+        android:gravity="left|center_vertical"
+        android:textSize="@dimen/common_sp_14"
+        android:textColor="@color/bs_grary2" />
+    <TextView
+        android:id="@+id/outlogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:minHeight="50dp"
+        android:background="@drawable/shape_allround_while_base_stroke"
+        android:text="退出登录"
+        android:paddingLeft="@dimen/common_dp_10"
+        android:drawableLeft="@mipmap/icon_outlogin"
+        android:drawablePadding="5dp"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/common_dp_10"
+        android:gravity="left|center_vertical"
+        android:textSize="@dimen/common_sp_14"
+        android:textColor="@color/bs_grary2" />
+
+</LinearLayout>

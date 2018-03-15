@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/appbg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bit.communityProperty.activity.userinfo.FeedbackActivity">
+
+    <include layout="@layout/action_bar"></include>
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+        <EditText
+            android:textColor="@color/tv_black_33"
+            android:textSize="@dimen/common_sp_14"
+            android:id="@+id/et_input"
+            android:maxLength="200"
+            android:gravity="left|top"
+            android:hint="请填写排查结果"
+            android:background="@null"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"/>
+        <TextView
+            android:id="@+id/tv_length"
+            android:textColor="@color/tv_gray_66"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0/200"
+            android:layout_gravity="right"/>
+    </LinearLayout>
+</LinearLayout>

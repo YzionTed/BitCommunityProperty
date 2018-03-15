@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="true">
+
+    <item
+        android:drawable="@mipmap/ele01"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele02"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele03"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele04"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele05"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele06"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele07"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele08"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele09"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele10"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele11"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele12"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele13"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele14"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele15"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele16"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele17"
+        android:duration="100" />
+    <item
+        android:drawable="@mipmap/ele18"
+        android:duration="100" />
+</animation-list>

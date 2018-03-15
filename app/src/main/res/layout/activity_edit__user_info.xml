@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.bit.communityProperty.activity.edit_user_info.Edit_User_info">
+    <include layout="@layout/action_bar"></include>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:divider="@drawable/base_divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@android:color/white"
+                android:minHeight="50dp"
+
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/common_dp_10"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/common_sp_16"
+                    android:text="姓名:" />
+
+                <EditText
+                    android:textSize="@dimen/common_sp_16"
+                    android:background="@null"
+                    android:hint="请填写姓名"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left|center_vertical"
+                    android:padding="@dimen/common_dp_8"
+                    android:layout_weight="1"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@android:color/white"
+                android:minHeight="50dp"
+
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/common_dp_10"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/common_sp_16"
+                    android:text="昵称:" />
+
+                <EditText
+                    android:textSize="@dimen/common_sp_16"
+                    android:background="@null"
+                    android:hint="请填写昵称"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left|center_vertical"
+                    android:padding="@dimen/common_dp_8"
+                    android:layout_weight="1"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@android:color/white"
+                android:minHeight="50dp"
+
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/common_dp_10"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/common_sp_16"
+                    android:text="手机:" />
+
+                <EditText
+                    android:textSize="@dimen/common_sp_16"
+                    android:background="@null"
+                    android:hint="请填写昵称"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left|center_vertical"
+                    android:padding="@dimen/common_dp_8"
+                    android:layout_weight="1"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@android:color/white"
+                android:minHeight="50dp"
+
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/common_dp_10"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/common_sp_16"
+                    android:text="座机:" />
+
+                <EditText
+                    android:textSize="@dimen/common_sp_16"
+                    android:background="@null"
+                    android:hint="请填写昵称"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left|center_vertical"
+                    android:padding="@dimen/common_dp_8"
+                    android:layout_weight="1"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@android:color/white"
+                android:minHeight="50dp"
+
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/common_dp_10"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/common_sp_16"
+                    android:text="性别:" />
+
+                <EditText
+                    android:textSize="@dimen/common_sp_16"
+                    android:background="@null"
+                    android:hint="请填写昵称"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left|center_vertical"
+                    android:padding="@dimen/common_dp_8"
+                    android:layout_weight="1"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@android:color/white"
+                android:minHeight="50dp"
+
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/common_dp_10"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/common_sp_16"
+                    android:text="职业:" />
+
+                <EditText
+                    android:textSize="@dimen/common_sp_16"
+                    android:background="@null"
+                    android:hint="请填写昵称"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left|center_vertical"
+                    android:padding="@dimen/common_dp_8"
+                    android:layout_weight="1"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@android:color/white"
+                android:minHeight="50dp"
+
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/common_dp_10"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/common_sp_16"
+                    android:text="户口所在地:" />
+
+                <EditText
+                    android:textSize="@dimen/common_sp_16"
+                    android:background="@null"
+                    android:hint="请填写昵称"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left|center_vertical"
+                    android:padding="@dimen/common_dp_8"
+                    android:layout_weight="1"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="@android:color/white"
+                android:minHeight="50dp"
+
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="@dimen/common_dp_10"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/common_sp_16"
+                    android:text="工作单位:" />
+
+                <EditText
+                    android:textSize="@dimen/common_sp_16"
+                    android:background="@null"
+                    android:hint="请填写昵称"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="left|center_vertical"
+                    android:padding="@dimen/common_dp_8"
+                    android:layout_weight="1"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+            <Button
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_allround_blue"
+                android:text="提交"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

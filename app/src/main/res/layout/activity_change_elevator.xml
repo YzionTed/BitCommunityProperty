@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.bit.communityProperty.activity.access.ChangeAccessActivity">
+
+    <include layout="@layout/action_bar"></include>
+
+    <com.bit.communityProperty.view.CustomExpandListview
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/appbg"
+        android:divider="@drawable/base_divider"
+        android:dividerHeight="0.5dp"
+        android:groupIndicator="@null"
+        android:visibility="gone"></com.bit.communityProperty.view.CustomExpandListview>
+
+    <ListView
+        android:id="@+id/lv_elevator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:divider="@drawable/base_divider"
+        android:dividerHeight="1dp"></ListView>
+</LinearLayout>
